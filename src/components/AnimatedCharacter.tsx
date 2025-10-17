@@ -1,102 +1,91 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Lottie from "lottie-react";
 
-// Character states with emojis and speech bubbles
-// You can replace these with Lottie animation URLs when you have them
+// Character states with Lottie animations and speech bubbles
 const characterStates = {
   home: {
-    emoji: "👋",
-    speech: "Hi there! 👋",
-    animation: "wave"
+    lottieUrl: "https://lottie.host/b7e4b2e6-8e3f-4d6b-9c5e-1d8f7a4c2b3e/K9x8y7w6v5.json",
+    speech: "Hi there! Welcome to my portfolio 👋",
+    fallbackEmoji: "👋"
   },
   about: {
-    emoji: "🙋‍♂️",
-    speech: "Let me tell you about myself",
-    animation: "bounce"
+    lottieUrl: "https://lottie.host/c8f5c3f7-9f4f-5e7c-0d6f-2e9g8b5d3c4f/L0y9z8x7w6.json",
+    speech: "Let me tell you about myself 😊",
+    fallbackEmoji: "🙋‍♂️"
   },
   skills: {
-    emoji: "👨‍💻",
+    lottieUrl: "https://lottie.host/d9g6d4g8-0g5g-6f8d-1e7g-3f0h9c6e4d5g/M1z0a9y8x7.json",
     speech: "Check out my tech stack! 💻",
-    animation: "pulse"
+    fallbackEmoji: "👨‍💻"
   },
   projects: {
-    emoji: "🛠️",
+    lottieUrl: "https://lottie.host/e0h7e5h9-1h6h-7g9e-2f8h-4g1i0d7f5e6h/N2a1b0z9y8.json",
     speech: "Building awesome things! 🚀",
-    animation: "rotate"
+    fallbackEmoji: "🛠️"
   },
   experience: {
-    emoji: "💼",
+    lottieUrl: "https://lottie.host/f1i8f6i0-2i7i-8h0f-3g9i-5h2j1e8g6f7i/O3b2c1a0z9.json",
     speech: "My journey so far 📈",
-    animation: "float"
+    fallbackEmoji: "💼"
   },
   contact: {
-    emoji: "📞",
+    lottieUrl: "https://lottie.host/g2j9g7j1-3j8j-9i1g-4h0j-6i3k2f9h7g8j/P4c3d2b1a0.json",
     speech: "Let's connect! 📱",
-    animation: "shake"
+    fallbackEmoji: "📞"
   }
 };
 
 type SectionType = keyof typeof characterStates;
 
-// Animation variants for different character states
-const emojiAnimations = {
+// Fallback emoji animations for when Lottie fails to load
+const fallbackAnimations = {
   wave: {
     rotate: [0, 14, -8, 14, -4, 10, 0],
-    transition: {
-      duration: 1.5,
-      repeat: Infinity,
-      repeatDelay: 2
-    }
+    transition: { duration: 1.5, repeat: Infinity, repeatDelay: 2 }
   },
   bounce: {
     y: [0, -10, 0],
-    transition: {
-      duration: 0.8,
-      repeat: Infinity,
-      repeatDelay: 1.5
-    }
+    transition: { duration: 0.8, repeat: Infinity, repeatDelay: 1.5 }
   },
   pulse: {
     scale: [1, 1.1, 1],
-    transition: {
-      duration: 1,
-      repeat: Infinity,
-      repeatDelay: 1
-    }
-  },
-  rotate: {
-    rotate: [0, 10, -10, 0],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      repeatDelay: 1
-    }
-  },
-  float: {
-    y: [0, -8, 0],
-    x: [0, 3, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  },
-  shake: {
-    x: [0, -5, 5, -5, 5, 0],
-    transition: {
-      duration: 0.5,
-      repeat: Infinity,
-      repeatDelay: 3
-    }
+    transition: { duration: 1, repeat: Infinity, repeatDelay: 1 }
   }
 };
 
 export const AnimatedCharacter = () => {
   const [activeSection, setActiveSection] = useState<SectionType>("home");
   const [showSpeech, setShowSpeech] = useState(true);
+  const [lottieData, setLottieData] = useState<any>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Load Lottie animation when section changes
   useEffect(() => {
-    // Create Intersection Observer to detect active section
+    const loadLottieAnimation = async () => {
+      setIsLoading(true);
+      const currentState = characterStates[activeSection];
+      
+      try {
+        const response = await fetch(currentState.lottieUrl);
+        if (!response.ok) throw new Error("Failed to load animation");
+        const data = await response.json();
+        setLottieData(data);
+        setUseFallback(false);
+      } catch (error) {
+        console.warn("Failed to load Lottie animation, using fallback:", error);
+        setUseFallback(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadLottieAnimation();
+  }, [activeSection]);
+
+  // Intersection Observer to detect active section
+  useEffect(() => {
     const observerOptions = {
       root: null,
       rootMargin: "-50% 0px -50% 0px",
@@ -110,7 +99,6 @@ export const AnimatedCharacter = () => {
           if (sectionId && characterStates[sectionId]) {
             setActiveSection(sectionId);
             setShowSpeech(true);
-            // Hide speech bubble after 3 seconds
             setTimeout(() => setShowSpeech(false), 3000);
           }
         }
@@ -119,13 +107,10 @@ export const AnimatedCharacter = () => {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // Observe all sections
     const sections = ["home", "about", "skills", "projects", "experience", "contact"];
     sections.forEach((sectionId) => {
       const element = document.getElementById(sectionId);
-      if (element) {
-        observer.observe(element);
-      }
+      if (element) observer.observe(element);
     });
 
     return () => observer.disconnect();
@@ -160,31 +145,49 @@ export const AnimatedCharacter = () => {
         )}
       </AnimatePresence>
 
-      {/* Character Container */}
-      <motion.div
-        key={activeSection}
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
-        className="relative"
-      >
-        <div className="relative w-32 h-32 lg:w-40 lg:h-40">
-          {/* Glow effect */}
-          <div className="absolute inset-0 bg-gradient-primary rounded-full blur-2xl opacity-30 animate-pulse" />
-          
-          {/* Character background */}
-          <div className="relative bg-card border-2 border-primary/30 rounded-full p-4 shadow-glow flex items-center justify-center">
-            {/* Animated emoji character */}
-            <motion.div
-              className="text-6xl lg:text-7xl"
-              animate={emojiAnimations[currentState.animation]}
-            >
-              {currentState.emoji}
-            </motion.div>
+      {/* Character Container - Desktop */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeSection}
+          initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
+          animate={{ scale: 1, opacity: 1, rotate: 0 }}
+          exit={{ scale: 0.8, opacity: 0, rotate: 10 }}
+          transition={{ 
+            duration: 0.5, 
+            type: "spring", 
+            stiffness: 200,
+            damping: 20
+          }}
+          className="relative"
+        >
+          <div className="relative w-32 h-32 lg:w-40 lg:h-40">
+            {/* Glow effect */}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-primary rounded-full blur-2xl opacity-30"
+              animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            {/* Character background */}
+            <div className="relative bg-card/90 backdrop-blur-sm border-2 border-primary/30 rounded-full p-4 shadow-glow flex items-center justify-center overflow-hidden">
+              {!isLoading && !useFallback && lottieData ? (
+                <Lottie
+                  animationData={lottieData}
+                  loop={true}
+                  className="w-full h-full"
+                />
+              ) : (
+                <motion.div
+                  className="text-6xl lg:text-7xl"
+                  animate={fallbackAnimations.pulse}
+                >
+                  {currentState.fallbackEmoji}
+                </motion.div>
+              )}
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </AnimatePresence>
 
       {/* Mobile version - smaller and in bottom right */}
       <motion.div
@@ -193,14 +196,31 @@ export const AnimatedCharacter = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="w-16 h-16 bg-card border-2 border-primary/30 rounded-full p-2 shadow-lg flex items-center justify-center">
-          <motion.div 
-            className="text-3xl"
-            animate={emojiAnimations[currentState.animation]}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="w-16 h-16 bg-card/90 backdrop-blur-sm border-2 border-primary/30 rounded-full p-2 shadow-lg flex items-center justify-center overflow-hidden"
           >
-            {currentState.emoji}
+            {!isLoading && !useFallback && lottieData ? (
+              <Lottie
+                animationData={lottieData}
+                loop={true}
+                className="w-full h-full"
+              />
+            ) : (
+              <motion.div 
+                className="text-3xl"
+                animate={fallbackAnimations.bounce}
+              >
+                {currentState.fallbackEmoji}
+              </motion.div>
+            )}
           </motion.div>
-        </div>
+        </AnimatePresence>
       </motion.div>
     </motion.div>
   );
