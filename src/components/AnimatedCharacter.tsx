@@ -1,47 +1,99 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Lottie from "lottie-react";
 
-// Character states with animation data and speech bubbles
+// Character states with emojis and speech bubbles
+// You can replace these with Lottie animation URLs when you have them
 const characterStates = {
   home: {
-    animation: "https://lottie.host/4b6d6f8e-df9d-4c9e-8f3a-3e3d0b9c6f9e/1gXJ0J3Y7D.json",
+    emoji: "👋",
     speech: "Hi there! 👋",
-    fallback: "👋"
+    animation: "wave"
   },
   about: {
-    animation: "https://lottie.host/8e8f8f8e-8f8f-4f8f-8f8f-8f8f8f8f8f8f/1gXJ0J3Y7D.json",
+    emoji: "🙋‍♂️",
     speech: "Let me tell you about myself",
-    fallback: "🙋‍♂️"
+    animation: "bounce"
   },
   skills: {
-    animation: "https://lottie.host/2c8f8f8e-8f8f-4f8f-8f8f-8f8f8f8f8f8f/1gXJ0J3Y7D.json",
+    emoji: "👨‍💻",
     speech: "Check out my tech stack! 💻",
-    fallback: "👨‍💻"
+    animation: "pulse"
   },
   projects: {
-    animation: "https://lottie.host/5d8f8f8e-8f8f-4f8f-8f8f-8f8f8f8f8f8f/1gXJ0J3Y7D.json",
+    emoji: "🛠️",
     speech: "Building awesome things! 🚀",
-    fallback: "🛠️"
+    animation: "rotate"
   },
   experience: {
-    animation: "https://lottie.host/6e8f8f8e-8f8f-4f8f-8f8f-8f8f8f8f8f8f/1gXJ0J3Y7D.json",
+    emoji: "💼",
     speech: "My journey so far 📈",
-    fallback: "💼"
+    animation: "float"
   },
   contact: {
-    animation: "https://lottie.host/7f8f8f8e-8f8f-4f8f-8f8f-8f8f8f8f8f8f/1gXJ0J3Y7D.json",
+    emoji: "📞",
     speech: "Let's connect! 📱",
-    fallback: "📞"
+    animation: "shake"
   }
 };
 
 type SectionType = keyof typeof characterStates;
 
+// Animation variants for different character states
+const emojiAnimations = {
+  wave: {
+    rotate: [0, 14, -8, 14, -4, 10, 0],
+    transition: {
+      duration: 1.5,
+      repeat: Infinity,
+      repeatDelay: 2
+    }
+  },
+  bounce: {
+    y: [0, -10, 0],
+    transition: {
+      duration: 0.8,
+      repeat: Infinity,
+      repeatDelay: 1.5
+    }
+  },
+  pulse: {
+    scale: [1, 1.1, 1],
+    transition: {
+      duration: 1,
+      repeat: Infinity,
+      repeatDelay: 1
+    }
+  },
+  rotate: {
+    rotate: [0, 10, -10, 0],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      repeatDelay: 1
+    }
+  },
+  float: {
+    y: [0, -8, 0],
+    x: [0, 3, 0],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  },
+  shake: {
+    x: [0, -5, 5, -5, 5, 0],
+    transition: {
+      duration: 0.5,
+      repeat: Infinity,
+      repeatDelay: 3
+    }
+  }
+};
+
 export const AnimatedCharacter = () => {
   const [activeSection, setActiveSection] = useState<SectionType>("home");
   const [showSpeech, setShowSpeech] = useState(true);
-  const [animationError, setAnimationError] = useState(false);
 
   useEffect(() => {
     // Create Intersection Observer to detect active section
@@ -122,20 +174,14 @@ export const AnimatedCharacter = () => {
           <div className="absolute inset-0 bg-gradient-primary rounded-full blur-2xl opacity-30 animate-pulse" />
           
           {/* Character background */}
-          <div className="relative bg-card border-2 border-primary/30 rounded-full p-4 shadow-glow">
-            {!animationError ? (
-              <Lottie
-                animationData={currentState.animation}
-                loop={true}
-                className="w-full h-full"
-                onError={() => setAnimationError(true)}
-              />
-            ) : (
-              // Fallback emoji if Lottie fails to load
-              <div className="w-full h-full flex items-center justify-center text-6xl">
-                {currentState.fallback}
-              </div>
-            )}
+          <div className="relative bg-card border-2 border-primary/30 rounded-full p-4 shadow-glow flex items-center justify-center">
+            {/* Animated emoji character */}
+            <motion.div
+              className="text-6xl lg:text-7xl"
+              animate={emojiAnimations[currentState.animation]}
+            >
+              {currentState.emoji}
+            </motion.div>
           </div>
         </div>
       </motion.div>
@@ -147,8 +193,13 @@ export const AnimatedCharacter = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="w-16 h-16 bg-card border-2 border-primary/30 rounded-full p-2 shadow-lg flex items-center justify-center text-3xl">
-          {currentState.fallback}
+        <div className="w-16 h-16 bg-card border-2 border-primary/30 rounded-full p-2 shadow-lg flex items-center justify-center">
+          <motion.div 
+            className="text-3xl"
+            animate={emojiAnimations[currentState.animation]}
+          >
+            {currentState.emoji}
+          </motion.div>
         </div>
       </motion.div>
     </motion.div>
