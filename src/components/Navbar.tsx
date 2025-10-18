@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/contexts/ThemeContext";
+import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -13,13 +15,10 @@ const navItems = [
 ];
 
 export const Navbar = () => {
-  const [isDark, setIsDark] = useState(true);
+  const { isDark, toggleDarkMode } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark);
-  }, [isDark]);
+  const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,8 +75,17 @@ export const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsDark(!isDark)}
+              onClick={() => setIsThemeCustomizerOpen(true)}
               className="ml-2"
+              title="Customize Theme"
+            >
+              <Palette className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
+              className="ml-1"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -88,7 +96,15 @@ export const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsDark(!isDark)}
+              onClick={() => setIsThemeCustomizerOpen(true)}
+              className="mr-1"
+            >
+              <Palette className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
               className="mr-2"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -128,6 +144,11 @@ export const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ThemeCustomizer
+        open={isThemeCustomizerOpen}
+        onOpenChange={setIsThemeCustomizerOpen}
+      />
     </motion.nav>
   );
 };
