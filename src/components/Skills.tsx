@@ -12,34 +12,34 @@ import {
 
 const skillCategories = [
   {
-    title: "Frontend Development",
+    title: "Frontend",
     icon: Code2,
-    skills: ["React.js", "Next.js", "TypeScript", "JavaScript (ES6+)", "HTML5/CSS3", "Tailwind CSS"],
+    skills: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Ant Design", "Material UI"],
   },
   {
-    title: "Mobile Development",
-    icon: Smartphone,
-    skills: ["React Native", "Expo", "iOS Development", "Android Development", "Mobile UI/UX"],
-  },
-  {
-    title: "Backend & Database",
+    title: "State Management",
     icon: Database,
-    skills: ["Node.js", "Express", "PostgreSQL", "MongoDB", "Firebase", "REST APIs"],
+    skills: ["Redux Toolkit", "Redux Saga", "React Query", "Zustand", "Context API"],
   },
   {
-    title: "UI/UX Design",
-    icon: Palette,
-    skills: ["Figma", "Responsive Design", "Material-UI", "Framer Motion", "shadcn/ui"],
+    title: "Real-time & APIs",
+    icon: Smartphone,
+    skills: ["Socket.io", "Pusher", "Firebase Realtime DB", "Supabase", "REST APIs", "WebSockets"],
   },
   {
-    title: "Version Control",
-    icon: GitBranch,
-    skills: ["Git", "GitHub", "GitLab", "CI/CD", "Code Review"],
-  },
-  {
-    title: "Tools & Others",
+    title: "Backend Familiarity",
     icon: Terminal,
-    skills: ["VS Code", "Webpack", "Vite", "npm/yarn", "Jest", "Testing Library"],
+    skills: ["Node.js", "KeystoneJS", "Laravel", "Express.js"],
+  },
+  {
+    title: "Deployment",
+    icon: GitBranch,
+    skills: ["Vercel", "Netlify", "Firebase", "GitHub Actions"],
+  },
+  {
+    title: "UI/UX",
+    icon: Palette,
+    skills: ["Responsive Design", "Animations", "Modern UI Libraries", "Component Design"],
   },
 ];
 

@@ -47,34 +47,30 @@ export const About = () => {
             className="space-y-6"
           >
             <h3 className="text-3xl font-bold">
-              Professional React & React Native Developer
+              Frontend Developer
             </h3>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              I'm a passionate developer with expertise in building modern web and mobile
-              applications. With years of experience in the React ecosystem, I specialize in
-              creating intuitive, performant, and scalable solutions.
+              I'm a Frontend Developer with over 2 years of professional experience specializing in building modern, responsive, and high-performance web and mobile applications. I focus on crafting smooth UI/UX experiences using React.js and React Native.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              My approach combines clean code, modern design principles, and best practices to
-              deliver exceptional user experiences. I'm constantly learning and adapting to new
-              technologies to stay at the forefront of web and mobile development.
+              I love bringing ideas to life with clean, efficient code and real-time functionality.
             </p>
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="bg-card border border-border rounded-lg p-4">
                 <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  5+
+                  2+
                 </div>
                 <div className="text-sm text-muted-foreground">Years Experience</div>
               </div>
               <div className="bg-card border border-border rounded-lg p-4">
                 <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  50+
+                  30+
                 </div>
                 <div className="text-sm text-muted-foreground">Projects Completed</div>
               </div>
               <div className="bg-card border border-border rounded-lg p-4">
                 <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  30+
+                  20+
                 </div>
                 <div className="text-sm text-muted-foreground">Happy Clients</div>
               </div>
