@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
 import { X, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -76,34 +76,48 @@ const colorLabels: Record<keyof ThemeColors, string> = {
 export const ThemeCustomizer = ({ open, onOpenChange }: ThemeCustomizerProps) => {
   const { colors, updateColor, resetTheme } = useTheme();
   const [selectedColor, setSelectedColor] = useState<keyof ThemeColors>("primary");
-  const [hexValue, setHexValue] = useState(hslToHex(colors[selectedColor]));
+  const [pendingColors, setPendingColors] = useState<ThemeColors>(colors);
+  const [hexValue, setHexValue] = useState(hslToHex(pendingColors[selectedColor]));
+
+  // Reset pending colors when modal opens
+  useEffect(() => {
+    if (open) {
+      setPendingColors(colors);
+      setHexValue(hslToHex(colors[selectedColor]));
+    }
+  }, [open, colors, selectedColor]);
 
   const handleColorChange = (hex: string) => {
     setHexValue(hex);
     const hsl = hexToHsl(hex);
-    updateColor(selectedColor, hsl);
+    setPendingColors(prev => ({ ...prev, [selectedColor]: hsl }));
   };
 
   const handleColorSelect = (key: keyof ThemeColors) => {
     setSelectedColor(key);
-    setHexValue(hslToHex(colors[key]));
+    setHexValue(hslToHex(pendingColors[key]));
+  };
+
+  const handleSave = () => {
+    // Apply all pending colors
+    Object.entries(pendingColors).forEach(([key, value]) => {
+      updateColor(key as keyof ThemeColors, value);
+    });
+    onOpenChange(false);
+  };
+
+  const handleReset = () => {
+    resetTheme();
+    setPendingColors(colors);
+    setHexValue(hslToHex(colors[selectedColor]));
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[450px] w-[90vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            <span>🎨 Customize Theme</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={resetTheme}
-              className="h-8 text-xs"
-            >
-              <RotateCcw className="h-3 w-3 mr-1" />
-              Reset
-            </Button>
+          <DialogTitle className="text-lg font-semibold">
+            🎨 Customize Theme
           </DialogTitle>
         </DialogHeader>
 
@@ -125,9 +139,9 @@ export const ThemeCustomizer = ({ open, onOpenChange }: ThemeCustomizerProps) =>
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center gap-2">
-                    <div
+                  <div
                       className="w-6 h-6 rounded-md border-2 border-border"
-                      style={{ backgroundColor: hslToHex(colors[key]) }}
+                      style={{ backgroundColor: hslToHex(pendingColors[key]) }}
                     />
                     <span className="text-sm font-medium">{colorLabels[key]}</span>
                   </div>
@@ -165,18 +179,54 @@ export const ThemeCustomizer = ({ open, onOpenChange }: ThemeCustomizerProps) =>
 
           {/* Preview */}
           <div className="space-y-2">
-            <p className="text-sm font-medium">Live Preview</p>
+            <p className="text-sm font-medium">Preview</p>
             <div className="p-4 rounded-lg border bg-card space-y-2">
-              <div className="h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground text-xs font-medium">
+              <div 
+                className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
+                style={{ 
+                  backgroundColor: hslToHex(pendingColors.primary),
+                  color: hslToHex(pendingColors.foreground)
+                }}
+              >
                 Primary
               </div>
-              <div className="h-8 rounded-md bg-secondary flex items-center justify-center text-secondary-foreground text-xs font-medium">
+              <div 
+                className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
+                style={{ 
+                  backgroundColor: hslToHex(pendingColors.secondary),
+                  color: hslToHex(pendingColors.foreground)
+                }}
+              >
                 Secondary
               </div>
-              <div className="h-8 rounded-md bg-accent flex items-center justify-center text-accent-foreground text-xs font-medium">
+              <div 
+                className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
+                style={{ 
+                  backgroundColor: hslToHex(pendingColors.accent),
+                  color: hslToHex(pendingColors.foreground)
+                }}
+              >
                 Accent
               </div>
             </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 pt-2">
+            <Button
+              variant="outline"
+              onClick={handleReset}
+              className="flex-1"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Reset
+            </Button>
+            <Button
+              onClick={handleSave}
+              className="flex-1"
+            >
+              Save Theme
+            </Button>
           </div>
         </div>
       </DialogContent>
