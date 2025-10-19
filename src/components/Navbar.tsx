@@ -36,16 +36,16 @@ export const Navbar = () => {
     }
   };
 
+// top-0
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-10 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
           ? "bg-background/80 backdrop-blur-lg border-b border-border"
           : "bg-transparent"
-      }`}
-    >
+        }`} 
+    > 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <motion.a
@@ -78,8 +78,8 @@ export const Navbar = () => {
               asChild
               className="ml-2"
             >
-              <a 
-                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf" 
+              <a
+                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
                 download="Muhammad_Luqman_CV.pdf"
                 className="flex items-center gap-2"
               >
@@ -114,8 +114,8 @@ export const Navbar = () => {
               asChild
               className="mr-2"
             >
-              <a 
-                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf" 
+              <a
+                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
                 download="Muhammad_Luqman_CV.pdf"
                 className="flex items-center gap-1"
               >

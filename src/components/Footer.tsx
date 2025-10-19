@@ -34,10 +34,10 @@ export const Footer = () => {
 
           <div className="text-center text-sm text-muted-foreground">
             <p className="flex items-center gap-2 justify-center">
-              Built with <Heart className="h-4 w-4 text-red-500 fill-red-500" /> using React.js & Tailwind CSS
+              Built with using Vite React.js.
             </p>
             <p className="mt-2">
-              © {currentYear} Your Name. All rights reserved.
+              © {currentYear} Muhammad Luqman Khokhar. All rights reserved.
             </p>
           </div>
         </div>

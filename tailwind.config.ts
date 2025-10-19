@@ -68,6 +68,10 @@ export default {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
@@ -96,6 +100,7 @@ export default {
         "fade-in-up": "fade-in-up 0.6s ease-out",
         "scale-in": "scale-in 0.4s ease-out",
         "slide-in-right": "slide-in-right 0.3s ease-out",
+        "scroll": "scroll 15s linear infinite",
       },
     },
   },
