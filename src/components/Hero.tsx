@@ -30,7 +30,7 @@ export const Hero = () => {
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
               Hi, I'm{" "}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
-                Your Name
+                Muhammad Luqman Khokhar
               </span>
             </h1>
           </motion.div>
@@ -47,9 +47,11 @@ export const Hero = () => {
                 2000,
                 "React Native Developer",
                 2000,
-                "Full Stack Developer",
+                "Web Developer",
                 2000,
                 "Mobile App Developer",
+                2000,
+                "Full Stack Developer",
                 2000,
               ]}
               wrapper="span"
@@ -99,7 +101,7 @@ export const Hero = () => {
             className="flex items-center justify-center gap-6"
           >
             <a
-              href="https://github.com/yourusername"
+              href="https://github.com/Luqman-Khokhar"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -107,7 +109,7 @@ export const Hero = () => {
               <Github className="h-6 w-6" />
             </a>
             <a
-              href="https://linkedin.com/in/yourusername"
+              href="https://www.linkedin.com/in/mluqmangn/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -115,7 +117,7 @@ export const Hero = () => {
               <Linkedin className="h-6 w-6" />
             </a>
             <a
-              href="mailto:your.email@example.com"
+              href="mailto:mluqmangn@gmail.com"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               <Mail className="h-6 w-6" />

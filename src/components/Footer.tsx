@@ -9,7 +9,7 @@ export const Footer = () => {
         <div className="flex flex-col items-center justify-center space-y-6">
           <div className="flex items-center gap-6">
             <a
-              href="https://github.com/yourusername"
+              href="https://github.com/Luqman-Khokhar"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -17,7 +17,7 @@ export const Footer = () => {
               <Github className="h-6 w-6" />
             </a>
             <a
-              href="https://linkedin.com/in/yourusername"
+              href="https://www.linkedin.com/in/mluqmangn/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -25,7 +25,7 @@ export const Footer = () => {
               <Linkedin className="h-6 w-6" />
             </a>
             <a
-              href="mailto:your.email@example.com"
+              href="mailto:mluqmangn@gmail.com"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               <Mail className="h-6 w-6" />

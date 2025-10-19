@@ -17,17 +17,35 @@ export const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
 
-    toast({
-      title: "Message sent!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
-    });
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+      if (!res.ok) throw new Error("Failed to send");
+
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+
+      e.currentTarget.reset();
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <section id="contact" className="py-20 bg-muted/30 relative" ref={ref}>
@@ -67,7 +85,7 @@ export const Contact = () => {
                       href="mailto:your.email@example.com"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      your.email@example.com
+                      mluqmangn@gmail.com
                     </a>
                   </div>
                 </div>
@@ -78,10 +96,10 @@ export const Contact = () => {
                   <div>
                     <h4 className="font-semibold mb-1">Phone</h4>
                     <a
-                      href="tel:+1234567890"
+                      href="tel:+923147551262"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      +1 (234) 567-890
+                      +92 3147551262
                     </a>
                   </div>
                 </div>
@@ -92,7 +110,7 @@ export const Contact = () => {
                   <div>
                     <h4 className="font-semibold mb-1">Location</h4>
                     <p className="text-muted-foreground">
-                      Your City, Country
+                      Daska City, Pakistan
                     </p>
                   </div>
                 </div>
@@ -109,12 +127,12 @@ export const Contact = () => {
                 </p>
                 <div className="flex gap-4">
                   <Button variant="outline" size="sm" asChild>
-                    <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/Luqman-Khokhar" target="_blank" rel="noopener noreferrer">
                       GitHub
                     </a>
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.linkedin.com/in/mluqmangn/" target="_blank" rel="noopener noreferrer">
                       LinkedIn
                     </a>
                   </Button>
