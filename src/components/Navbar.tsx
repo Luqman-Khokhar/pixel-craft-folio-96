@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Moon, Sun, Menu, X, Palette, Download } from "lucide-react";
+import { Moon, Sun, Menu, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -18,7 +17,6 @@ export const Navbar = () => {
   const { isDark, toggleDarkMode } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,30 +71,6 @@ export const Navbar = () => {
               </Button>
             ))}
             <Button
-              variant="default"
-              size="sm"
-              asChild
-              className="ml-2"
-            >
-              <a
-                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
-                download="Muhammad_Luqman_CV.pdf"
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                CV
-              </a>
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsThemeCustomizerOpen(true)}
-              className="ml-2"
-              title="Customize Theme"
-            >
-              <Palette className="h-5 w-5" />
-            </Button>
-            <Button
               variant="ghost"
               size="icon"
               onClick={toggleDarkMode}
@@ -108,28 +82,6 @@ export const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden">
-            <Button
-              variant="default"
-              size="sm"
-              asChild
-              className="mr-2"
-            >
-              <a
-                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
-                download="Muhammad_Luqman_CV.pdf"
-                className="flex items-center gap-1"
-              >
-                <Download className="h-4 w-4" />
-              </a>
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsThemeCustomizerOpen(true)}
-              className="mr-1"
-            >
-              <Palette className="h-5 w-5" />
-            </Button>
             <Button
               variant="ghost"
               size="icon"
@@ -174,10 +126,6 @@ export const Navbar = () => {
         )}
       </AnimatePresence>
 
-      <ThemeCustomizer
-        open={isThemeCustomizerOpen}
-        onOpenChange={setIsThemeCustomizerOpen}
-      />
     </motion.nav>
   );
 };

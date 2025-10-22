@@ -130,7 +130,7 @@ export const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 1, repeat: Infinity, repeatType: "reverse" }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-2 left-1/2 transform -translate-x-1/2"
       >
         <ArrowDown className="h-6 w-6 text-muted-foreground" />
       </motion.div>

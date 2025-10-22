@@ -32,7 +32,7 @@ export const About = () => {
               <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-3xl opacity-30" />
               <div className="relative bg-card rounded-2xl overflow-hidden border border-border shadow-xl">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop"
+                  src="/mine.jpg"
                   alt="Profile"
                   className="w-full h-auto object-cover"
                 />

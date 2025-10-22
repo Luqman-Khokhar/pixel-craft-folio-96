@@ -1,8 +1,8 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import * as Tooltip from "@radix-ui/react-tooltip"
+import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -28,20 +28,53 @@ const buttonVariants = cva(
       size: "default",
     },
   },
-);
+)
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+  asChild?: boolean
+  tooltip?: string
+  tooltipClassName?: string
+  tooltipSide?: "top" | "right" | "bottom" | "left"
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
-  },
-);
-Button.displayName = "Button";
+  (
+    { className, variant, size, asChild = false, tooltip, tooltipClassName, tooltipSide = "top", ...props },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button"
 
-export { Button, buttonVariants };
+    const buttonEl = (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+
+    if (!tooltip) return buttonEl
+
+    return (
+      <Tooltip.Provider>
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>{buttonEl}</Tooltip.Trigger>
+          <Tooltip.Content
+            side={tooltipSide}
+            className={cn(
+              "text-sm bg-gray-800 text-white px-2 py-1 rounded shadow-md z-50",
+              tooltipClassName
+            )}
+          >
+            {tooltip}
+            <Tooltip.Arrow className="fill-gray-800" />
+          </Tooltip.Content>
+        </Tooltip.Root>
+      </Tooltip.Provider>
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }
