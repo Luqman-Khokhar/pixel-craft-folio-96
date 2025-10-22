@@ -13,39 +13,40 @@ export const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
 
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  try {
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    formData.append("access_key", import.meta.env.VITE_WEB3_ACCESS_KEY);
 
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    });
+
+    const text = await response.text();
+    let data = {};
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) throw new Error("Failed to send");
-
-      toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
-      });
-
-      e.currentTarget.reset();
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+      data = JSON.parse(text);
+    } catch {
+      data = {};
     }
-  };
 
+    if (data && (data as any).success) {
+      alert("✅ Message sent successfully!");
+      e.currentTarget.reset();
+    } else {
+      alert("❌ Failed to send message. Try again later.");
+    }
+  } catch (error) {
+    console.error("Error sending message:", error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <section id="contact" className="py-20 bg-muted/30 relative" ref={ref}>
@@ -148,6 +149,7 @@ export const Contact = () => {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-2xl opacity-20" />
+
               <form
                 onSubmit={handleSubmit}
                 className="relative bg-card border border-border rounded-2xl p-8 space-y-6"
@@ -156,13 +158,9 @@ export const Contact = () => {
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
                     Name
                   </label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Your Name"
-                    required
-                  />
+                  <Input id="name" name="name" placeholder="Your Name" required />
                 </div>
+
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium mb-2">
                     Email
@@ -175,17 +173,21 @@ export const Contact = () => {
                     required
                   />
                 </div>
+
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium mb-2 hidden">
                     Subject
                   </label>
                   <Input
                     id="subject"
                     name="subject"
                     placeholder="Project Discussion"
-                    required
+                    // required
+                    className="hidden"
+                    value="Portfolio Contact"
                   />
                 </div>
+
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium mb-2">
                     Message
@@ -193,11 +195,12 @@ export const Contact = () => {
                   <Textarea
                     id="message"
                     name="message"
-                    placeholder="Tell me about your project..."
+                    placeholder="Write your message here"
                     rows={5}
                     required
                   />
                 </div>
+
                 <Button
                   type="submit"
                   className="w-full bg-gradient-primary hover:opacity-90 transition-opacity"
