@@ -34,16 +34,16 @@ export const Navbar = () => {
     }
   };
 
-// top-0
+  // top-0
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-10 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? "bg-background/80 backdrop-blur-lg border-b border-border"
-          : "bg-transparent"
-        }`} 
-    > 
+        ? "bg-background/80 backdrop-blur-lg border-b border-border"
+        : "bg-transparent"
+        }`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <motion.a
@@ -77,6 +77,20 @@ export const Navbar = () => {
               className="ml-1"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={toggleDarkMode}
+              className="ml-1"
+            >
+              <a
+                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
+                download="Muhammad_Luqman_CV.pdf"
+                className="flex items-center gap-2"
+              >
+                CV <Download className="h-4 w-4" />
+              </a>
             </Button>
           </div>
 
@@ -126,6 +140,6 @@ export const Navbar = () => {
         )}
       </AnimatePresence>
 
-    </motion.nav>
+    </motion.nav >
   );
 };
