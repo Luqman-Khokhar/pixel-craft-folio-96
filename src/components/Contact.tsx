@@ -20,7 +20,7 @@ export const Contact = () => {
 
   try {
     const formData = new FormData(e.currentTarget);
-    formData.append("access_key", import.meta.env.VITE_WEB3_ACCESS_KEY);
+    formData.append("access_key", "89baae63-25f7-4869-9d4e-a17cb3a200fb");
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
