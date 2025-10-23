@@ -32,9 +32,9 @@ export const About = () => {
               <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-3xl opacity-30" />
               <div className="relative bg-card rounded-2xl overflow-hidden border border-border shadow-xl">
                 <img
-                  src="/mine.jpg"
+                  src="/about.png"
                   alt="Profile"
-                  className="w-full h-auto object-cover"
+                  className="w-fit h-auto object-cover"
                 />
               </div>
             </div>
