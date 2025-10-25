@@ -1,57 +1,62 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Link } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const projects = [
   {
-    title: "E-Commerce Mobile App",
-    description: "Full-featured mobile e-commerce application with shopping cart, payment integration, and order tracking.",
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop",
-    tech: ["React Native", "TypeScript", "Firebase", "Stripe"],
-    github: "https://github.com/yourusername/project",
-    demo: "https://demo.example.com",
+    title: "Chirpbyte",
+    type: "Customer Support & Engagement App",
+    description: "A mobile app for chatting with website/social visitors, handling their issues, and scheduling meetings.",
+    image: "/Projects/Chirpbyte.png",
+    tech: ["React Native", "Notifee", "Socket.io", "Pusher"],
+    // github: "https://github.com/yourusername/project",
+    companyLink: "https://chirpbyte.com/",
+    demo: "https://play.google.com/store/apps/details?id=com.chirpbyte&hl=en",
   },
   {
-    title: "Task Management Dashboard",
-    description: "Modern task management application with real-time collaboration, drag-and-drop, and team features.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop",
-    tech: ["React.js", "Next.js", "Tailwind CSS", "PostgreSQL"],
-    github: "https://github.com/yourusername/project",
-    demo: "https://demo.example.com",
+    title: "Skip2Beat",
+    type: "Social Fitness & Workout Tracking App",
+    description: "A fitness app that combines guided 7-minute workouts with music, real-time chat, and geolocation to connect, compete, and stay motivated with friends.",
+    image: "/Projects/Skip2beat.png",
+    tech: ["React Native", "Socket.io", "Google Map"],
+    // github: "https://github.com/yourusername/project",
+    companyLink: "https://skip2beat.com.au/",
+    demo: "https://play.google.com/store/apps/details?id=com.skip2beat.app&hl=en",
   },
   {
-    title: "Social Media Platform",
-    description: "Feature-rich social networking platform with posts, comments, likes, and real-time messaging.",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=400&fit=crop",
-    tech: ["React.js", "Node.js", "MongoDB", "Socket.io"],
-    github: "https://github.com/yourusername/project",
-    demo: "https://demo.example.com",
+    title: "Kroolo",
+    type: "Management & Team Collaboration App",
+    description: "A project management platform that lets teams organize tasks, manage roles, and collaborate through real-time chat and group communication.",
+    image: "/Projects/Kroolo.png",
+    tech: ["React Native", "Socket.io", "Firebase", "Google / Apple / Facebook Login",],
+    companyLink: "https://kroolo.com/",
+    demo: "https://play.google.com/store/search?q=kroolo&c=apps&hl=en",
   },
   {
-    title: "Weather Forecast App",
-    description: "Beautiful weather application with location-based forecasts, interactive maps, and detailed metrics.",
-    image: "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=600&h=400&fit=crop",
-    tech: ["React Native", "Redux", "Weather API", "Maps"],
-    github: "https://github.com/yourusername/project",
-    demo: "https://demo.example.com",
+    title: "AlSalaam Tourism",
+    type: "Tour & Event Booking Web Application",
+    description: "A tour and event booking platform that lets users discover, compare, and book curated travel experiences.",
+    image: "/Projects/Alsalaam.png",
+    tech: ["Next JS", "Tailwind Css", "Ant Design",],
+    demo: "https://alsalaamtourism.com/",
   },
   {
-    title: "Portfolio CMS",
-    description: "Content management system for portfolios with drag-and-drop builder and customizable themes.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-    tech: ["React.js", "Express", "PostgreSQL", "AWS"],
-    github: "https://github.com/yourusername/project",
-    demo: "https://demo.example.com",
+    title: "Primax Portal",
+    type: "Role-Based Data Management Web Application",
+    description: "A web platform that allows admins, brokers, telemarketers, account managers, and data managers to manage, track, and organize business data efficiently.",
+    image: "/Projects/Primax.png",
+    tech: ["Laravel", "Vite", "Boostrap", "MySQL"],
+    demo: "https://primaxportal.com/login",
   },
   {
-    title: "Fitness Tracking App",
-    description: "Mobile fitness application with workout plans, progress tracking, and health analytics.",
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&h=400&fit=crop",
-    tech: ["React Native", "TypeScript", "Health APIs", "Charts"],
-    github: "https://github.com/yourusername/project",
-    demo: "https://demo.example.com",
+    title: "Ace Live",
+    type: "Live Streaming & Interactive Chat Web Application",
+    description: "A platform where users can watch live streams, chat in real time, and interact with streamers who can manage or promote participants.",
+    image: "/Projects/Acelive.png",
+    tech: ["React JS", "Keystone JS", "TypeScript", "OBS software", "Supabase", "Graphql", "Prisma", "MySQL"],
+    demo: "https://acelive.cc/",
   },
 ];
 
@@ -86,15 +91,16 @@ export const Projects = () => {
               <div className="relative h-full">
                 <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
                 <div className="relative bg-card border border-border rounded-2xl overflow-hidden h-full flex flex-col hover:border-primary/50 transition-all duration-300">
-                  <div className="relative overflow-hidden h-48">
+                  <div className="relative overflow-hidden h-48 p-4">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
                   <div className="p-6 flex-1 flex flex-col">
                     <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                    <h3 className="text-md font-bold mb-2">{project.type}</h3>
                     <p className="text-muted-foreground mb-4 flex-1">
                       {project.description}
                     </p>
@@ -109,7 +115,7 @@ export const Projects = () => {
                       ))}
                     </div>
                     <div className="flex gap-3">
-                      <Button
+                      {project?.github && <Button
                         variant="outline"
                         size="sm"
                         className="flex-1"
@@ -123,7 +129,22 @@ export const Projects = () => {
                           <Github className="h-4 w-4 mr-2" />
                           Code
                         </a>
-                      </Button>
+                      </Button>}
+                      {project?.companyLink && <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        asChild
+                      >
+                        <a
+                          href={project.companyLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Link  className="h-4 w-4 mr-2" />
+                          Company Link
+                        </a>
+                      </Button>}
                       <Button
                         size="sm"
                         className="flex-1 bg-gradient-primary"

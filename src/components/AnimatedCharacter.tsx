@@ -1,29 +1,31 @@
 "use client"
 
-import { Canvas, useFrame } from "@react-three/fiber"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { useGLTF, Html } from "@react-three/drei"
 import { Suspense, useRef, useEffect, useState } from "react"
 import * as THREE from "three"
 
-function BeeModel() {
+function BeeModel({ followCursor = false }: { followCursor?: boolean }) {
   const { scene, animations } = useGLTF("/Model/bee_rigged.glb")
   const beeRef = useRef<THREE.Group>(null)
-  const [scrollY, setScrollY] = useState(0)
-  const [maxScroll, setMaxScroll] = useState(0)
   const mixer = useRef<THREE.AnimationMixer | null>(null)
   const leftWing = useRef<THREE.Object3D | null>(null)
   const rightWing = useRef<THREE.Object3D | null>(null)
-  const prevX = useRef(0)
+  const [cursor, setCursor] = useState({ x: 0, y: 0 })
+  const { camera } = useThree()
 
+  // 🖱️ Track cursor pixel position
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    const handleResize = () =>
-      setMaxScroll(document.body.scrollHeight - window.innerHeight)
+    if (!followCursor) return
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursor({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [followCursor])
 
-    handleResize()
-    window.addEventListener("scroll", handleScroll)
-    window.addEventListener("resize", handleResize)
-
+  // 🐝 Setup wings / animation
+  useEffect(() => {
     if (animations.length > 0) {
       mixer.current = new THREE.AnimationMixer(scene)
       const action = mixer.current.clipAction(animations[0])
@@ -41,38 +43,48 @@ function BeeModel() {
         }
       })
     }
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleResize)
-    }
   }, [animations, scene])
 
   useFrame((state, delta) => {
-    if (!beeRef.current || maxScroll <= 0) return
-
+    if (!beeRef.current) return
     const t = state.clock.getElapsedTime()
-    const progress = Math.min(scrollY / maxScroll, 1)
-    const startX = 1.5
-    const endX = -2
-    const startY = -0.7
-    const endY = -1
-    const waveX = Math.sin(t * 2) * 1.5
-    const targetX = startX + (endX - startX) * progress + waveX
-    const targetY = startY + (endY - startY) * progress
 
-    beeRef.current.position.x = targetX
-    beeRef.current.position.y = targetY
-    beeRef.current.position.z = 0
+    // 🕊️ Gentle hover motion
+    const waveY = Math.sin(t * 3) * 0.15
 
-    const velocityX = targetX - prevX.current
-    const maxTilt = 0.5
-    const tilt = THREE.MathUtils.clamp(velocityX * 3, -maxTilt, maxTilt)
-    beeRef.current.rotation.z = tilt
+    // 🧭 Convert mouse pixel → world position
+    const mouseVec = new THREE.Vector3(
+      (cursor.x / window.innerWidth) * 2 - 1,
+      -(cursor.y / window.innerHeight) * 2 + 1,
+      0
+    )
+    mouseVec.unproject(camera) // Converts to world coordinates
+    const dir = mouseVec.sub(camera.position).normalize()
+    const distance = 3 // how far from camera (depth)
+    const worldPos = camera.position.clone().add(dir.multiplyScalar(distance))
+
+    // 🐝 Move bee toward target
+    beeRef.current.position.x = THREE.MathUtils.lerp(
+      beeRef.current.position.x,
+      worldPos.x,
+      0.08
+    )
+    beeRef.current.position.y = THREE.MathUtils.lerp(
+      beeRef.current.position.y,
+      worldPos.y + waveY,
+      0.08
+    )
+
+    // 🧠 Rotate bee toward movement
+    const tiltZ = THREE.MathUtils.lerp(
+      beeRef.current.rotation.z,
+      (worldPos.x - beeRef.current.position.x) * -0.3,
+      0.1
+    )
+    beeRef.current.rotation.z = tiltZ
     beeRef.current.rotation.y = Math.sin(t * 2) * 0.2
 
-    prevX.current = targetX
-
+    // 🪽 Wing flap
     if (mixer.current) {
       mixer.current.update(delta)
     } else {
@@ -82,7 +94,7 @@ function BeeModel() {
     }
   })
 
-  return <primitive ref={beeRef} object={scene} scale={0.022} />
+  return <primitive ref={beeRef} object={scene} scale={0.015} />
 }
 
 function BeeLoader() {
@@ -96,7 +108,11 @@ function BeeLoader() {
   )
 }
 
-export default function AnimatedCharacter() {
+export default function AnimatedCharacter({
+  followCursor = false,
+}: {
+  followCursor?: boolean
+}) {
   return (
     <div
       className="fixed inset-0 z-50 pointer-events-none"
@@ -106,7 +122,7 @@ export default function AnimatedCharacter() {
         <ambientLight intensity={1.2} />
         <directionalLight position={[5, 5, 5]} />
         <Suspense fallback={<BeeLoader />}>
-          <BeeModel />
+          <BeeModel followCursor={followCursor} />
         </Suspense>
       </Canvas>
     </div>

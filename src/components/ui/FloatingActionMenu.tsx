@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Plus, X, Palette, FileDown } from "lucide-react"
+import { Plus, X, Palette, FileDown, Settings } from "lucide-react"
 
 export const FloatingActionMenu = ({ setIsThemeCustomizerOpen, setShowBee }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -74,18 +74,20 @@ export const FloatingActionMenu = ({ setIsThemeCustomizerOpen, setShowBee }) => 
       >
         <Button
           size="icon"
-          className={`${
-            isOpen
+          className={`${isOpen
               ? "bg-red-600 hover:bg-red-700"
               : "bg-primary hover:bg-primary/90"
-          } text-white rounded-full shadow-lg p-3 flex items-center justify-center transition-all duration-300`}
+            } text-white rounded-full shadow-lg p-3 flex items-center justify-center transition-all duration-300`}
         >
-          <motion.div
+          {/* <motion.div
             initial={false}
             animate={{ rotate: isOpen ? 45 : 0 }}
             transition={{ duration: 0.3 }}
           >
             {isOpen ? <X className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+          </motion.div> */}
+          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
+            <Settings size={32} />
           </motion.div>
         </Button>
       </motion.div>

@@ -19,7 +19,12 @@ const Index = () => {
   const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
   return (
 
-    <div className="min-h-screen relative">
+    <div
+      style={{
+        cursor: 'url("/cursor.png") 16 16, auto', // 16 16 = hotspot position
+      }}
+      className="min-h-screen relative"
+    >
       <NoticeBar />
       <Navbar />
       <main>
@@ -75,7 +80,7 @@ const Index = () => {
         open={isThemeCustomizerOpen}
         onOpenChange={setIsThemeCustomizerOpen}
       />
-      {showBee && <AnimatedCharacter />}
+      {showBee && <AnimatedCharacter followCursor={true} />}
 
     </div>
   );
