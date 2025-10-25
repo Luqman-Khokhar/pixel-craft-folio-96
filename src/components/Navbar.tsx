@@ -65,7 +65,7 @@ export const Navbar = () => {
                 key={item.name}
                 variant="ghost"
                 onClick={() => scrollToSection(item.href)}
-                className="text-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-white transition-colors"
               >
                 {item.name}
               </Button>

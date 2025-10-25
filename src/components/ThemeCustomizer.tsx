@@ -1,67 +1,47 @@
 import { useState, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
-import { X, RotateCcw } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { RotateCcw } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useTheme, ThemeColors } from "@/contexts/ThemeContext";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ThemeCustomizerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const hslToHex = (hsl: string): string => {
-  const [h, s, l] = hsl.split(" ").map((v) => parseFloat(v));
-  const hDecimal = h / 360;
-  const sDecimal = s / 100;
-  const lDecimal = l / 100;
-
-  const c = (1 - Math.abs(2 * lDecimal - 1)) * sDecimal;
-  const x = c * (1 - Math.abs(((hDecimal * 6) % 2) - 1));
-  const m = lDecimal - c / 2;
-
-  let r = 0, g = 0, b = 0;
-  if (hDecimal < 1 / 6) [r, g, b] = [c, x, 0];
-  else if (hDecimal < 2 / 6) [r, g, b] = [x, c, 0];
-  else if (hDecimal < 3 / 6) [r, g, b] = [0, c, x];
-  else if (hDecimal < 4 / 6) [r, g, b] = [0, x, c];
-  else if (hDecimal < 5 / 6) [r, g, b] = [x, 0, c];
-  else [r, g, b] = [c, 0, x];
-
-  const toHex = (n: number) =>
-    Math.round((n + m) * 255)
-      .toString(16)
-      .padStart(2, "0");
-
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+// --- helpers ---
+const hslToHex = (hsl?: string): string => {
+  if (!hsl) return "#ccc";
+  const parts = hsl.replace(/[^\d.%]/g, "").split(/\s+/).filter(Boolean);
+  const [h, s, l] = parts.map(v => parseFloat(v));
+  if ([h, s, l].some(isNaN)) return "#ccc";
+  const a = s * Math.min(l / 100, 1 - l / 100) / 100;
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l / 100 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, "0");
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
 };
 
 const hexToHsl = (hex: string): string => {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
   const b = parseInt(hex.slice(5, 7), 16) / 255;
-
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h = 0, s = 0, l = (max + min) / 2;
-
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
-    switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-      case g: h = ((b - r) / d + 2) / 6; break;
-      case b: h = ((r - g) / d + 4) / 6; break;
-    }
+    h =
+      max === r ? ((g - b) / d + (g < b ? 6 : 0)) :
+      max === g ? ((b - r) / d + 2) :
+      ((r - g) / d + 4);
+    h /= 6;
   }
-
   return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 };
 
@@ -71,165 +51,149 @@ const colorLabels: Record<keyof ThemeColors, string> = {
   accent: "Accent",
   background: "Background",
   foreground: "Text",
+  rainbow: "Rainbow"
 };
 
 export const ThemeCustomizer = ({ open, onOpenChange }: ThemeCustomizerProps) => {
   const { colors, updateColor, resetTheme } = useTheme();
-  const [selectedColor, setSelectedColor] = useState<keyof ThemeColors>("primary");
-  const [pendingColors, setPendingColors] = useState<ThemeColors>(colors);
-  const [hexValue, setHexValue] = useState(hslToHex(pendingColors[selectedColor]));
+  const [pending, setPending] = useState(colors);
+  const [selected, setSelected] = useState<keyof ThemeColors>("primary");
+  const [hex, setHex] = useState(hslToHex(colors.primary));
+  const [rainbow, setRainbow] = useState(["#3b82f6", "#9333ea"]);
 
-  // Reset pending colors when modal opens
   useEffect(() => {
     if (open) {
-      setPendingColors(colors);
-      setHexValue(hslToHex(colors[selectedColor]));
+      setPending(colors);
+      const val = colors[selected];
+      setHex(selected === "rainbow" ? "" : hslToHex(val));
     }
-  }, [open, colors, selectedColor]);
+  }, [open, colors, selected]);
 
-  const handleColorChange = (hex: string) => {
-    setHexValue(hex);
-    const hsl = hexToHsl(hex);
-    setPendingColors(prev => ({ ...prev, [selectedColor]: hsl }));
+  const handleChange = (hex: string) => {
+    setHex(hex);
+    setPending(p => ({ ...p, [selected]: hexToHsl(hex) }));
   };
 
-  const handleColorSelect = (key: keyof ThemeColors) => {
-    setSelectedColor(key);
-    setHexValue(hslToHex(pendingColors[key]));
-  };
-
-  const handleSave = () => {
-    // Apply all pending colors
-    Object.entries(pendingColors).forEach(([key, value]) => {
-      updateColor(key as keyof ThemeColors, value);
-    });
+  const save = () => {
+    Object.entries(pending).forEach(([k, v]) => updateColor(k as keyof ThemeColors, v));
     onOpenChange(false);
   };
 
-  const handleReset = () => {
+  const reset = () => {
     resetTheme();
-    setPendingColors(colors);
-    setHexValue(hslToHex(colors[selectedColor]));
+    setPending(colors);
+    setHex(hslToHex(colors[selected]));
   };
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[450px] w-[90vw] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">
-            🎨 Customize Theme
-          </DialogTitle>
-        </DialogHeader>
+return (
+  <Dialog open={open} onOpenChange={onOpenChange}>
+    <DialogContent
+      className="
+        w-[95vw] max-w-full md:max-w-[900px] lg:max-w-[1000px]
+        p-4 sm:p-6
+        max-h-[90vh] overflow-y-auto
+      "
+    >
+      <DialogHeader className=" bg-background  pb-2">
+        <DialogTitle className="text-base sm:text-lg md:text-xl">
+          🎨 Customize Theme
+        </DialogTitle>
+      </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Color Variable Selector */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Select Variable</p>
-            <div className="grid grid-cols-2 gap-2">
-              {(Object.keys(colors) as Array<keyof ThemeColors>).map((key) => (
-                <motion.button
-                  key={key}
-                  onClick={() => handleColorSelect(key)}
-                  className={`p-3 rounded-lg border-2 transition-all text-left ${
-                    selectedColor === key
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="flex items-center gap-2">
-                  <div
-                      className="w-6 h-6 rounded-md border-2 border-border"
-                      style={{ backgroundColor: hslToHex(pendingColors[key]) }}
-                    />
-                    <span className="text-sm font-medium">{colorLabels[key]}</span>
-                  </div>
-                </motion.button>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {/* Left: Picker */}
+        <div className="space-y-4">
+          <p className="text-sm font-medium">
+            Pick Color for {colorLabels[selected]}
+          </p>
+
+          {selected === "rainbow" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {rainbow.map((clr, i) => (
+                <div key={i} className="flex justify-center">
+                  <HexColorPicker
+                    color={clr}
+                    onChange={newClr => {
+                      const arr = [...rainbow];
+                      arr[i] = newClr;
+                      setRainbow(arr);
+                      setPending(p => ({
+                        ...p,
+                        rainbow: `linear-gradient(90deg, ${arr[0]}, ${arr[1]})`,
+                      }));
+                    }}
+                    style={{ width: "100%" }}
+                  />
+                </div>
               ))}
             </div>
+          ) : (
+            <HexColorPicker
+              color={hex}
+              onChange={handleChange}
+              style={{ width: "100%" }}
+            />
+          )}
+        </div>
+
+        {/* Right: Preview & Actions */}
+        <div className="space-y-4">
+          <p className="text-sm font-medium">Preview (click to select)</p>
+
+          <div
+            className="
+              p-3 border rounded-lg 
+              grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 
+              gap-2
+            "
+          >
+            {(Object.keys(pending) as Array<keyof ThemeColors>).map(k => {
+              const val = pending[k];
+              const isGrad = val?.startsWith("linear-gradient");
+              return (
+                <motion.div
+                  key={k}
+                  onClick={() => {
+                    setSelected(k);
+                    if (k !== "rainbow") setHex(hslToHex(val));
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  className={`cursor-pointer h-10 flex items-center justify-center text-[10px] sm:text-xs rounded-md border transition-all ${
+                    selected === k ? "ring-2 ring-primary" : ""
+                  }`}
+                  style={{
+                    background: isGrad ? val : `hsl(${val})`,
+                    color:
+                      k === "foreground"
+                        ? `hsl(${pending.background})`
+                        : `hsl(${pending.foreground})`,
+                  }}
+                >
+                  {colorLabels[k]}
+                </motion.div>
+              );
+            })}
           </div>
 
-          {/* Color Picker */}
-          <div className="space-y-3">
-            <p className="text-sm font-medium">
-              Pick Color for {colorLabels[selectedColor]}
-            </p>
-            <div className="flex flex-col items-center gap-3">
-              <HexColorPicker
-                color={hexValue}
-                onChange={handleColorChange}
-                style={{ width: "100%", height: "180px" }}
-              />
-              <div className="flex items-center gap-2 w-full">
-                <input
-                  type="text"
-                  value={hexValue}
-                  onChange={(e) => handleColorChange(e.target.value)}
-                  className="flex-1 px-3 py-2 text-sm border rounded-md bg-background"
-                  placeholder="#000000"
-                />
-                <div
-                  className="w-12 h-10 rounded-md border-2 border-border"
-                  style={{ backgroundColor: hexValue }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Preview */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Preview</p>
-            <div className="p-4 rounded-lg border bg-card space-y-2">
-              <div 
-                className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
-                style={{ 
-                  backgroundColor: hslToHex(pendingColors.primary),
-                  color: hslToHex(pendingColors.foreground)
-                }}
-              >
-                Primary
-              </div>
-              <div 
-                className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
-                style={{ 
-                  backgroundColor: hslToHex(pendingColors.secondary),
-                  color: hslToHex(pendingColors.foreground)
-                }}
-              >
-                Secondary
-              </div>
-              <div 
-                className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
-                style={{ 
-                  backgroundColor: hslToHex(pendingColors.accent),
-                  color: hslToHex(pendingColors.foreground)
-                }}
-              >
-                Accent
-              </div>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-2 pt-2">
+          <div className="flex flex-col sm:flex-row gap-2 sticky bottom-0 bg-background pt-2 pb-1">
             <Button
               variant="outline"
-              onClick={handleReset}
-              className="flex-1"
+              onClick={reset}
+              className="flex-1 flex items-center justify-center"
             >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Reset
+              <RotateCcw className="w-4 h-4 mr-2" /> Reset
             </Button>
             <Button
-              onClick={handleSave}
-              className="flex-1"
+              onClick={save}
+              className="flex-1 flex items-center justify-center"
             >
               Save Theme
             </Button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
-  );
+      </div>
+    </DialogContent>
+  </Dialog>
+);
+
 };

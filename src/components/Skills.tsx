@@ -14,17 +14,17 @@ const skillCategories = [
   {
     title: "Frontend",
     icon: Code2,
-    skills: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Ant Design", "Material UI"],
+    skills: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Ant Design", "Material UI", "Bootstrap", "Aceternity UI", "Formik & Yup"],
   },
   {
     title: "State Management",
     icon: Database,
-    skills: ["Redux Toolkit", "Redux Saga", "React Query", "Zustand", "Context API"],
+    skills: ["Context API", "Redux", "Redux Toolkit", "Redux Thunk", "Redux Saga", "React Query", "Zustand",],
   },
   {
     title: "Real-time & APIs",
     icon: Smartphone,
-    skills: ["Socket.io", "Pusher", "Firebase Realtime DB", "Supabase", "REST APIs", "WebSockets"],
+    skills: ["Socket.io", "Pusher", "Firebase", "Supabase", "REST APIs", "WebSockets", "GraphQl"],
   },
   {
     title: "Backend Familiarity",
@@ -34,12 +34,12 @@ const skillCategories = [
   {
     title: "Deployment",
     icon: GitBranch,
-    skills: ["Vercel", "Netlify", "Firebase", "GitHub Actions"],
+    skills: ["Vercel", "Netlify", "Godaddy","Hostinger", "Google Play Store", "Apple App Store"],
   },
   {
-    title: "UI/UX",
+    title: "UI / UX",
     icon: Palette,
-    skills: ["Responsive Design", "Animations", "Modern UI Libraries", "Component Design"],
+    skills: ["Responsive Design",  "Animations & Transitions", "Modern UI Libraries", "Component Design",  "MVC / MVVM Structure",],
   },
 ];
 

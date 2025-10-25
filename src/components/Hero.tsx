@@ -29,7 +29,7 @@ export const Hero = () => {
           >
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
               Hi, I'm{" "}
-              <span className="bg-gradient-primary bg-clip-text text-transparent">
+              <span className="rainbow bg-clip-text text-transparent">
                 Muhammad Luqman Khokhar
               </span>
             </h1>

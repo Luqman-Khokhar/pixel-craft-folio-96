@@ -31,7 +31,7 @@ const projects = [
     title: "Kroolo",
     type: "Management & Team Collaboration App",
     description: "A project management platform that lets teams organize tasks, manage roles, and collaborate through real-time chat and group communication.",
-    image: "/Projects/Kroolo.png",
+    image: "/Projects/Kroolo.svg",
     tech: ["React Native", "Socket.io", "Firebase", "Google / Apple / Facebook Login",],
     companyLink: "https://kroolo.com/",
     platform:"mobile",

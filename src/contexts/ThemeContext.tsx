@@ -6,6 +6,7 @@ export interface ThemeColors {
   accent: string;
   background: string;
   foreground: string;
+  rainbow: string;
 }
 
 interface ThemeContextType {
@@ -24,6 +25,7 @@ const defaultLightColors: ThemeColors = {
   accent: "262 83% 58%",
   background: "0 0% 100%",
   foreground: "222 47% 11%",
+  rainbow: "linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 83% 58%) 100%)",
 };
 
 const defaultDarkColors: ThemeColors = {
@@ -32,6 +34,7 @@ const defaultDarkColors: ThemeColors = {
   accent: "262 83% 58%",
   background: "222 47% 5%",
   foreground: "210 40% 98%",
+  rainbow: "linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 83% 58%) 100%)",
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
@@ -60,7 +63,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.style.setProperty("--accent", colors.accent);
     root.style.setProperty("--background", colors.background);
     root.style.setProperty("--foreground", colors.foreground);
-    
+    root.style.setProperty("--rainbow", colors.rainbow);
     localStorage.setItem("theme-colors", JSON.stringify(colors));
   }, [colors]);
 

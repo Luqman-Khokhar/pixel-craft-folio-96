@@ -8,33 +8,36 @@ const experiences = [
     title: "Frontend Developer",
     company: "Adroid IT Solutions",
     period: "2025 - Present",
-    description: "Leading the development of web and mobile interfaces with React.js and React Native.",
+    description:
+      "Leading the development of web and mobile interfaces with React.js and React Native.",
     achievements: [
-      "Implementing real-time features with Socket.io and Pusher",
-      "Optimizing frontend performance across web and mobile platforms",
-      "Collaborating with cross-functional teams on product development",
+      "Developed and enhanced gym, marketing, chat, and work management apps.",
+      "Implemented AI LLM integrations while contributing to backend development in Node.js, KeystoneJS, and Laravel.",
+      "Led real-time chat and notification features, optimized state management, and collaborated on robust app architecture.",
     ],
   },
   {
     title: "Frontend Developer",
     company: "AppCrates",
     period: "2024 - 2025",
-    description: "Built and maintained production-level React and React Native apps with modern UI libraries.",
+    description:
+      "Built and maintained production-level React and React Native apps with modern UI libraries.",
     achievements: [
-      "Integrated REST APIs and real-time data synchronization",
-      "Developed responsive, animated components with Framer Motion",
-      "Implemented state management solutions using Redux Toolkit and React Query",
+      "Built and maintained mobile apps for gym, chat, and work management platforms.",
+      "Integrated real-time communication features, optimized APIs, and improved front-end structure for scalability.",
+      "Worked closely with cross-functional teams to deliver responsive and stable applications.",
     ],
   },
   {
     title: "Frontend Developer",
     company: "Al-Salam Tech House",
     period: "2023 - 2024",
-    description: "Developed dynamic user interfaces and implemented responsive layouts for web applications.",
+    description:
+      "Developed dynamic user interfaces and implemented responsive layouts for web applications.",
     achievements: [
-      "Collaborated with backend teams for seamless API integration",
-      "Built reusable component libraries with Ant Design and Material UI",
-      "Improved application responsiveness and cross-browser compatibility",
+      "Developed CRM web applications and a ride-booking mobile app using React Native.",
+      "Focused on performance optimization, UI/UX improvements, and efficient state management.",
+      "Collaborated with teams to implement new features and ensure scalable solutions.",
     ],
   },
 ];
@@ -46,6 +49,7 @@ export const Experience = () => {
   return (
     <section id="experience" className="py-20 relative" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -53,64 +57,69 @@ export const Experience = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            Work <span className="bg-gradient-primary bg-clip-text text-transparent">Experience</span>
+            Work{" "}
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              Experience
+            </span>
           </h2>
           <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full" />
         </motion.div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-primary transform md:-translate-x-1/2" />
+        {/* Timeline Container */}
+        <div className="relative max-w-5xl mx-auto">
+          {/* Center line */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-primary -translate-x-1/2 rounded-full" />
 
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={exp.title}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className={`relative mb-12 ${
-                  index % 2 === 0 ? "md:pr-1/2 md:text-right" : "md:pl-1/2 md:ml-auto"
+          {experiences.map((exp, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              className={`relative flex flex-col md:flex-row items-center mb-16 ${
+                index % 2 === 0 ? "md:flex-row-reverse" : ""
+              }`}
+            >
+              {/* Connector Dot */}
+              <div className="absolute left-1/2 w-6 h-6 bg-gradient-primary rounded-full -translate-x-1/2 z-10 border-4 border-background shadow-md" />
+
+              {/* Spacer for alignment */}
+              <div className="hidden md:block w-1/2" />
+
+              {/* Card */}
+              <div
+                className={`w-full md:w-1/2 bg-card border border-border rounded-2xl p-6 relative shadow-md hover:border-primary/50 transition-all duration-300 ${
+                  index % 2 === 0 ? "md:mr-8" : "md:ml-8"
                 }`}
               >
-                {/* Timeline dot */}
-                <div className="absolute left-0 md:left-1/2 top-6 w-4 h-4 bg-gradient-primary rounded-full transform md:-translate-x-1/2 border-4 border-background" />
-
-                <div className="ml-8 md:ml-0">
-                  <div className={`relative group ${index % 2 === 0 ? "md:mr-8" : "md:ml-8"}`}>
-                    <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                    <div className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-all duration-300">
-                      <div className="flex items-start gap-3 mb-3">
-                        <div className="p-2 bg-gradient-primary rounded-lg">
-                          <Briefcase className="h-5 w-5 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold mb-1">{exp.title}</h3>
-                          <p className="text-primary font-semibold">{exp.company}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-muted-foreground mb-3">
-                        <Calendar className="h-4 w-4" />
-                        <span className="text-sm">{exp.period}</span>
-                      </div>
-                      <p className="text-muted-foreground mb-4">{exp.description}</p>
-                      <ul className="space-y-2">
-                        {exp.achievements.map((achievement, i) => (
-                          <li
-                            key={i}
-                            className="flex items-start gap-2 text-sm text-muted-foreground"
-                          >
-                            <span className="text-primary mt-1">•</span>
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="p-2 bg-gradient-primary rounded-lg">
+                    <Briefcase className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-1">{exp.title}</h3>
+                    <p className="text-primary font-semibold">{exp.company}</p>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+
+                <div className="flex items-center gap-2 text-muted-foreground mb-3">
+                  <Calendar className="h-4 w-4" />
+                  <span className="text-sm">{exp.period}</span>
+                </div>
+
+                <p className="text-muted-foreground mb-4">{exp.description}</p>
+
+                <ul className="space-y-2">
+                  {exp.achievements.map((a, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <span className="text-primary mt-1">•</span>
+                      <span>{a}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
