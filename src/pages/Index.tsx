@@ -11,7 +11,6 @@ import AnimatedCharacter from "@/components/AnimatedCharacter";
 import NoticeBar from "@/components/NoticeBar";
 import { Button } from "@/components/ui/button";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
-import { Download, FileDown, Palette } from "lucide-react";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
 
 const Index = () => {
