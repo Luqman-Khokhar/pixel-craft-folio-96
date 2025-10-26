@@ -134,7 +134,7 @@ export const ProjectCardModal = ({ project, index }) => {
                                             </a>
                                         </Button>
                                     )}
-                                    <Button size="sm" className="bg-gradient-primary" asChild>
+                                    <Button size="sm" className="bg-rainbow" asChild>
                                         <a href={project.demo} target="_blank" rel="noopener noreferrer">
                                             <ExternalLink className="h-4 w-4 mr-2" /> Demo
                                         </a>

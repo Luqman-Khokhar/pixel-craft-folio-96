@@ -57,9 +57,9 @@ export const Skills = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            Technical <span className="bg-gradient-primary bg-clip-text text-transparent">Skills</span>
+            Technical <span className="rainbow bg-clip-text text-transparent">Skills</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -75,7 +75,7 @@ export const Skills = () => {
                 <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
                 <div className="relative bg-card border border-border rounded-2xl p-6 h-full hover:border-primary/50 transition-all duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-gradient-primary rounded-lg">
+                    <div className="p-2 bg-rainbow rounded-lg">
                       <category.icon className="h-6 w-6 text-white" />
                     </div>
                     <h3 className="text-xl font-bold">{category.title}</h3>

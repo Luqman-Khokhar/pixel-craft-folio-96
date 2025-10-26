@@ -16,9 +16,9 @@ export const About = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            About <span className="bg-gradient-primary bg-clip-text text-transparent">Me</span>
+            About <span className="rainbow bg-clip-text text-transparent">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
@@ -29,7 +29,7 @@ export const About = () => {
             className="relative"
           >
             <div className="relative w-full max-w-md mx-auto">
-              <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-3xl opacity-30" />
+              <div className="absolute inset-0 bg-rainbow rounded-2xl blur-3xl opacity-30" />
               <div className="relative bg-card rounded-2xl overflow-hidden border border-border shadow-xl">
                 <img
                   src="/about.png"

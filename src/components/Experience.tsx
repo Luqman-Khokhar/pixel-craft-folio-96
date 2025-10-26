@@ -58,17 +58,17 @@ export const Experience = () => {
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
             Work{" "}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
+            <span className="rainbow bg-clip-text text-transparent">
               Experience
             </span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
         </motion.div>
 
         {/* Timeline Container */}
         <div className="relative max-w-5xl mx-auto">
           {/* Center line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-primary -translate-x-1/2 rounded-full" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-rainbow -translate-x-1/2 rounded-full" />
 
           {experiences.map((exp, index) => (
             <motion.div
@@ -81,7 +81,7 @@ export const Experience = () => {
               }`}
             >
               {/* Connector Dot */}
-              <div className="absolute left-1/2 w-6 h-6 bg-gradient-primary rounded-full -translate-x-1/2 z-10 border-4 border-background shadow-md" />
+              <div className="absolute left-1/2 w-6 h-6 bg-rainbow rounded-full -translate-x-1/2 z-10 border-4 border-background shadow-md" />
 
               {/* Spacer for alignment */}
               <div className="hidden md:block w-1/2" />
@@ -93,7 +93,7 @@ export const Experience = () => {
                 }`}
               >
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="p-2 bg-gradient-primary rounded-lg">
+                  <div className="p-2 bg-rainbow rounded-lg">
                     <Briefcase className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1">

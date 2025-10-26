@@ -169,7 +169,7 @@ return (
                         : `hsl(${pending.foreground})`,
                   }}
                 >
-                  {colorLabels[k]}
+                  {k === "rainbow"? "Gradient": k === "accent"? "Hover": colorLabels[k]}
                 </motion.div>
               );
             })}

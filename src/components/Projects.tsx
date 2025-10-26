@@ -96,9 +96,9 @@ export const Projects = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            Featured <span className="bg-gradient-primary bg-clip-text text-transparent">Projects</span>
+            Featured <span className="rainbow bg-clip-text text-transparent">Projects</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -114,12 +114,12 @@ export const Projects = () => {
         >
           <div className="flex justify-center items-center gap-4 mt-8">
             {visibleCount < projects.length && (
-              <Button onClick={handleViewMore} className="bg-gradient-primary">
+              <Button onClick={handleViewMore} className="bg-rainbow">
                 View More
               </Button>
             )}
             {visibleCount > 3 && (
-              <Button onClick={handleShowLess} className="bg-gradient-primary">
+              <Button onClick={handleShowLess} className="bg-rainbow">
                 Show Less
               </Button>
             )}

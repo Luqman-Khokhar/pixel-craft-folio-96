@@ -58,9 +58,9 @@ export const Contact = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            Get In <span className="bg-gradient-primary bg-clip-text text-transparent">Touch</span>
+            Get In <span className="rainbow bg-clip-text text-transparent">Touch</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full mb-4" />
+          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full mb-4" />
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Have a project in mind or want to discuss opportunities? I'd love to hear from you!
           </p>
@@ -77,7 +77,7 @@ export const Contact = () => {
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-primary rounded-lg">
+                  <div className="p-3 bg-rainbow rounded-lg">
                     <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -91,7 +91,7 @@ export const Contact = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-primary rounded-lg">
+                  <div className="p-3 bg-rainbow rounded-lg">
                     <Phone className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -105,7 +105,7 @@ export const Contact = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-primary rounded-lg">
+                  <div className="p-3 bg-rainbow rounded-lg">
                     <MapPin className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -119,7 +119,7 @@ export const Contact = () => {
             </div>
 
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-2xl opacity-20" />
+              <div className="absolute inset-0 bg-rainbow rounded-2xl blur-2xl opacity-20" />
               <div className="relative bg-card border border-border rounded-2xl p-6">
                 <h4 className="font-semibold mb-4">Let's connect!</h4>
                 <p className="text-muted-foreground mb-4">
@@ -148,7 +148,7 @@ export const Contact = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-2xl opacity-20" />
+              <div className="absolute inset-0 bg-rainbow rounded-2xl blur-2xl opacity-20" />
 
               <form
                 onSubmit={handleSubmit}
@@ -203,7 +203,7 @@ export const Contact = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-primary hover:opacity-90 transition-opacity"
+                  className="w-full bg-rainbow hover:opacity-90 transition-opacity"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

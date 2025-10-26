@@ -79,7 +79,7 @@ export const Hero = () => {
           >
             <Button
               size="lg"
-              className="bg-gradient-primary hover:opacity-90 transition-opacity shadow-glow"
+              className="bg-rainbow hover:opacity-90 transition-opacity shadow-glow"
               onClick={() => scrollToSection("#contact")}
             >
               <Mail className="mr-2 h-5 w-5" />

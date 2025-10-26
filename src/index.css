@@ -43,6 +43,7 @@ All colors MUST be HSL.
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(217 91% 98%) 100%);
     --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.3);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --rainbow: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
   }
 
   .dark {
@@ -78,6 +79,7 @@ All colors MUST be HSL.
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 83% 58%) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(222 47% 5%) 0%, hsl(222 47% 8%) 100%);
     --shadow-glow: 0 0 60px hsl(217 91% 60% / 0.4);
+    --rainbow: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
   }
 
   .rainbow {
@@ -119,3 +121,21 @@ All colors MUST be HSL.
 .animate-slide-up {
   animation: slide-up 0.4s ease-out forwards;
 }
+
+@layer utilities {
+.bg-rainbow {
+  background: var(--rainbow);
+  background-size: 400% 400%;
+  transition: background-position 0.8s ease;
+}
+
+.bg-rainbow:hover {
+  background-position: 100% 50%;
+}
+
+  @keyframes rainbow-shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+}
+
