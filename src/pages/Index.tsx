@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { HeroSection2 } from "@/components/HeroSection2";
 import { About } from "@/components/About";
 import { Skills } from "@/components/Skills";
 import { Projects } from "@/components/Projects";
@@ -13,6 +12,7 @@ import NoticeBar from "@/components/NoticeBar";
 import { Button } from "@/components/ui/button";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
+
 
 const Index = () => {
   const [showBee, setShowBee] = useState(false);
@@ -29,7 +29,6 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        <HeroSection2 />
         <About />
         <Skills />
         <Projects />

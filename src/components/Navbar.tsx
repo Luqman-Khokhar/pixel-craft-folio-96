@@ -3,6 +3,7 @@ import { Moon, Sun, Menu, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -14,6 +15,8 @@ const navItems = [
 ];
 
 export const Navbar = () => {
+
+  const navigate = useNavigate();
   const { isDark, toggleDarkMode } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -60,6 +63,14 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/Theme2")}
+              className="text-foreground hover:text-white transition-colors"
+            >
+              Theme 2
+            </Button>
+
             {navItems.map((item) => (
               <Button
                 key={item.name}
