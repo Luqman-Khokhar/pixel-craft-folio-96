@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
 
+
 const Index = () => {
   const [showBee, setShowBee] = useState(false);
   const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
