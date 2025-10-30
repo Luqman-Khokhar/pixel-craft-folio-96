@@ -45,7 +45,7 @@ const Index = () => {
         className="fixed bottom-36 right-6 bg-green-700 hover:bg-green-900 text-white rounded-full shadow-lg p-2 transition-all duration-300 flex items-center justify-center z-[9999]"
       >
         <a
-          href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
+          href="/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf"
           download="Muhammad_Luqman_CV.pdf"
         >
           <FileDown  className="h-5 w-5" />

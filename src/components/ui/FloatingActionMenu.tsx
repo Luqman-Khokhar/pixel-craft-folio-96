@@ -15,7 +15,7 @@ export const FloatingActionMenu = ({ setIsThemeCustomizerOpen, setShowBee }) => 
       icon: <FileDown className="h-5 w-5" />,
       onClick: () =>
         window.open(
-          "/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf",
+          "/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf",
           "_blank"
         ),
       bottom: 36,

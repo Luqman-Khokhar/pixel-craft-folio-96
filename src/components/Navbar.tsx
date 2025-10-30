@@ -96,7 +96,7 @@ export const Navbar = () => {
               className="ml-1"
             >
               <a
-                href="/CV/Muhammad_Luqman_CV_(18Oct2025).pdf.pdf"
+                href="/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf"
                 download="Muhammad_Luqman_CV.pdf"
                 className="flex items-center gap-2"
               >
