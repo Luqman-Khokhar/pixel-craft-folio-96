@@ -25,7 +25,7 @@ const Index = () => {
       }}
       className="min-h-screen relative"
     >
-      <NoticeBar notice="🚧 This website is in development. Some buttons only work when Bee Model is OFF." />
+      {/* <NoticeBar notice="🚧 This website is in development. Some buttons only work when Bee Model is OFF." /> */}
       <Navbar />
       <main>
         <Hero />
@@ -74,6 +74,7 @@ const Index = () => {
       </Button> */}
       <FloatingActionMenu
         setIsThemeCustomizerOpen={setIsThemeCustomizerOpen}
+        isThemeCustomizerOpen={isThemeCustomizerOpen}
         setShowBee={setShowBee}
       />
       <ThemeCustomizer

@@ -47,8 +47,8 @@ export const Experience = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="experience" className="py-20 relative" ref={ref}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="experience" className="py-20 relative w-full overflow-hidden" ref={ref}>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[90rem] overflow-hidden">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -68,7 +68,7 @@ export const Experience = () => {
         {/* Timeline Container */}
         <div className="relative max-w-5xl mx-auto">
           {/* Center line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-rainbow -translate-x-1/2 rounded-full" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-rainbow -translate-x-[calc(50%-1px)] rounded-full" />
 
           {experiences.map((exp, index) => (
             <motion.div
@@ -76,21 +76,19 @@ export const Experience = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className={`relative flex flex-col md:flex-row items-center mb-16 ${
-                index % 2 === 0 ? "md:flex-row-reverse" : ""
-              }`}
+              className={`relative flex flex-col md:flex-row items-center mb-16 ${index % 2 === 0 ? "md:flex-row-reverse" : ""
+                }`}
             >
               {/* Connector Dot */}
-              <div className="absolute left-1/2 w-6 h-6 bg-rainbow rounded-full -translate-x-1/2 z-10 border-4 border-background shadow-md" />
+              <div className="absolute left-1/2 w-5 h-5 bg-rainbow rounded-full -translate-x-1/2 z-10 border-4 border-background shadow-md" />
 
               {/* Spacer for alignment */}
               <div className="hidden md:block w-1/2" />
 
               {/* Card */}
               <div
-                className={`w-full md:w-1/2 bg-card border border-border rounded-2xl p-6 relative shadow-md hover:border-primary/50 transition-all duration-300 ${
-                  index % 2 === 0 ? "md:mr-8" : "md:ml-8"
-                }`}
+                className={`w-full md:w-1/2 bg-card border border-border rounded-2xl p-6 relative shadow-md hover:border-primary/50 transition-all duration-300 ${index % 2 === 0 ? "md:mr-8" : "md:ml-8"
+                  }`}
               >
                 <div className="flex items-start gap-3 mb-3">
                   <div className="p-2 bg-rainbow rounded-lg">

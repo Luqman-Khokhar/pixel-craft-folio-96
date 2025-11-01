@@ -87,7 +87,7 @@ export const Projects = () => {
     setVisibleCount(3);
   };
   return (
-    <section id="projects" className="py-20 bg-muted/30 relative" ref={ref}>
+    <section id="projects"  className="py-20 bg-muted/30 relative w-full overflow-x-hidden" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -101,7 +101,7 @@ export const Projects = () => {
           <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto overflow-hidden">
           {projects.slice(0, visibleCount).map((project, index) => (
             <ProjectCardModal project={project} index={index} key={project.title} />
           ))}

@@ -104,7 +104,7 @@ return (
         {/* Left: Picker */}
         <div className="space-y-4">
           <p className="text-sm font-medium">
-            Pick Color for {colorLabels[selected]}
+            Pick Color for {selected === "rainbow"? "Gradient":colorLabels[selected]}
           </p>
 
           {selected === "rainbow" ? (

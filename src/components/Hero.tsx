@@ -14,7 +14,7 @@ export const Hero = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16"
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-16"
     >
       {/* Animated background gradient */}
       <div className="absolute inset-0 bg-gradient-subtle opacity-50" />

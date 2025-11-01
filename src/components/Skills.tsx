@@ -9,22 +9,50 @@ import {
   GitBranch,
   Terminal,
 } from "lucide-react";
+import { InfiniteSkillsScroll } from "./ui/infiniteScroll";
 
 const skillCategories = [
   {
     title: "Frontend",
     icon: Code2,
-    skills: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Ant Design", "Material UI", "Bootstrap", "Aceternity UI", "Formik & Yup"],
+    skills: [
+      "React.js",
+      "React Native",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Ant Design",
+      "Material UI",
+      "Bootstrap",
+      "Aceternity UI",
+      "Formik & Yup",
+    ],
   },
   {
     title: "State Management",
     icon: Database,
-    skills: ["Context API", "Redux", "Redux Toolkit", "Redux Thunk", "Redux Saga", "React Query", "Zustand",],
+    skills: [
+      "Context API",
+      "Redux",
+      "Redux Toolkit",
+      "Redux Thunk",
+      "Redux Saga",
+      "React Query",
+      "Zustand",
+    ],
   },
   {
     title: "Real-time & APIs",
     icon: Smartphone,
-    skills: ["Socket.io", "Pusher", "Firebase", "Supabase", "REST APIs", "WebSockets", "GraphQl"],
+    skills: [
+      "Socket.io",
+      "Pusher",
+      "Firebase",
+      "Supabase",
+      "REST APIs",
+      "WebSockets",
+      "GraphQl",
+    ],
   },
   {
     title: "Backend Familiarity",
@@ -34,12 +62,25 @@ const skillCategories = [
   {
     title: "Deployment",
     icon: GitBranch,
-    skills: ["Vercel", "Netlify", "Godaddy","Hostinger", "Google Play Store", "Apple App Store"],
+    skills: [
+      "Vercel",
+      "Netlify",
+      "Godaddy",
+      "Hostinger",
+      "Google Play Store",
+      "Apple App Store",
+    ],
   },
   {
     title: "UI / UX",
     icon: Palette,
-    skills: ["Responsive Design",  "Animations & Transitions", "Modern UI Libraries", "Component Design",  "MVC / MVVM Structure",],
+    skills: [
+      "Responsive Design",
+      "Animations & Transitions",
+      "Modern UI Libraries",
+      "Component Design",
+      "MVC / MVVM Structure",
+    ],
   },
 ];
 
@@ -48,21 +89,30 @@ export const Skills = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="py-20 relative" ref={ref}>
+    <section
+      id="skills"
+      className="py-20 relative w-full overflow-x-hidden"
+      ref={ref}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center  sm:mb-8"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            Technical <span className="rainbow bg-clip-text text-transparent">Skills</span>
+          <h2 className="text-3xl sm:text-5xl font-bold mb-4">
+            Technical{" "}
+            <span className="rainbow bg-clip-text text-transparent">
+              Skills
+            </span>
           </h2>
           <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
         </motion.div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+       <InfiniteSkillsScroll/>
+        {/* Skills Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
           {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
@@ -72,19 +122,25 @@ export const Skills = () => {
               className="group"
             >
               <div className="relative h-full">
+                {/* Glow */}
                 <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                <div className="relative bg-card border border-border rounded-2xl p-6 h-full hover:border-primary/50 transition-all duration-300">
+
+                {/* Card */}
+                <div className="relative bg-card border border-border rounded-2xl p-5 sm:p-6 h-full hover:border-primary/50 transition-all duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 bg-rainbow rounded-lg">
                       <category.icon className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold">{category.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold">
+                      {category.title}
+                    </h3>
                   </div>
+
                   <div className="flex flex-wrap gap-2">
                     {category.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-3 py-1 text-sm bg-secondary text-secondary-foreground rounded-full border border-border hover:border-primary/50 transition-colors"
+                        className="px-3 py-1 text-xs sm:text-sm bg-secondary text-secondary-foreground rounded-full border border-border hover:border-primary/50 transition-colors"
                       >
                         {skill}
                       </span>

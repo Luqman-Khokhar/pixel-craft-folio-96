@@ -32,26 +32,31 @@ export const Navbar = () => {
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const yOffset = -80; // adjust for your navbar height
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
       setIsMobileMenuOpen(false);
     }
   };
+
 
   // top-0
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-10 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
         ? "bg-background/80 backdrop-blur-lg border-b border-border"
         : "bg-transparent"
         }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className={`flex items-center justify-between h-16 ${isScrolled
+          ? "pt-5" : ''}`}>
           <motion.a
             href="#home"
-            className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent"
+            className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent items-center"
             whileHover={{ scale: 1.05 }}
             onClick={(e) => {
               e.preventDefault();
@@ -92,21 +97,33 @@ export const Navbar = () => {
             <Button
               variant="default"
               size="sm"
-              onClick={toggleDarkMode}
-              className="ml-1"
+              className="ghost rainbow"
             >
               <a
                 href="/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf"
                 download="Muhammad_Luqman_CV.pdf"
                 className="flex items-center gap-2"
               >
-                CV <Download className="h-4 w-4" />
+                Resume
               </a>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center md:hidden mt-1">
+            <Button
+              variant="default"
+              size="sm"
+              className="ghost rainbow"
+            >
+              <a
+                href="/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf"
+                download="Muhammad_Luqman_CV.pdf"
+                className="flex items-center gap-2"
+              >
+                Resume
+              </a>
+            </Button>
             <Button
               variant="ghost"
               size="icon"
@@ -140,7 +157,10 @@ export const Navbar = () => {
                 <Button
                   key={item.name}
                   variant="ghost"
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item.href);
+                  }}
                   className="w-full justify-start text-foreground hover:text-primary"
                 >
                   {item.name}
