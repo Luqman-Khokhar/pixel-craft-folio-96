@@ -25,99 +25,98 @@ export const DynamicIslandNav = () => {
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
 
-  return (
+return (
+  <motion.div
+    initial={{ y: -40, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+    onMouseEnter={() => setExpanded(true)}
+    onMouseLeave={() => setExpanded(false)}
+    className="fixed top-6 right-6 z-50 flex justify-end"
+  >
     <motion.div
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
-      className="fixed top-6 right-6 z-50 flex justify-end"
+      layout
+      animate={{
+        width: expanded ? (window.innerWidth < 640 ? 220 : 720) : 90,
+        height: expanded
+          ? window.innerWidth < 640
+            ? 380
+            : 56
+          : 40,
+    transition: {
+      type: "spring",
+      stiffness: 300,   // ⬆️ faster spring
+      damping: 18,      // ⬇️ less bounce resistance
+      mass: 0.5,
+      duration: 0.25,   // ⬆️ shortens total time
+    },
+      }}
+      className="relative flex flex-col sm:flex-row items-center justify-center bg-background/90 backdrop-blur-2xl border border-border shadow-lg shadow-orange-500/10 rounded-2xl sm:rounded-full overflow-hidden p-2 sm:p-0"
     >
-      <motion.div
-        layout
-        animate={{
-          width: expanded ? 720 : 90,
-          height: expanded ? 56 : 40,
-          transition: {
-            type: "spring",
-            stiffness: 200,
-            damping: 25,
-            mass: 0.6,
-          },
-        }}
-        className="relative flex items-center justify-center bg-background/90 backdrop-blur-2xl border border-border shadow-lg shadow-orange-500/10 rounded-full overflow-hidden"
-      >
-        <AnimatePresence mode="wait">
-          {expanded ? (
-            <motion.div
-              key="expanded"
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 22,
-                delay: 0, // ✅ instant
-              }}
-              className="flex items-center justify-center space-x-4 px-6 py-2"
-            >
-              {navItems.map((item) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 1, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 0 }}
-                  transition={{ duration: 0 }}
-                >
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => scrollToSection(item.href)}
-                    className="text-sm text-foreground hover:text-primary transition-colors"
-                  >
-                    {item.name}
-                  </Button>
-                </motion.div>
-              ))}
-
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {isDark ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </Button>
-
+      <AnimatePresence mode="wait">
+        {expanded ? (
+          <motion.div
+            key="expanded"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 18,
+               duration: 0.25,
+            }}
+            className="flex flex-col sm:flex-row items-center justify-center sm:space-x-4 space-y-2 sm:space-y-0 px-4 py-2"
+          >
+            {navItems.map((item) => (
               <Button
-                variant="default"
+                key={item.name}
+                variant="ghost"
                 size="sm"
-                className="ml-1 flex items-center gap-1"
+                onClick={() => scrollToSection(item.href)}
+                className="text-sm text-foreground hover:text-primary transition-colors"
               >
-                <Download className="h-4 w-4" />
-                <span>CV</span>
+                {item.name}
               </Button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="collapsed"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{
-                type: "spring",
-                stiffness: 170,
-                damping: 20,
-              }}
-              className="flex items-center gap-2 px-4 py-2 cursor-pointer"
+            ))}
+
+            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              {isDark ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </Button>
+
+            <Button
+              variant="default"
+              size="sm"
+              className="ml-0 sm:ml-1 flex items-center gap-1"
             >
-              <Menu className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold">Menu</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+              <Download className="h-4 w-4" />
+              <span>CV</span>
+            </Button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="collapsed"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{
+              type: "spring",
+              stiffness: 170,
+              damping: 20,
+            }}
+            className="flex items-center gap-2 px-4 py-2 cursor-pointer"
+          >
+            <Menu className="h-5 w-5 text-primary" />
+            <span className="text-sm font-semibold">Menu</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
-  );
+  </motion.div>
+);
+
 };

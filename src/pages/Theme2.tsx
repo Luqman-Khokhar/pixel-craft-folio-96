@@ -6,6 +6,10 @@ import AnimatedCharacter from "@/components/AnimatedCharacter";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
 import { DynamicIslandNav } from "@/components/ui/DynamicIslandNav";
+import { Projects } from "@/components/Projects";
+import { Experience } from "@/components/Experience";
+import { Contact } from "@/components/Contact";
+import NoticeBar from "@/components/NoticeBar";
 
 const Theme2 = () => {
     const [showBee, setShowBee] = useState(false);
@@ -18,10 +22,14 @@ const Theme2 = () => {
             }}
             className="min-h-screen relative"
         >
+            {/* <NoticeBar notice="🚧 Theme2 is under Developement." /> */}
             <DynamicIslandNav />
             <main>
                 <HeroSection2 />
                 <Skills />
+                <Projects />
+                <Experience />
+                <Contact />
             </main>
             <Footer />
             <FloatingActionMenu

@@ -15,7 +15,7 @@ export const HeroSection2 = () => {
           transition={{ duration: 1, ease: "easeOut" }}
           src="/about-removebg.png"
           alt="Muhammad Luqman Khokhar"
-          className="h-[550px] w-auto max-w-[45%] object-contain object-left ml-0 lg:ml-12"
+          className="h-[350px] sm:h-[450px] md:h-[550px] lg:h-[600px] xl:h-[700px] w-auto max-w-[85%] sm:max-w-[65%] md:max-w-[50%] lg:max-w-[45%] object-contain object-center sm:object-left ml-0 lg:ml-12"
         />
 
         {/* Blurry cloudy bottom effect */}
@@ -32,7 +32,7 @@ export const HeroSection2 = () => {
             className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl text-white tracking-tight font-bold"
             style={{ fontFamily: "'Dancing Script', cursive" }}
           >
-            Luqman<span className="text-primary">®</span>
+            Luqman
           </motion.h1>
 
           <motion.p
