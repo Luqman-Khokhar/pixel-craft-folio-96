@@ -12,8 +12,7 @@ import NoticeBar from "@/components/NoticeBar";
 import { Button } from "@/components/ui/button";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
-
-
+import { InactivityAnimation } from "@/components/ui/inActivityAnimation";
 const Index = () => {
   const [showBee, setShowBee] = useState(false);
   const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
@@ -28,6 +27,7 @@ const Index = () => {
       {/* <NoticeBar notice="🚧 This website is in development. Some buttons only work when Bee Model is OFF." /> */}
       <Navbar />
       <main>
+        <InactivityAnimation />
         <Hero />
         <About />
         <Skills />

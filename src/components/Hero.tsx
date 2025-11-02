@@ -2,6 +2,10 @@ import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ArrowDown } from "lucide-react";
+import Lottie from "lottie-react";
+import animationData from "@/assets/animations/sleepingCat.json";
+import { InactivityAnimation } from "./ui/inActivityAnimation";
+
 
 export const Hero = () => {
   const scrollToSection = (href: string) => {
@@ -19,9 +23,11 @@ export const Hero = () => {
       {/* Animated background gradient */}
       <div className="absolute inset-0 bg-gradient-subtle opacity-50" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,hsl(217,91%,60%,0.1),transparent)]" />
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-4xl mx-auto">
+        <div className=" relative text-center max-w-4xl mx-auto">
+          <div className="absolute top-[-135px] left-12">
+            {/* <Lottie animationData={animationData} loop={true} style={{ width: 200, height: 200 }} /> */}
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -31,14 +31,32 @@ export const Navbar = () => {
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
-    if (element) {
-      const yOffset = -80; // adjust for your navbar height
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
+    if (!element) {
       setIsMobileMenuOpen(false);
+      return;
+    }
+
+    // Close mobile menu first so layout/height changes won't break the scroll.
+    const wasMobile = isMobileMenuOpen;
+    setIsMobileMenuOpen(false);
+
+    // Use requestAnimationFrame to wait one frame for layout to settle,
+    // then do a smooth scroll with navbar offset.
+    const doScroll = () => {
+      const navbar = document.querySelector("nav");
+      const navbarHeight = (navbar?.getBoundingClientRect().height ?? 80);
+      const top = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    };
+
+    // if mobile menu was open, wait a frame so the menu's collapse finishes
+    if (wasMobile) {
+      requestAnimationFrame(() => requestAnimationFrame(doScroll));
+    } else {
+      doScroll();
     }
   };
+
 
 
   // top-0
@@ -161,7 +179,7 @@ export const Navbar = () => {
                     e.preventDefault();
                     scrollToSection(item.href);
                   }}
-                  className="w-full justify-start text-foreground hover:text-primary"
+                  className="w-full justify-start text-foreground  hover:text-white"
                 >
                   {item.name}
                 </Button>
