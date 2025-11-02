@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -52,5 +52,89 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html> -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muhammad Luqman Khokhar</title>
+    <meta
+      name="description"
+      content="Portfolio of a professional React.js and React Native developer specializing in modern web and mobile applications."
+    />
+    <meta name="author" content="Muhammad Luqman Khokhar" />
+
+    <!-- 🧠 Preconnect for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- 🕹️ Preload and lazy-load fonts to remove render-blocking -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      onload="this.rel='stylesheet'"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      />
+    </noscript>
+
+    <!-- 🌐 Social meta tags -->
+    <meta
+      property="og:title"
+      content="Professional React Developer | Portfolio"
+    />
+    <meta
+      property="og:description"
+      content="Portfolio of a professional React.js and React Native developer"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://lovable.dev/opengraph-image-p98pqg.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta
+      name="twitter:image"
+      content="https://lovable.dev/opengraph-image-p98pqg.png"
+    />
+
+    <!-- ⚙️ Preload your main JS for faster first paint -->
+    <link rel="preload" as="script" href="/src/main.tsx" />
+
+    <!-- 🧩 Optional: minimal inline critical CSS if needed -->
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- 🚀 Load main script -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- ❌ Removed DevTools-blocking script (hurts performance & accessibility) -->
   </body>
 </html>
