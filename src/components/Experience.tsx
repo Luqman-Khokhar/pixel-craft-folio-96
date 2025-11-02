@@ -11,9 +11,9 @@ const experiences = [
     description:
       "Leading the development of web and mobile interfaces with React.js and React Native.",
     achievements: [
-      "Developed and enhanced gym, marketing, chat, and work management apps.",
-      "Implemented AI LLM integrations while contributing to backend development in Node.js, KeystoneJS, and Laravel.",
-      "Led real-time chat and notification features, optimized state management, and collaborated on robust app architecture.",
+      "Spearheaded frontend development of multiple mobile and web products, achieving improved responsiveness and user retention.",
+      `Integrated AI chatbot & real-time notification systems, boosting user engagement and reducing manual support.`,
+      `Collaborated with backend teams on Node.js, KeystoneJS and Laravel integrations, enhancing system reliability and data flow.`,
     ],
   },
   {
@@ -23,9 +23,9 @@ const experiences = [
     description:
       "Built and maintained production-level React and React Native apps with modern UI libraries.",
     achievements: [
-      "Built and maintained mobile apps for gym, chat, and work management platforms.",
-      "Integrated real-time communication features, optimized APIs, and improved front-end structure for scalability.",
-      "Worked closely with cross-functional teams to deliver responsive and stable applications.",
+      `Built responsive web and mobile UI components with React.js and React Native, improving customer satisfaction metrics.`,
+      `Streamlined state management and component architecture to reduce code complexity and accelerate feature delivery.`,
+      `Partnered with cross-discipline teams to implement new features and ensure scalable & maintainable solutions.`,
     ],
   },
   {
@@ -35,9 +35,9 @@ const experiences = [
     description:
       "Developed dynamic user interfaces and implemented responsive layouts for web applications.",
     achievements: [
-      "Developed CRM web applications and a ride-booking mobile app using React Native.",
-      "Focused on performance optimization, UI/UX improvements, and efficient state management.",
-      "Collaborated with teams to implement new features and ensure scalable solutions.",
+      `Developed CRM web applications and a ride-booking mobile app using React Native.`,
+      `Focused on performance optimization, UI/UX enhancements, and efficient state management.`,
+      `Collaborated with teams to implement new features and ensure scalable solutions.`,
     ],
   },
 ];

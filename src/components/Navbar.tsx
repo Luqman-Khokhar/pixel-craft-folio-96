@@ -118,7 +118,7 @@ export const Navbar = () => {
               className="ghost rainbow"
             >
               <a
-                href="/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf"
+                href="/CV/Muhammad_Luqman_CV_(31Oct2025).pdf.pdf"
                 download="Muhammad_Luqman_CV.pdf"
                 className="flex items-center gap-2"
               >
@@ -135,7 +135,7 @@ export const Navbar = () => {
               className="ghost rainbow"
             >
               <a
-                href="/CV/Muhammad_Luqman_CV_(30Oct2025).pdf.pdf"
+                href="/CV/Muhammad_Luqman_CV_(31Oct2025).pdf.pdf"
                 download="Muhammad_Luqman_CV.pdf"
                 className="flex items-center gap-2"
               >
