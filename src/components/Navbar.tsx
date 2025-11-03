@@ -88,6 +88,18 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center space-x-1">
             <Button
               variant="ghost"
+              size="sm"
+              className="text-foreground hover:text-white transition-colors"
+            >
+              <a
+                href="https://portfolio20-phi.vercel.app/"
+
+              >
+                Portfolio 2
+              </a>
+            </Button>
+            <Button
+              variant="ghost"
               onClick={() => navigate("/Theme2")}
               className="text-foreground hover:text-white transition-colors"
             >
