@@ -86,7 +86,7 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <Button
+            {/* <Button
               variant="ghost"
               size="sm"
               className="text-foreground hover:text-white transition-colors"
@@ -97,14 +97,14 @@ export const Navbar = () => {
               >
                 Portfolio 2
               </a>
-            </Button>
-            <Button
+            </Button> */}
+            {/* <Button
               variant="ghost"
               onClick={() => navigate("/Theme2")}
               className="text-foreground hover:text-white transition-colors"
             >
               Theme 2
-            </Button>
+            </Button> */}
 
             {navItems.map((item) => (
               <Button
