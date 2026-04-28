@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Theme2 from "./pages/Theme2";
 import Theme3 from "./pages/Theme3";
+import Theme4 from "./pages/Theme4";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/theme2" element={<Theme2 />} />
             <Route path="/theme3" element={<Theme3 />} />
+            <Route path="/theme4" element={<Theme4 />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
