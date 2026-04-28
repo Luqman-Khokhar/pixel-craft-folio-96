@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { HeroSection4 } from "@/components/HeroSection4";
-import { Skills } from "@/components/Skills";
-import { Projects } from "@/components/Projects";
-import { Experience } from "@/components/Experience";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
+import { AboutCyber } from "@/components/theme4/AboutCyber";
+import { SkillsCyber } from "@/components/theme4/SkillsCyber";
+import { ProjectsCyber } from "@/components/theme4/ProjectsCyber";
+import { ExperienceCyber } from "@/components/theme4/ExperienceCyber";
+import { ContactCyber } from "@/components/theme4/ContactCyber";
+import { FooterCyber } from "@/components/theme4/FooterCyber";
+import { CyberNavbar } from "@/components/theme4/CyberNavbar";
 import AnimatedCharacter from "@/components/AnimatedCharacter";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
-import { DynamicIslandNav } from "@/components/ui/DynamicIslandNav";
 
 const sectionWrap =
   "relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 " +
-  "before:bg-[radial-gradient(ellipse_at_top,hsl(290_90%_60%/0.08),transparent_60%)]";
+  "before:bg-[radial-gradient(ellipse_at_top,hsl(290_90%_60%/0.06),transparent_60%)]";
 
 const Theme4 = () => {
   const [showBee, setShowBee] = useState(false);
@@ -37,23 +38,24 @@ const Theme4 = () => {
         />
       </div>
 
-      <DynamicIslandNav />
+      <CyberNavbar />
 
       <main>
         <HeroSection4 />
 
         {[
-          { id: "skills", node: <Skills /> },
-          { id: "projects", node: <Projects /> },
-          { id: "experience", node: <Experience /> },
-          { id: "contact", node: <Contact /> },
+          { id: "about", node: <AboutCyber /> },
+          { id: "skills", node: <SkillsCyber /> },
+          { id: "projects", node: <ProjectsCyber /> },
+          { id: "experience", node: <ExperienceCyber /> },
+          { id: "contact", node: <ContactCyber /> },
         ].map((s, i) => (
           <motion.section
             key={s.id}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
             className={sectionWrap}
           >
             {s.node}
@@ -61,7 +63,7 @@ const Theme4 = () => {
         ))}
       </main>
 
-      <Footer />
+      <FooterCyber />
 
       <FloatingActionMenu
         isThemeCustomizerOpen={isThemeCustomizerOpen}
