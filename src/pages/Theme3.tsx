@@ -1,0 +1,72 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { HeroSection3 } from "@/components/HeroSection3";
+import { Skills } from "@/components/Skills";
+import { Projects } from "@/components/Projects";
+import { Experience } from "@/components/Experience";
+import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
+import AnimatedCharacter from "@/components/AnimatedCharacter";
+import { ThemeCustomizer } from "@/components/ThemeCustomizer";
+import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
+import { DynamicIslandNav } from "@/components/ui/DynamicIslandNav";
+
+const sectionWrap =
+  "relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 " +
+  "before:bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.08),transparent_60%)]";
+
+const Theme3 = () => {
+  const [showBee, setShowBee] = useState(false);
+  const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
+
+  return (
+    <div
+      style={{ cursor: 'url("/cursor.png") 16 16, auto' }}
+      className="relative min-h-screen bg-[hsl(222_47%_4%)] text-foreground"
+    >
+      {/* Global ambient glow */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,hsl(217_91%_60%/0.10),transparent_50%),radial-gradient(circle_at_80%_30%,hsl(262_83%_58%/0.10),transparent_55%),radial-gradient(circle_at_50%_90%,hsl(190_95%_55%/0.08),transparent_55%)]" />
+      </div>
+
+      <DynamicIslandNav />
+
+      <main>
+        <HeroSection3 />
+
+        {[
+          { id: "skills", node: <Skills /> },
+          { id: "projects", node: <Projects /> },
+          { id: "experience", node: <Experience /> },
+          { id: "contact", node: <Contact /> },
+        ].map((s, i) => (
+          <motion.section
+            key={s.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, delay: i * 0.05, ease: "easeOut" }}
+            className={sectionWrap}
+          >
+            {s.node}
+          </motion.section>
+        ))}
+      </main>
+
+      <Footer />
+
+      <FloatingActionMenu
+        isThemeCustomizerOpen={isThemeCustomizerOpen}
+        setIsThemeCustomizerOpen={setIsThemeCustomizerOpen}
+        setShowBee={setShowBee}
+      />
+      <ThemeCustomizer
+        open={isThemeCustomizerOpen}
+        onOpenChange={setIsThemeCustomizerOpen}
+      />
+      {showBee && <AnimatedCharacter followCursor={true} />}
+    </div>
+  );
+};
+
+export default Theme3;
