@@ -33,6 +33,7 @@ const Theme2 = () => {
             </main>
             <Footer />
             <FloatingActionMenu
+                isThemeCustomizerOpen={isThemeCustomizerOpen}
                 setIsThemeCustomizerOpen={setIsThemeCustomizerOpen}
                 setShowBee={setShowBee}
             />
