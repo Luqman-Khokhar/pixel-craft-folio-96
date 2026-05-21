@@ -1,44 +1,43 @@
 import { Github, Linkedin, Mail, Heart } from "lucide-react";
 
 export const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="bg-card border-t border-border py-12">
+    <footer className="border-t border-border/50 py-8 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-center space-y-6">
-          <div className="flex items-center gap-6">
-            <a
-              href="https://github.com/Luqman-Khokhar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Github className="h-6 w-6" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/mluqmangn/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Linkedin className="h-6 w-6" />
-            </a>
-            <a
-              href="mailto:mluqmangn@gmail.com"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Mail className="h-6 w-6" />
-            </a>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <span className="w-7 h-7 rounded-lg gradient-fill flex items-center justify-center text-white font-bold text-xs shadow-md">
+              L
+            </span>
+            <span className="text-sm font-semibold">
+              Luqman<span className="gradient-text">.</span>
+            </span>
           </div>
 
-          <div className="text-center text-sm text-muted-foreground">
-            <p className="flex items-center gap-2 justify-center">
-              Built with using Vite React.js.
-            </p>
-            <p className="mt-2">
-              © {currentYear} Muhammad Luqman Khokhar. All rights reserved.
-            </p>
+          {/* Copyright */}
+          <p className="text-xs text-muted-foreground flex items-center gap-1">
+            Built with <Heart className="h-3 w-3 text-red-500 fill-red-500" /> by Muhammad Luqman Khokhar
+          </p>
+
+          {/* Socials */}
+          <div className="flex items-center gap-3">
+            {[
+              { icon: Github, href: "https://github.com/Luqman-Khokhar", label: "GitHub" },
+              { icon: Linkedin, href: "https://www.linkedin.com/in/mluqmangn/", label: "LinkedIn" },
+              { icon: Mail, href: "mailto:mluqmangn@gmail.com", label: "Email" },
+            ].map(({ icon: Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-200"
+              >
+                <Icon className="h-3.5 w-3.5" />
+              </a>
+            ))}
           </div>
         </div>
       </div>

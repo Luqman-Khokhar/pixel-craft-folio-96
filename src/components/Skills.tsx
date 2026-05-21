@@ -1,86 +1,51 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import {
-  Code2,
-  Smartphone,
-  Database,
-  Palette,
-  GitBranch,
-  Terminal,
-} from "lucide-react";
+import { Code2, Smartphone, Database, Palette, GitBranch, Terminal } from "lucide-react";
 import { InfiniteSkillsScroll } from "./ui/infiniteScroll";
 
-const skillCategories = [
+const categories = [
   {
-    title: "Frontend",
     icon: Code2,
-    skills: [
-      "React.js",
-      "React Native",
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Ant Design",
-      "Material UI",
-      "Bootstrap",
-      "Aceternity UI",
-      "Formik & Yup",
-    ],
+    title: "Frontend",
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+    skills: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Ant Design", "Material UI", "Bootstrap", "Aceternity UI", "Formik & Yup"],
   },
   {
-    title: "State Management",
     icon: Database,
-    skills: [
-      "Context API",
-      "Redux",
-      "Redux Toolkit",
-      "Redux Thunk",
-      "Redux Saga",
-      "React Query",
-      "Zustand",
-    ],
+    title: "State Management",
+    color: "text-violet-500",
+    bg: "bg-violet-500/10",
+    skills: ["Context API", "Redux", "Redux Toolkit", "Redux Thunk", "Redux Saga", "React Query", "Zustand"],
   },
   {
-    title: "Real-time & APIs",
     icon: Smartphone,
-    skills: [
-      "Socket.io",
-      "Pusher",
-      "Firebase",
-      "Supabase",
-      "REST APIs",
-      "WebSockets",
-      "GraphQl",
-    ],
+    title: "Real-time & APIs",
+    color: "text-cyan-500",
+    bg: "bg-cyan-500/10",
+    skills: ["Socket.io", "Pusher", "Firebase", "Supabase", "REST APIs", "WebSockets", "GraphQL"],
   },
   {
-    title: "Backend Familiarity",
     icon: Terminal,
+    title: "Backend Familiarity",
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
     skills: ["Node.js", "KeystoneJS", "Laravel", "Express.js"],
   },
   {
-    title: "Deployment",
     icon: GitBranch,
-    skills: [
-      "Vercel",
-      "Netlify",
-      "Godaddy",
-      "Hostinger",
-      "Google Play Store",
-      "Apple App Store",
-    ],
+    title: "Deployment",
+    color: "text-orange-500",
+    bg: "bg-orange-500/10",
+    skills: ["Vercel", "Netlify", "GoDaddy", "Hostinger", "Google Play Store", "Apple App Store"],
   },
   {
-    title: "UI / UX",
     icon: Palette,
-    skills: [
-      "Responsive Design",
-      "Animations & Transitions",
-      "Modern UI Libraries",
-      "Component Design",
-      "MVC / MVVM Structure",
-    ],
+    title: "UI / UX",
+    color: "text-pink-500",
+    bg: "bg-pink-500/10",
+    skills: ["Responsive Design", "Animations & Transitions", "Modern UI Libraries", "Component Design", "MVC / MVVM Structure"],
   },
 ];
 
@@ -89,63 +54,57 @@ export const Skills = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section
-      id="skills"
-      className="py-20 relative w-full overflow-x-hidden"
-      ref={ref}
-    >
+    <section id="skills" className="py-24 relative overflow-hidden" ref={ref}>
+      {/* Orb */}
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center  sm:mb-8"
+          transition={{ duration: 0.5 }}
+          className="mb-12"
         >
-          <h2 className="text-3xl sm:text-5xl font-bold mb-4">
-            Technical{" "}
-            <span className="rainbow bg-clip-text text-transparent">
-              Skills
-            </span>
+          <p className="text-sm font-mono text-primary mb-2">// tech stack</p>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+            Technical <span className="gradient-text">Skills</span>
           </h2>
-          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full" />
+          <div className="section-line" />
         </motion.div>
-       <InfiniteSkillsScroll/>
-        {/* Skills Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
-          {skillCategories.map((category, index) => (
+
+        {/* Infinite scroll strip */}
+        <div className="mb-12">
+          <InfiniteSkillsScroll />
+        </div>
+
+        {/* Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+          {categories.map((cat, i) => (
             <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 50 }}
+              key={cat.title}
+              initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group"
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="group relative"
             >
-              <div className="relative h-full">
-                {/* Glow */}
-                <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              {/* Hover glow */}
+              <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300 pointer-events-none" />
 
-                {/* Card */}
-                <div className="relative bg-card border border-border rounded-2xl p-5 sm:p-6 h-full hover:border-primary/50 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-rainbow rounded-lg">
-                      <category.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-bold">
-                      {category.title}
-                    </h3>
+              <div className="relative glass border border-border/60 rounded-2xl p-5 h-full hover:border-primary/30 transition-all duration-300">
+                {/* Icon + title */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${cat.bg}`}>
+                    <cat.icon className={`h-5 w-5 ${cat.color}`} />
                   </div>
+                  <h3 className="font-semibold text-sm">{cat.title}</h3>
+                </div>
 
-                  <div className="flex flex-wrap gap-2">
-                    {category.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-3 py-1 text-xs sm:text-sm bg-secondary text-secondary-foreground rounded-full border border-border hover:border-primary/50 transition-colors"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5">
+                  {cat.skills.map((skill) => (
+                    <span key={skill} className="tech-tag">{skill}</span>
+                  ))}
                 </div>
               </div>
             </motion.div>
