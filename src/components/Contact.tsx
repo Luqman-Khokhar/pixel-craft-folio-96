@@ -1,182 +1,187 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Github, Linkedin } from "lucide-react";
 
+const contactInfo = [
+  { icon: Mail,   label: "Email",    value: "mluqmangn@gmail.com",  href: "mailto:mluqmangn@gmail.com" },
+  { icon: Phone,  label: "Phone",    value: "+92 314 755 1262",      href: "tel:+923147551262" },
+  { icon: MapPin, label: "Location", value: "Daska City, Pakistan",  href: null },
+];
+
+const socials = [
+  { icon: Github,   href: "https://github.com/Luqman-Khokhar",      label: "GitHub" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/mluqmangn/", label: "LinkedIn" },
+  { icon: Mail,     href: "mailto:mluqmangn@gmail.com",              label: "Email" },
+];
+
+function FloatInput({
+  id, label, type = "text", name, required = false,
+}: { id: string; label: string; type?: string; name: string; required?: boolean }) {
+  return (
+    <div className="relative group">
+      <input
+        id={id}
+        name={name}
+        type={type}
+        required={required}
+        placeholder=" "
+        className="peer w-full bg-transparent border-b border-border px-0 pt-6 pb-2 text-sm text-foreground focus:outline-none focus:border-primary transition-colors placeholder-transparent"
+      />
+      <label
+        htmlFor={id}
+        className="absolute left-0 top-2 text-[10px] font-mono-alt text-muted-foreground/60 transition-all duration-200
+          peer-placeholder-shown:top-6 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground
+          peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-primary"
+      >
+        {label}
+      </label>
+      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left" />
+    </div>
+  );
+}
+
 export const Contact = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const ref     = useRef(null);
+  const inView  = useInView(ref, { once: true, margin: "-80px" });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setSubmitting(true);
     try {
-      const formData = new FormData(e.currentTarget);
-      formData.append("access_key", "89baae63-25f7-4869-9d4e-a17cb3a200fb");
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json().catch(() => ({}));
+      const fd = new FormData(e.currentTarget);
+      fd.append("access_key", "89baae63-25f7-4869-9d4e-a17cb3a200fb");
+      const res  = await fetch("https://api.web3forms.com/submit", { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
       if ((data as any).success) {
-        alert("✅ Message sent successfully!");
+        alert("✅ Message sent!");
         e.currentTarget.reset();
       } else {
-        alert("❌ Failed to send message. Please try again.");
+        alert("❌ Failed to send. Try again.");
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
+      alert("❌ Network error. Try again.");
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
-  const contactInfo = [
-    { icon: Mail, label: "Email", value: "mluqmangn@gmail.com", href: "mailto:mluqmangn@gmail.com" },
-    { icon: Phone, label: "Phone", value: "+92 314 755 1262", href: "tel:+923147551262" },
-    { icon: MapPin, label: "Location", value: "Daska City, Pakistan", href: null },
-  ];
+  const fade = (delay = 0) => ({
+    initial: { opacity: 0, y: 24 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+  });
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 bg-secondary/20" />
-      <div className="absolute top-0 left-0 w-72 h-72 bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+    <section id="contact" className="py-28 relative overflow-hidden" ref={ref}>
+      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-blue-500/6 blur-[100px] pointer-events-none" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-12"
-        >
-          <p className="text-sm font-mono text-primary mb-2">// let's talk</p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
-            Get In <span className="gradient-text">Touch</span>
-          </h2>
-          <div className="section-line" />
-          <p className="text-muted-foreground mt-4 max-w-lg">
-            Have a project in mind or want to discuss opportunities? I'd love to hear from you!
-          </p>
-        </motion.div>
+      <div className="container mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
 
-        <div className="grid lg:grid-cols-2 gap-10 max-w-5xl mx-auto">
-          {/* Left — info */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-6"
-          >
-            {contactInfo.map(({ icon: Icon, label, value, href }) => (
-              <div key={label} className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl gradient-fill flex items-center justify-center flex-shrink-0 shadow-md">
-                  <Icon className="h-5 w-5 text-white" />
+          {/* ── Left: Copy + contacts ── */}
+          <div>
+            <motion.p {...fade(0)} className="section-label mb-3">05 — Contact</motion.p>
+            <motion.h2
+              {...fade(0.08)}
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4"
+            >
+              Let's build<br />
+              <span className="gradient-text">something.</span>
+            </motion.h2>
+            <motion.div {...fade(0.12)} className="forge-line" />
+            <motion.p {...fade(0.15)} className="text-muted-foreground leading-relaxed mb-8 max-w-sm text-base">
+              Have a project in mind, a role to fill, or just want to say hi?
+              My inbox is always open.
+            </motion.p>
+
+            {/* Contact info */}
+            <motion.div {...fade(0.2)} className="flex flex-col gap-4 mb-10">
+              {contactInfo.map(({ icon: Icon, label, value, href }) => (
+                <div key={label} className="flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-mono-alt text-muted-foreground/60 mb-0.5">{label}</p>
+                    {href ? (
+                      <a href={href} className="text-sm font-medium hover:text-primary transition-colors">{value}</a>
+                    ) : (
+                      <p className="text-sm font-medium">{value}</p>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium mb-0.5">{label}</p>
-                  {href ? (
-                    <a href={href} className="text-sm font-semibold hover:text-primary transition-colors">
-                      {value}
-                    </a>
-                  ) : (
-                    <p className="text-sm font-semibold">{value}</p>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))}
+            </motion.div>
 
-            {/* Social card */}
-            <div className="glass border border-border/60 rounded-2xl p-6 mt-4">
-              <h4 className="font-semibold mb-2 text-sm">Let's connect</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Open to new projects, creative ideas, and collaboration opportunities.
-              </p>
-              <div className="flex gap-3">
+            {/* Socials */}
+            <motion.div {...fade(0.25)} className="flex items-center gap-3">
+              {socials.map(({ icon: Icon, href, label }) => (
                 <a
-                  href="https://github.com/Luqman-Khokhar"
+                  key={label}
+                  href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-semibold border border-border px-4 py-2 rounded-lg hover:bg-secondary hover:border-primary/30 transition-all"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-md border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
                 >
-                  <Github className="h-3.5 w-3.5" /> GitHub
+                  <Icon className="h-4 w-4" />
                 </a>
-                <a
-                  href="https://www.linkedin.com/in/mluqmangn/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-semibold border border-border px-4 py-2 rounded-lg hover:bg-secondary hover:border-primary/30 transition-all"
-                >
-                  <Linkedin className="h-3.5 w-3.5" /> LinkedIn
-                </a>
-              </div>
-            </div>
-          </motion.div>
+              ))}
+            </motion.div>
+          </div>
 
-          {/* Right — form */}
+          {/* ── Right: Form ── */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, x: 32 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.65, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="forge-card rounded-2xl p-8"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-primary/10 rounded-3xl blur-2xl opacity-30" />
-              <form
-                onSubmit={handleSubmit}
-                className="relative glass border border-border/60 rounded-2xl p-6 space-y-4"
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+              <FloatInput id="name"    name="name"    label="Your Name"          required />
+              <FloatInput id="email"   name="email"   label="Email Address" type="email" required />
+              <FloatInput id="subject" name="subject" label="Subject"            required />
+
+              {/* Textarea with floating label */}
+              <div className="relative group">
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={4}
+                  required
+                  placeholder=" "
+                  className="peer w-full bg-transparent border-b border-border px-0 pt-6 pb-2 text-sm text-foreground focus:outline-none focus:border-primary transition-colors resize-none placeholder-transparent"
+                />
+                <label
+                  htmlFor="message"
+                  className="absolute left-0 top-2 text-[10px] font-mono-alt text-muted-foreground/60 transition-all duration-200
+                    peer-placeholder-shown:top-6 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground
+                    peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-primary"
+                >
+                  Message
+                </label>
+                <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left" />
+              </div>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="gradient-fill text-white px-6 py-3 rounded-md font-semibold text-sm shadow-lg hover:opacity-90 hover:shadow-orange-500/25 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium mb-1.5 text-muted-foreground">Name</label>
-                    <input
-                      name="name"
-                      required
-                      placeholder="Your Name"
-                      className="w-full bg-background/60 border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all placeholder:text-muted-foreground/50"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium mb-1.5 text-muted-foreground">Email</label>
-                    <input
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="you@example.com"
-                      className="w-full bg-background/60 border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all placeholder:text-muted-foreground/50"
-                    />
-                  </div>
-                </div>
-
-                <input name="subject" value="Portfolio Contact" className="hidden" readOnly />
-
-                <div>
-                  <label className="block text-xs font-medium mb-1.5 text-muted-foreground">Message</label>
-                  <textarea
-                    name="message"
-                    required
-                    rows={5}
-                    placeholder="Tell me about your project..."
-                    className="w-full bg-background/60 border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all resize-none placeholder:text-muted-foreground/50"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full gradient-fill text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <span className="animate-pulse">Sending…</span>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      Send Message
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
+                {submitting ? (
+                  <>
+                    <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    Sending…
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Send Message
+                  </>
+                )}
+              </button>
+            </form>
           </motion.div>
         </div>
       </div>

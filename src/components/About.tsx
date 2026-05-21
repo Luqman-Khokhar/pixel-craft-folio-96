@@ -1,125 +1,140 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Zap, Code, Smartphone, MapPin, Calendar } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { MapPin, Calendar, Code, Zap, Smartphone, ExternalLink } from "lucide-react";
 
 const stats = [
-  { icon: Zap, value: "2+", label: "Years Exp.", color: "text-amber-500" },
-  { icon: Code, value: "20+", label: "Projects", color: "text-primary" },
-  { icon: Smartphone, value: "React", label: "/ Native", color: "text-cyan-500" },
+  { icon: Zap,       value: "2+",     label: "Years Exp.",    color: "text-orange-400" },
+  { icon: Code,      value: "20+",    label: "Projects Built", color: "text-blue-400" },
+  { icon: Smartphone,value: "React",  label: "/ Native",      color: "text-orange-400" },
+];
+
+const highlights = [
+  { icon: Calendar, text: "Frontend Developer since 2023" },
+  { icon: Code,     text: "React.js & React Native Specialist" },
+  { icon: MapPin,   text: "Daska City, Pakistan" },
 ];
 
 export const About = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const ref     = useRef(null);
+  const inView  = useInView(ref, { once: true, margin: "-80px" });
+
+  const fade = (delay = 0) => ({
+    initial: { opacity: 0, y: 28 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
+  });
 
   return (
-    <section
-      id="about"
-      ref={ref}
-      className="py-24 relative overflow-hidden"
-    >
-      {/* Subtle orb */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+    <section id="about" className="py-28 relative overflow-hidden" ref={ref}>
+      {/* Decorative blobs */}
+      <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-orange-500/6 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-blue-500/6  blur-[80px]  pointer-events-none" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <p className="text-sm font-mono text-primary mb-2">// about me</p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
-            Who I <span className="gradient-text">Am</span>
-          </h2>
-          <div className="section-line" />
-        </motion.div>
-
+      <div className="container mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
-          {/* Left — image */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative"
-          >
-            <div className="absolute -inset-6 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
-            <div className="relative rounded-3xl overflow-hidden border border-border/60 glass shadow-xl aspect-square max-w-sm mx-auto lg:mx-0">
-              <img
-                src="/about-removebg.png"
-                alt="About Luqman"
-                className="w-full h-full object-contain"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
-            </div>
-            {/* Location badge */}
-            <div className="absolute -bottom-4 left-1/2 lg:left-8 -translate-x-1/2 lg:translate-x-0 glass border border-border/60 rounded-2xl px-4 py-2.5 flex items-center gap-2 shadow-lg">
-              <MapPin className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">Daska City, Pakistan</span>
-            </div>
-          </motion.div>
 
-          {/* Right — content */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
-          >
-            <h3 className="text-2xl sm:text-3xl font-bold leading-snug">
-              Turning ideas into{" "}
+          {/* ── Left: Copy ── */}
+          <div>
+            <motion.p {...fade(0)} className="section-label mb-3">01 — About me</motion.p>
+            <motion.h2
+              {...fade(0.08)}
+              className="font-display text-4xl sm:text-5xl font-extrabold leading-tight mb-3"
+            >
+              Turning ideas into<br />
               <span className="gradient-text">digital reality</span>
-            </h3>
+            </motion.h2>
+            <motion.div {...fade(0.12)} className="forge-line" />
 
-            <p className="text-muted-foreground leading-relaxed">
-              I'm a{" "}
-              <span className="text-foreground font-semibold">
-                Frontend Developer
-              </span>{" "}
-              with 2+ years of experience crafting intuitive, high-performance
-              web and mobile applications using React.js and React Native.
-            </p>
+            <motion.p {...fade(0.15)} className="text-muted-foreground leading-relaxed mb-4 text-base">
+              I'm <span className="text-foreground font-semibold">Muhammad Luqman Khokhar</span> — a frontend developer
+              with 2+ years of experience crafting intuitive, high-performance web &amp; mobile applications with
+              React.js and React Native.
+            </motion.p>
+            <motion.p {...fade(0.2)} className="text-muted-foreground leading-relaxed mb-8 text-base">
+              I thrive at the intersection of elegant design and clean code — building products that feel fast,
+              look sharp, and scale well. From real-time chat apps to live streaming platforms, I've shipped
+              across diverse domains.
+            </motion.p>
 
-            <p className="text-muted-foreground leading-relaxed">
-              I focus on detail-oriented interfaces, real-time features, and
-              efficient architectures that scale gracefully. My passion lies in
-              blending creativity and logic to deliver smooth, visually stunning
-              user experiences.
-            </p>
+            {/* Highlights */}
+            <motion.div {...fade(0.24)} className="flex flex-col gap-3 mb-8">
+              {highlights.map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-3">
+                  <span className="w-7 h-7 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-3.5 w-3.5 text-primary" />
+                  </span>
+                  <span className="text-sm text-muted-foreground">{text}</span>
+                </div>
+              ))}
+            </motion.div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-2">
-              {stats.map(({ icon: Icon, value, label, color }, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                  className="glass border border-border/60 rounded-2xl p-4 text-center hover:border-primary/40 transition-colors"
-                >
+            {/* CTA */}
+            <motion.div {...fade(0.28)}>
+              <a
+                href="https://github.com/Luqman-Khokhar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline underline-offset-4"
+              >
+                View GitHub profile <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </motion.div>
+          </div>
+
+          {/* ── Right: Card stack ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 32 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="relative flex flex-col gap-4"
+          >
+            {/* Stat cards */}
+            <div className="grid grid-cols-3 gap-3">
+              {stats.map(({ icon: Icon, value, label, color }) => (
+                <div key={label} className="forge-card rounded-xl p-5 text-center">
                   <Icon className={`h-5 w-5 ${color} mx-auto mb-2`} />
-                  <p className="text-xl font-bold">{value}</p>
-                  <p className="text-xs text-muted-foreground">{label}</p>
-                </motion.div>
+                  <p className="font-display text-2xl font-bold gradient-text">{value}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{label}</p>
+                </div>
               ))}
             </div>
 
-            {/* Quick info */}
-            <div className="flex flex-wrap gap-3 pt-2">
-              {[
-                { icon: Calendar, text: "Frontend Developer since 2023" },
-                { icon: Code, text: "React / React Native Specialist" },
-              ].map(({ icon: Icon, text }) => (
-                <span
-                  key={text}
-                  className="flex items-center gap-1.5 text-xs text-muted-foreground bg-secondary rounded-full px-3 py-1.5"
-                >
-                  <Icon className="h-3 w-3 text-primary" />
-                  {text}
-                </span>
-              ))}
+            {/* What I do card */}
+            <div className="forge-card rounded-xl p-6">
+              <p className="section-label mb-4">What I do</p>
+              <div className="flex flex-col gap-3">
+                {[
+                  { label: "Web Applications",    pct: 92, color: "bg-orange-500" },
+                  { label: "Mobile Apps (React Native)", pct: 88, color: "bg-blue-500" },
+                  { label: "UI / UX Implementation",     pct: 85, color: "bg-orange-400" },
+                  { label: "API Integration",            pct: 80, color: "bg-blue-400" },
+                ].map(({ label, pct, color }) => (
+                  <div key={label}>
+                    <div className="flex justify-between text-xs mb-1.5">
+                      <span className="text-muted-foreground">{label}</span>
+                      <span className="font-mono-alt text-primary">{pct}%</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={inView ? { width: `${pct}%` } : {}}
+                        transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+                        className={`h-full rounded-full ${color}`}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Location badge */}
+            <div className="forge-card rounded-xl p-4 flex items-center gap-3">
+              <span className="text-2xl">🇵🇰</span>
+              <div>
+                <p className="text-sm font-semibold">Daska City, Pakistan</p>
+                <p className="text-xs text-muted-foreground">Open to remote opportunities worldwide</p>
+              </div>
+              <span className="ml-auto w-2 h-2 rounded-full bg-emerald-400 pulse-glow" />
             </div>
           </motion.div>
         </div>
