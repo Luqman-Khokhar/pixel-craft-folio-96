@@ -111,7 +111,6 @@ function Orbit() {
           <AnimatePresence mode="wait">
             <motion.div
               key={project.title}
-              data-bee-skip
               className="flex flex-col items-center"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
