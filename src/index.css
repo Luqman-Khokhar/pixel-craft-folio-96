@@ -6,35 +6,53 @@
 All colors MUST be HSL.
 */
 
+@font-face { font-family: "Melodrama"; src: url("/fonts/melodrama-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Melodrama"; src: url("/fonts/melodrama-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Melodrama"; src: url("/fonts/melodrama-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Boska"; src: url("/fonts/boska-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Boska"; src: url("/fonts/boska-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("/fonts/general-sans-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("/fonts/general-sans-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("/fonts/general-sans-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("/fonts/jetbrains-mono-var.woff2") format("woff2"); font-weight: 400 500; font-display: swap; }
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    /* Site palette: midnight denim, honey, warm paper, one ember spark. */
+    --ink: 212 78% 15%;
+    --ink-deep: 216 62% 7%;
+    --honey: 38 92% 56%;
+    --honey-deep: 30 85% 44%;
+    --paper: 42 40% 94%;
+    --ember: 9 85% 52%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --background: 42 40% 94%;
+    --foreground: 212 78% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --card: 42 40% 94%;
+    --card-foreground: 212 78% 15%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
+    --popover: 42 40% 94%;
+    --popover-foreground: 212 78% 15%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --primary: 38 92% 56%;
+    --primary-foreground: 212 78% 15%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --secondary: 42 30% 88%;
+    --secondary-foreground: 212 78% 15%;
 
-    --accent: 262 83% 58%;
-    --accent-foreground: 0 0% 100%;
+    --muted: 42 30% 88%;
+    --muted-foreground: 212 25% 35%;
+
+    --accent: 9 85% 52%;
+    --accent-foreground: 42 40% 94%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 60%;
+    --border: 212 30% 80%;
+    --input: 212 30% 80%;
+    --ring: 38 92% 56%;
 
     --radius: 0.75rem;
 
@@ -98,12 +116,22 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    @apply bg-ink text-paper font-sans antialiased;
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
+    background: hsl(var(--ink));
+  }
+
+  ::selection {
+    background: hsl(var(--honey));
+    color: hsl(var(--ink));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--honey));
+    outline-offset: 3px;
   }
 }
 
@@ -166,4 +194,57 @@ All colors MUST be HSL.
   [data-bee-landed="true"]:is(h1, h2, h3, h4, button) {
     animation: none;
   }
+}
+
+
+/* ---------- Site system ---------- */
+.eyebrow {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.title-outline {
+  color: transparent;
+  -webkit-text-stroke: 0.09rem hsl(var(--honey));
+}
+.fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 98%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 98%);
+}
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.07;
+}
+.field-line {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid hsl(var(--paper) / 0.35);
+  border-radius: 0;
+  transition: border-color 0.3s ease;
+}
+.field-line:hover { border-color: hsl(var(--paper) / 0.7); }
+.field-line:focus { outline: none; border-color: hsl(var(--honey)); }
+.field-line[aria-invalid="true"] { border-color: hsl(var(--ember)); }
+
+/* Rolling label: text slides up and is replaced by its clone. */
+.roll { display: inline-grid; overflow: hidden; line-height: 1.25; }
+.roll > span { grid-area: 1 / 1; transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1); }
+.roll > span:last-child { transform: translateY(110%); }
+a:hover > .roll > span:first-child, button:hover > .roll > span:first-child,
+a:focus-visible > .roll > span:first-child, button:focus-visible > .roll > span:first-child { transform: translateY(-110%); }
+a:hover > .roll > span:last-child, button:hover > .roll > span:last-child,
+a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:last-child { transform: translateY(0); }
+
+@keyframes halo-spin { to { transform: rotate(360deg); } }
+.halo-spin { animation: halo-spin 48s linear infinite; transform-origin: center; }
+@keyframes swing {
+  0%, 100% { transform: rotate(var(--swing, 6deg)); }
+  50% { transform: rotate(calc(var(--swing, 6deg) * -1)); }
+}
+.swing { animation: swing var(--swing-t, 5s) ease-in-out infinite; transform-origin: 50% -30%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .halo-spin, .swing { animation: none; }
+  .roll > span { transition: none; }
 }

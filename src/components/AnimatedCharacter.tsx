@@ -77,7 +77,7 @@ function isFadedOut(el: Element): boolean {
 
 function canPerch(el: HTMLElement): boolean {
   if (el.hasAttribute("data-bee-perch")) return true
-  if (el.closest("#home, nav, button, form, a, [aria-hidden='true']")) return false
+  if (el.closest("#home, nav, button, form, a, [aria-hidden='true'], [data-bee-skip]")) return false
   return !NEVER_PERCH_TEXT.test(el.textContent ?? "")
 }
 
@@ -212,7 +212,7 @@ function BeeModel() {
   const [line, setLine] = useState("")
   const [showLine, setShowLine] = useState(false)
   // Bubble goes beside the bee (toward the emptier half of the screen), or above on phones.
-  const [bubbleSide, setBubbleSide] = useState<"top" | "left" | "right">("top")
+  const [bubbleSide, setBubbleSide] = useState<"top" | "topRight" | "left" | "right">("top")
 
   // Scroll / flight state kept in refs so scrolling never re-renders React.
   const state = useRef({
@@ -509,7 +509,7 @@ function BeeModel() {
       tmp.proj.copy(g.position).project(camera)
       const beeX = ((tmp.proj.x + 1) / 2) * window.innerWidth
       const side =
-        window.innerWidth < 640 ? "top" : beeX < window.innerWidth / 2 ? "right" : "left"
+        window.innerWidth < 640 ? (beeX < window.innerWidth / 2 ? "topRight" : "top") : beeX < window.innerWidth / 2 ? "right" : "left"
       if (side !== bubbleSide) setBubbleSide(side)
     }
 
@@ -558,6 +558,8 @@ function BeeModel() {
                   ? "translate(54px, -50%)"
                   : bubbleSide === "left"
                     ? "translate(calc(-100% - 54px), -50%)"
+                    : bubbleSide === "topRight"
+                    ? "translate(-15%, calc(-100% - 52px))"
                     : "translate(-85%, calc(-100% - 52px))",
             }}
             className={`w-max max-w-[14rem] rounded-xl border border-border bg-card/95 px-3 py-2 text-xs sm:text-sm text-foreground shadow-lg backdrop-blur transition-all duration-300 ${

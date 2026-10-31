@@ -183,5 +183,5 @@ updated: 2026-10-31
 ## 9. Rules for editing / reuse
 
 - Keep this file theme-agnostic: no colors, fonts, or layout notes.
-- The site currently hardcodes this data in `src/components/{Hero,About,Skills,Projects,Experience,Contact,Footer}.tsx`. Any new theme should import or copy from here, not invent content.
+- The live design reads this data from `src/data/portfolio.ts`. Any new theme should import or copy from here, not invent content.
 - Health In Mobile reuses the Ace Live image; replace with its own asset when available.

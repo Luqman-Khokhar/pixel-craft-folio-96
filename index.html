@@ -11,33 +11,10 @@
     />
     <meta name="author" content="Muhammad Luqman Khokhar" />
 
-    <!-- 🧠 Preconnect for faster font loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- 🕹️ Preload and lazy-load fonts to remove render-blocking -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      onload="this.rel='stylesheet'"
-    />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
-      onload="this.rel='stylesheet'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      />
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
-      />
-    </noscript>
+    <!-- 🕹️ Self-hosted fonts: preload the two the first paint needs -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/melodrama-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/general-sans-400.woff2" crossorigin />
+    <meta name="theme-color" content="#082644" />
 
     <!-- 🌐 Social meta tags -->
     <meta
@@ -60,44 +37,15 @@
       content="https://portfolio-xi-ochre-76.vercel.app/about-removebg.png"
     />
 
-    <!-- ⚙️ Preload your main JS for faster first paint -->
-    <link rel="preload" as="script" href="/src/main.tsx" />
-
     <!-- 🧩 Optional: minimal inline critical CSS if needed -->
     <style>
       body {
         margin: 0;
-        font-family: 'Inter', sans-serif;
-        background: #fff;
+        font-family: 'General Sans', system-ui, sans-serif;
+        background: #082644;
       }
     </style>
   
-    <script>
-  // Disable right-click
-  document.addEventListener("contextmenu", (e) => e.preventDefault());
-
-  // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
-  document.addEventListener("keydown", (e) => {
-    if (
-      e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) ||
-      (e.ctrlKey && e.key === "U")
-    ) {
-      e.preventDefault();
-    }
-  });
-
-  // Optional: detect if DevTools is open
-  setInterval(() => {
-    const threshold = 160;
-    if (
-      window.outerWidth - window.innerWidth > threshold ||
-      window.outerHeight - window.innerHeight > threshold
-    ) {
-      document.body.innerHTML = "<h3 style='text-align:center;margin-top:20%'>🚫 Developer Tools are disabled</h3>";
-    }
-  }, 1000);
-</script>
 
   </head>
 
