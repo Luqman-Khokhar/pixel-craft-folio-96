@@ -143,8 +143,6 @@ export function HeroStage({ ready }: { ready: boolean }) {
           >
             <a
               href="#contact"
-              data-bee-perch
-              data-bee-box
               onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
               className="rounded-full bg-honey px-5 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5 active:translate-y-0"
             >

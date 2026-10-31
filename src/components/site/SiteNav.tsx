@@ -27,19 +27,7 @@ function useActiveSection() {
   return active;
 }
 
-const BeeToggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
-  <button
-    type="button"
-    onClick={onToggle}
-    aria-pressed={on}
-    aria-label={on ? "Hide the bee guide" : "Show the bee guide"}
-    className="grid h-10 w-10 place-items-center rounded-full border border-paper/20 bg-ink-deep/70 text-base backdrop-blur-md transition-colors hover:border-honey active:scale-95"
-  >
-    <span aria-hidden="true" className={on ? "" : "opacity-40 grayscale"}>🐝</span>
-  </button>
-);
-
-export function SiteNav({ beeOn, onToggleBee }: { beeOn: boolean; onToggleBee: () => void }) {
+export function SiteNav() {
   const active = useActiveSection();
   const [open, setOpen] = useState(false);
   const time = useClock(identity.timeZone);
@@ -86,7 +74,6 @@ export function SiteNav({ beeOn, onToggleBee }: { beeOn: boolean; onToggleBee: (
           <p className="eyebrow hidden rounded-full border border-paper/15 bg-ink-deep/70 px-3 py-3 !text-[0.65rem] text-paper/80 backdrop-blur-md xl:block">
             Daska <span className="text-honey">{time}</span> {identity.timeZoneLabel}
           </p>
-          <BeeToggle on={beeOn} onToggle={onToggleBee} />
           <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger aria-label="Open menu" className="grid h-10 w-10 place-items-center rounded-full border border-paper/20 bg-ink-deep/70 text-paper backdrop-blur-md md:hidden">
               <Menu className="h-5 w-5" aria-hidden="true" />

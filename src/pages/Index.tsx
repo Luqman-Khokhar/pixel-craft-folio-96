@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Preloader } from "@/components/site/Preloader";
 import { HeroStage } from "@/components/site/HeroStage";
@@ -9,22 +9,7 @@ import { ExperienceYears } from "@/components/site/ExperienceYears";
 import { ContactFinale } from "@/components/site/ContactFinale";
 import { CursorRing } from "@/components/site/CursorRing";
 import { initSmoothWheel } from "@/lib/smoothScroll";
-const AnimatedCharacter = lazy(() => import("@/components/AnimatedCharacter"));
 const Index = () => {
-  const [showBee, setShowBee] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem("bee-guide") !== "off";
-    } catch {
-      return true;
-    }
-  });
-  useEffect(() => {
-    try {
-      localStorage.setItem("bee-guide", showBee ? "on" : "off");
-    } catch {
-      /* storage unavailable: preference just won't persist */
-    }
-  }, [showBee]);
   const [ready, setReady] = useState(false);
   useEffect(() => initSmoothWheel(), []);
   return (
@@ -33,7 +18,7 @@ const Index = () => {
       <Preloader onDone={() => setReady(true)} />
       <div aria-hidden="true" className="grain pointer-events-none fixed inset-0 z-40" />
       <CursorRing />
-      <SiteNav beeOn={showBee} onToggleBee={() => setShowBee((prev) => !prev)} />
+      <SiteNav />
       <main>
         <HeroStage ready={ready} />
         <AboutSection />
@@ -78,11 +63,6 @@ const Index = () => {
       >
         🐝
       </Button> */}
-      {ready && showBee && (
-        <Suspense fallback={null}>
-          <AnimatedCharacter />
-        </Suspense>
-      )}
 
     </div>
   );
