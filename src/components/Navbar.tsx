@@ -14,7 +14,12 @@ const navItems = [
   { name: "Contact", href: "#contact" },
 ];
 
-export const Navbar = () => {
+interface NavbarProps {
+  beeOn?: boolean;
+  onToggleBee?: () => void;
+}
+
+export const Navbar = ({ beeOn = true, onToggleBee }: NavbarProps) => {
 
   const navigate = useNavigate();
   const { isDark, toggleDarkMode } = useTheme();
@@ -124,6 +129,24 @@ export const Navbar = () => {
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
+            {onToggleBee && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleBee}
+                aria-pressed={beeOn}
+                aria-label={beeOn ? "Turn off bee guide" : "Turn on bee guide"}
+                title={beeOn ? "Bee guide: on" : "Bee guide: off"}
+                className="ml-1"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`text-lg leading-none transition-all ${beeOn ? "" : "opacity-40 grayscale"}`}
+                >
+                  🐝
+                </span>
+              </Button>
+            )}
             <Button
               variant="default"
               size="sm"
@@ -162,6 +185,24 @@ export const Navbar = () => {
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
+            {onToggleBee && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleBee}
+                aria-pressed={beeOn}
+                aria-label={beeOn ? "Turn off bee guide" : "Turn on bee guide"}
+                title={beeOn ? "Bee guide: on" : "Bee guide: off"}
+                className="mr-1"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`text-lg leading-none transition-all ${beeOn ? "" : "opacity-40 grayscale"}`}
+                >
+                  🐝
+                </span>
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon"

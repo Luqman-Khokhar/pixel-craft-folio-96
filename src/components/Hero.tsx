@@ -94,6 +94,8 @@ export const Hero = () => {
             <Button
               size="lg"
               variant="outline"
+              data-bee-perch
+              data-bee-box
               onClick={() => scrollToSection("#projects")}
             >
               View My Work
