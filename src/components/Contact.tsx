@@ -185,6 +185,7 @@ export const Contact = () => {
                     // required
                     className="hidden"
                     value="Portfolio Contact"
+                    readOnly
                   />
                 </div>
 
