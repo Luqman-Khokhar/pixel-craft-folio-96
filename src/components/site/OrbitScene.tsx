@@ -22,26 +22,16 @@ const VERT = /* glsl */ `
   }
 `;
 
-// Off-focus covers dissolve into stippled mono with prismatic fringes, then snap to full colour.
+// Covers show as plain images in full colour; this only rounds the corners and fades far-off cards.
 const FRAG = /* glsl */ `
-  uniform sampler2D uMap; uniform float uFocus; uniform float uVel; uniform float uTime;
-  uniform float uAspect; uniform float uAlpha;
+  uniform sampler2D uMap; uniform float uAspect; uniform float uAlpha;
   varying vec2 vUv;
-  float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
   float box(vec2 p, vec2 b, float r) { vec2 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r; }
   void main() {
     vec2 d = vUv - 0.5;
-    float amt = (1.0 - uFocus) * 0.022 + abs(uVel) * 0.05;
-    vec3 c = vec3(texture2D(uMap, vUv + d * amt).r, texture2D(uMap, vUv).g, texture2D(uMap, vUv - d * amt).b);
-    float l = dot(c, vec3(0.299, 0.587, 0.114));
-    float n = hash(floor(gl_FragCoord.xy / 1.5) + floor(uTime * 14.0) * step(0.015, abs(uVel)));
-    vec3 stipple = vec3(step(n, l * 1.2 + 0.04));
-    vec3 prism = 0.5 + 0.5 * cos(6.283 * (l * 2.0 + vUv.x + vec3(0.0, 0.33, 0.67)));
-    vec3 off = mix(stipple, prism, 0.16 * step(0.4, l));
-    vec3 col = mix(off, c, smoothstep(0.1, 0.95, uFocus));
     float sd = box(d * vec2(uAspect, 1.0), vec2(uAspect * 0.5, 0.5), 0.035);
     float a = 1.0 - smoothstep(-0.003, 0.003, sd);
-    gl_FragColor = vec4(col, a * uAlpha);
+    gl_FragColor = vec4(texture2D(uMap, vUv).rgb, a * uAlpha);
   }
 `;
 
@@ -65,9 +55,7 @@ function Cover({ index, progress, onSelect, velocity }: Shared & { index: number
   const uniforms = useMemo(
     () => ({
       uMap: { value: tex },
-      uFocus: { value: 0 },
       uVel: { value: 0 },
-      uTime: { value: 0 },
       uCurve: { value: 0.5 },
       uAspect: { value: 1.6 },
       uAlpha: { value: 1 },
@@ -75,7 +63,7 @@ function Cover({ index, progress, onSelect, velocity }: Shared & { index: number
     [tex]
   );
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     const g = group.current;
     if (!g) return;
     const d = index - progress.current;
@@ -94,9 +82,7 @@ function Cover({ index, progress, onSelect, velocity }: Shared & { index: number
     }
     g.scale.set(w * s, (w / 1.6) * s, w * s);
     g.visible = Math.abs(d) < 2.4;
-    uniforms.uFocus.value = 1 - THREE.MathUtils.smoothstep(Math.abs(d), 0.04, 0.55);
     uniforms.uVel.value = velocity.current;
-    uniforms.uTime.value = clock.elapsedTime;
     uniforms.uAlpha.value = 1 - THREE.MathUtils.smoothstep(Math.abs(d), 1.5, 2.2);
   });
 
