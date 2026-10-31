@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import Lottie from "lottie-react";
+import LottieImport from "lottie-react";
 import animationData from "@/assets/animations/sleepingCat.json";
+
+const Lottie: typeof LottieImport = (LottieImport as any).default ?? LottieImport;
 
 export const InactivityAnimation = () => {
   const [isInactive, setIsInactive] = useState(false);
