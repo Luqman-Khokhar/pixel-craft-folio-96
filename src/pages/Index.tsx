@@ -1,18 +1,15 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
-import { About } from "@/components/About";
-import { Skills } from "@/components/Skills";
-import { Projects } from "@/components/Projects";
-import { Experience } from "@/components/Experience";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
+import { SiteNav } from "@/components/site/SiteNav";
+import { Preloader } from "@/components/site/Preloader";
+import { HeroStage } from "@/components/site/HeroStage";
+import { AboutSection } from "@/components/site/AboutSection";
+import { SkillsIndex } from "@/components/site/SkillsIndex";
+import { ProjectsOrbit } from "@/components/site/ProjectsOrbit";
+import { ExperienceYears } from "@/components/site/ExperienceYears";
+import { ContactFinale } from "@/components/site/ContactFinale";
+import { CursorRing } from "@/components/site/CursorRing";
+import { initSmoothWheel } from "@/lib/smoothScroll";
 const AnimatedCharacter = lazy(() => import("@/components/AnimatedCharacter"));
-import NoticeBar from "@/components/NoticeBar";
-import { Button } from "@/components/ui/button";
-import { ThemeCustomizer } from "@/components/ThemeCustomizer";
-import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
-import { InactivityAnimation } from "@/components/ui/inActivityAnimation";
 const Index = () => {
   const [showBee, setShowBee] = useState<boolean>(() => {
     try {
@@ -28,26 +25,23 @@ const Index = () => {
       /* storage unavailable: preference just won't persist */
     }
   }, [showBee]);
-  const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => initSmoothWheel(), []);
   return (
 
-    <div
-      style={{
-        cursor: 'url("/cursor.png") 16 16, auto', // 16 16 = hotspot position
-      }}
-      className="min-h-screen relative"
-    >
-      <Navbar beeOn={showBee} onToggleBee={() => setShowBee((prev) => !prev)} />
+    <div className="min-h-screen relative [overflow-x:clip]">
+      <Preloader onDone={() => setReady(true)} />
+      <div aria-hidden="true" className="grain pointer-events-none fixed inset-0 z-40" />
+      <CursorRing />
+      <SiteNav beeOn={showBee} onToggleBee={() => setShowBee((prev) => !prev)} />
       <main>
-        <InactivityAnimation />
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
+        <HeroStage ready={ready} />
+        <AboutSection />
+        <SkillsIndex />
+        <ProjectsOrbit />
+        <ExperienceYears />
+        <ContactFinale />
       </main>
-      <Footer />
 
       {/* <Button
         tooltip="CV Download"
@@ -84,16 +78,7 @@ const Index = () => {
       >
         🐝
       </Button> */}
-      <FloatingActionMenu
-        setIsThemeCustomizerOpen={setIsThemeCustomizerOpen}
-        isThemeCustomizerOpen={isThemeCustomizerOpen}
-        setShowBee={setShowBee}
-      />
-      <ThemeCustomizer
-        open={isThemeCustomizerOpen}
-        onOpenChange={setIsThemeCustomizerOpen}
-      />
-      {showBee && (
+      {ready && showBee && (
         <Suspense fallback={null}>
           <AnimatedCharacter />
         </Suspense>
