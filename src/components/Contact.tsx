@@ -1,187 +1,222 @@
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { Mail, Phone, MapPin, Send, Github, Linkedin } from "lucide-react";
-
-const contactInfo = [
-  { icon: Mail,   label: "Email",    value: "mluqmangn@gmail.com",  href: "mailto:mluqmangn@gmail.com" },
-  { icon: Phone,  label: "Phone",    value: "+92 314 755 1262",      href: "tel:+923147551262" },
-  { icon: MapPin, label: "Location", value: "Daska City, Pakistan",  href: null },
-];
-
-const socials = [
-  { icon: Github,   href: "https://github.com/Luqman-Khokhar",      label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/mluqmangn/", label: "LinkedIn" },
-  { icon: Mail,     href: "mailto:mluqmangn@gmail.com",              label: "Email" },
-];
-
-function FloatInput({
-  id, label, type = "text", name, required = false,
-}: { id: string; label: string; type?: string; name: string; required?: boolean }) {
-  return (
-    <div className="relative group">
-      <input
-        id={id}
-        name={name}
-        type={type}
-        required={required}
-        placeholder=" "
-        className="peer w-full bg-transparent border-b border-border px-0 pt-6 pb-2 text-sm text-foreground focus:outline-none focus:border-primary transition-colors placeholder-transparent"
-      />
-      <label
-        htmlFor={id}
-        className="absolute left-0 top-2 text-[10px] font-mono-alt text-muted-foreground/60 transition-all duration-200
-          peer-placeholder-shown:top-6 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground
-          peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-primary"
-      >
-        {label}
-      </label>
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left" />
-    </div>
-  );
-}
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 
 export const Contact = () => {
-  const ref     = useRef(null);
-  const inView  = useInView(ref, { once: true, margin: "-80px" });
-  const [submitting, setSubmitting] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitting(true);
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  try {
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", "89baae63-25f7-4869-9d4e-a17cb3a200fb");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    });
+
+    const text = await response.text();
+    let data = {};
     try {
-      const fd = new FormData(e.currentTarget);
-      fd.append("access_key", "89baae63-25f7-4869-9d4e-a17cb3a200fb");
-      const res  = await fetch("https://api.web3forms.com/submit", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if ((data as any).success) {
-        alert("✅ Message sent!");
-        e.currentTarget.reset();
-      } else {
-        alert("❌ Failed to send. Try again.");
-      }
+      data = JSON.parse(text);
     } catch {
-      alert("❌ Network error. Try again.");
-    } finally {
-      setSubmitting(false);
+      data = {};
     }
-  };
 
-  const fade = (delay = 0) => ({
-    initial: { opacity: 0, y: 24 },
-    animate: inView ? { opacity: 1, y: 0 } : {},
-    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
-  });
+    if (data && (data as any).success) {
+      alert("✅ Message sent successfully!");
+      e.currentTarget.reset();
+    } else {
+      alert("❌ Failed to send message. Try again later.");
+    }
+  } catch (error) {
+    console.error("Error sending message:", error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
-    <section id="contact" className="py-28 relative overflow-hidden" ref={ref}>
-      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-blue-500/6 blur-[100px] pointer-events-none" />
+    <section id="contact" className="py-20 bg-muted/30 relative" ref={ref}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+            Get In <span className="rainbow bg-clip-text text-transparent">Touch</span>
+          </h2>
+          <div className="w-20 h-1 bg-rainbow mx-auto rounded-full mb-4" />
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Have a project in mind or want to discuss opportunities? I'd love to hear from you!
+          </p>
+        </motion.div>
 
-      <div className="container mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
-
-          {/* ── Left: Copy + contacts ── */}
-          <div>
-            <motion.p {...fade(0)} className="section-label mb-3">05 — Contact</motion.p>
-            <motion.h2
-              {...fade(0.08)}
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4"
-            >
-              Let's build<br />
-              <span className="gradient-text">something.</span>
-            </motion.h2>
-            <motion.div {...fade(0.12)} className="forge-line" />
-            <motion.p {...fade(0.15)} className="text-muted-foreground leading-relaxed mb-8 max-w-sm text-base">
-              Have a project in mind, a role to fill, or just want to say hi?
-              My inbox is always open.
-            </motion.p>
-
-            {/* Contact info */}
-            <motion.div {...fade(0.2)} className="flex flex-col gap-4 mb-10">
-              {contactInfo.map(({ icon: Icon, label, value, href }) => (
-                <div key={label} className="flex items-center gap-4">
-                  <div className="w-9 h-9 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-4 w-4 text-primary" />
+        <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-8"
+          >
+            <div>
+              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-rainbow rounded-lg">
+                    <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-mono-alt text-muted-foreground/60 mb-0.5">{label}</p>
-                    {href ? (
-                      <a href={href} className="text-sm font-medium hover:text-primary transition-colors">{value}</a>
-                    ) : (
-                      <p className="text-sm font-medium">{value}</p>
-                    )}
+                    <h4 className="font-semibold mb-1">Email</h4>
+                    <a
+                      href="mailto:your.email@example.com"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      mluqmangn@gmail.com
+                    </a>
                   </div>
                 </div>
-              ))}
-            </motion.div>
-
-            {/* Socials */}
-            <motion.div {...fade(0.25)} className="flex items-center gap-3">
-              {socials.map(({ icon: Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="w-10 h-10 rounded-md border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* ── Right: Form ── */}
-          <motion.div
-            initial={{ opacity: 0, x: 32 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.65, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="forge-card rounded-2xl p-8"
-          >
-            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-              <FloatInput id="name"    name="name"    label="Your Name"          required />
-              <FloatInput id="email"   name="email"   label="Email Address" type="email" required />
-              <FloatInput id="subject" name="subject" label="Subject"            required />
-
-              {/* Textarea with floating label */}
-              <div className="relative group">
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  required
-                  placeholder=" "
-                  className="peer w-full bg-transparent border-b border-border px-0 pt-6 pb-2 text-sm text-foreground focus:outline-none focus:border-primary transition-colors resize-none placeholder-transparent"
-                />
-                <label
-                  htmlFor="message"
-                  className="absolute left-0 top-2 text-[10px] font-mono-alt text-muted-foreground/60 transition-all duration-200
-                    peer-placeholder-shown:top-6 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground
-                    peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-primary"
-                >
-                  Message
-                </label>
-                <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-rainbow rounded-lg">
+                    <Phone className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Phone</h4>
+                    <a
+                      href="tel:+923147551262"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      +92 3147551262
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-rainbow rounded-lg">
+                    <MapPin className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Location</h4>
+                    <p className="text-muted-foreground">
+                      Daska City, Pakistan
+                    </p>
+                  </div>
+                </div>
               </div>
+            </div>
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="gradient-fill text-white px-6 py-3 rounded-md font-semibold text-sm shadow-lg hover:opacity-90 hover:shadow-orange-500/25 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            <div className="relative">
+              <div className="absolute inset-0 bg-rainbow rounded-2xl blur-2xl opacity-20" />
+              <div className="relative bg-card border border-border rounded-2xl p-6">
+                <h4 className="font-semibold mb-4">Let's connect!</h4>
+                <p className="text-muted-foreground mb-4">
+                  I'm always open to discussing new projects, creative ideas, or opportunities
+                  to be part of your vision.
+                </p>
+                <div className="flex gap-4">
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="https://github.com/Luqman-Khokhar" target="_blank" rel="noopener noreferrer">
+                      GitHub
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="https://www.linkedin.com/in/mluqmangn/" target="_blank" rel="noopener noreferrer">
+                      LinkedIn
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-rainbow rounded-2xl blur-2xl opacity-20" />
+
+              <form
+                onSubmit={handleSubmit}
+                className="relative bg-card border border-border rounded-2xl p-8 space-y-6"
               >
-                {submitting ? (
-                  <>
-                    <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                    Sending…
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    Send Message
-                  </>
-                )}
-              </button>
-            </form>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2">
+                    Name
+                  </label>
+                  <Input id="name" name="name" placeholder="Your Name" required />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2">
+                    Email
+                  </label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium mb-2 hidden">
+                    Subject
+                  </label>
+                  <Input
+                    id="subject"
+                    name="subject"
+                    placeholder="Project Discussion"
+                    // required
+                    className="hidden"
+                    value="Portfolio Contact"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium mb-2">
+                    Message
+                  </label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    placeholder="Write your message here"
+                    rows={5}
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-rainbow hover:opacity-90 transition-opacity"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-4 w-4" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
+              </form>
+            </div>
           </motion.div>
         </div>
       </div>
