@@ -139,3 +139,31 @@ All colors MUST be HSL.
   }
 }
 
+
+
+/* Bee guide: page reacts when the bee lands on a section heading / button. */
+@keyframes bee-land {
+  0% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  35% {
+    transform: translateY(3px);
+    filter: drop-shadow(0 0 14px hsl(var(--primary) / 0.55));
+  }
+  100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+}
+
+/* Only headings and buttons react; paragraphs stay still. */
+[data-bee-landed="true"]:is(h1, h2, h3, h4, button) {
+  animation: bee-land 0.7s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-bee-landed="true"]:is(h1, h2, h3, h4, button) {
+    animation: none;
+  }
+}

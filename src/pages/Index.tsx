@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
@@ -7,14 +7,27 @@ import { Projects } from "@/components/Projects";
 import { Experience } from "@/components/Experience";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import AnimatedCharacter from "@/components/AnimatedCharacter";
+const AnimatedCharacter = lazy(() => import("@/components/AnimatedCharacter"));
 import NoticeBar from "@/components/NoticeBar";
 import { Button } from "@/components/ui/button";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FloatingActionMenu } from "@/components/ui/FloatingActionMenu";
 import { InactivityAnimation } from "@/components/ui/inActivityAnimation";
 const Index = () => {
-  const [showBee, setShowBee] = useState(false);
+  const [showBee, setShowBee] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem("bee-guide") !== "off";
+    } catch {
+      return true;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem("bee-guide", showBee ? "on" : "off");
+    } catch {
+      /* storage unavailable: preference just won't persist */
+    }
+  }, [showBee]);
   const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
   return (
 
@@ -24,7 +37,7 @@ const Index = () => {
       }}
       className="min-h-screen relative"
     >
-      <Navbar />
+      <Navbar beeOn={showBee} onToggleBee={() => setShowBee((prev) => !prev)} />
       <main>
         <InactivityAnimation />
         <Hero />
@@ -80,7 +93,11 @@ const Index = () => {
         open={isThemeCustomizerOpen}
         onOpenChange={setIsThemeCustomizerOpen}
       />
-      {showBee && <AnimatedCharacter followCursor={true} />}
+      {showBee && (
+        <Suspense fallback={null}>
+          <AnimatedCharacter />
+        </Suspense>
+      )}
 
     </div>
   );
