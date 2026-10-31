@@ -1,14 +1,18 @@
-## Project info
+# Pixel Craft Folio
 
-**URL**: https://portfolio-xi-ochre-76.vercel.app/
+Personal portfolio of Muhammad Luqman Khokhar, a frontend developer.
 
-## What technologies are used for this project?
+Live: https://portfolio-xi-ochre-76.vercel.app/
 
-This project is built with:
+## Stack
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Vite, React 18, TypeScript, Tailwind CSS, shadcn/ui, framer-motion, react-three-fiber.
 
+## Develop
+
+```sh
+npm install
+npm run dev      # http://localhost:8080
+npm run build
+npm run lint
+```
