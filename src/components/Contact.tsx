@@ -83,7 +83,7 @@ export const Contact = () => {
                   <div>
                     <h4 className="font-semibold mb-1">Email</h4>
                     <a
-                      href="mailto:your.email@example.com"
+                      href="mailto:mluqmangn@gmail.com"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
                       mluqmangn@gmail.com
