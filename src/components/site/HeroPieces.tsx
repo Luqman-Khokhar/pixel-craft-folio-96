@@ -3,12 +3,12 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type
 import { hero } from "@/data/portfolio";
 
 const TILES = [
-  { src: "/Projects/icons/chirpbyte.webp", name: "Chirpbyte", x: "4%", y: "45%", size: "clamp(3.5rem,7vw,6.5rem)", depth: 34, swing: 7, t: 5.4, mobile: true },
-  { src: "/Projects/icons/skip2beat.webp", name: "Skip2Beat", x: "24%", y: "64%", size: "clamp(3rem,5.2vw,5rem)", depth: 54, swing: 10, t: 4.2, mobile: false },
-  { src: "/Projects/icons/kroolo.webp", name: "Kroolo", x: "66%", y: "41%", size: "clamp(3rem,4.6vw,4.5rem)", depth: 20, swing: 12, t: 3.8, mobile: false },
-  { src: "/Projects/icons/health.webp", name: "Health In Mobile", x: "73%", y: "66%", size: "clamp(3rem,5.6vw,5.4rem)", depth: 48, swing: 8, t: 4.8, mobile: true },
-  { src: "/Projects/icons/alsalaam.webp", name: "AlSalaam Tourism", x: "86%", y: "44%", size: "clamp(3.5rem,7vw,6.5rem)", depth: 30, swing: 6, t: 6.2, mobile: true },
-  { src: "/Projects/icons/primax.webp", name: "Primax Portal", x: "20%", y: "41%", size: "clamp(3rem,5vw,5rem)", depth: 24, swing: 5, t: 5.8, mobile: false },
+  { src: "/logos/react.svg", name: "React", x: "4%", y: "45%", size: "clamp(3.5rem,7vw,6.5rem)", depth: 34, swing: 7, t: 5.4, mobile: true },
+  { src: "/logos/nodejs.svg", name: "Node.js", x: "24%", y: "64%", size: "clamp(3rem,5.2vw,5rem)", depth: 54, swing: 10, t: 4.2, mobile: false },
+  { src: "/logos/redux.svg", name: "Redux", x: "66%", y: "41%", size: "clamp(3rem,4.6vw,4.5rem)", depth: 20, swing: 12, t: 3.8, mobile: false },
+  { src: "/logos/typescript.svg", name: "TypeScript", x: "73%", y: "66%", size: "clamp(3rem,5.6vw,5.4rem)", depth: 48, swing: 8, t: 4.8, mobile: true },
+  { src: "/logos/nextjs.svg", name: "Next.js", x: "83%", y: "44%", size: "clamp(3.5rem,7vw,6.5rem)", depth: 30, swing: 6, t: 6.2, mobile: true },
+  { src: "/logos/tailwindcss.svg", name: "Tailwind CSS", x: "20%", y: "41%", size: "clamp(3rem,5vw,5rem)", depth: 24, swing: 5, t: 5.8, mobile: false },
 ];
 
 function Tile({ tile, mx, my, away, ready, index }: { tile: (typeof TILES)[number]; mx: MotionValue<number>; my: MotionValue<number>; away: MotionValue<number>; ready: boolean; index: number }) {
@@ -28,7 +28,7 @@ function Tile({ tile, mx, my, away, ready, index }: { tile: (typeof TILES)[numbe
     >
       <motion.div style={{ y: flyY, rotate: flyR }}>
         <div
-          className="swing grid place-items-center rounded-2xl bg-paper p-2.5 shadow-2xl shadow-ink-deep/60 ring-1 ring-honey/60"
+          className="swing grid place-items-center rounded-2xl bg-white p-3 shadow-2xl shadow-ink-deep/60 ring-1 ring-honey/60"
           style={{ width: tile.size, height: tile.size, ["--swing" as string]: `${tile.swing}deg`, ["--swing-t" as string]: `${tile.t}s` }}
         >
           <img src={tile.src} alt="" width={96} height={96} className="h-full w-full object-contain" draggable={false} />
@@ -38,7 +38,7 @@ function Tile({ tile, mx, my, away, ready, index }: { tile: (typeof TILES)[numbe
   );
 }
 
-/** Real product logos hanging in the air around the portrait, nudged by the pointer. */
+/** Tech stack logos hanging in the air around the portrait, nudged by the pointer. */
 export function FloatingTiles({ ready, away }: { ready: boolean; away: MotionValue<number> }) {
   const reduce = useReducedMotion();
   const rawX = useMotionValue(0);
