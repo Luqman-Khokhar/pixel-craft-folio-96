@@ -14,7 +14,7 @@ export const identity = {
   github: "https://github.com/Luqman-Khokhar",
   linkedin: "https://www.linkedin.com/in/mluqmangn/",
   cv: "/CV/Muhammad_Luqman_CV_(31Oct2025).pdf.pdf",
-  portrait: "/about-removebg.png",
+  portrait: "/portrait-gold.webp",
 };
 
 export const hero = {

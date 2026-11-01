@@ -180,13 +180,13 @@ All colors MUST be HSL.
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+.title-solid {
+  color: hsl(var(--azure));
+  -webkit-text-stroke: 0.02em hsl(var(--azure));
+}
 .title-outline {
   color: transparent;
-  -webkit-text-stroke: 0.09rem hsl(var(--honey));
-}
-.fade-bottom {
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 98%);
-  mask-image: linear-gradient(to bottom, black 70%, transparent 98%);
+  -webkit-text-stroke: 0.016em hsl(var(--honey));
 }
 .grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -222,15 +222,6 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
   .sheet-edge { border-top-left-radius: 3rem; border-top-right-radius: 3rem; }
 }
 
-@keyframes halo-spin { to { transform: rotate(360deg); } }
-.halo-spin { animation: halo-spin 48s linear infinite; transform-origin: center; }
-@keyframes swing {
-  0%, 100% { transform: rotate(var(--swing, 6deg)); }
-  50% { transform: rotate(calc(var(--swing, 6deg) * -1)); }
-}
-.swing { animation: swing var(--swing-t, 5s) ease-in-out infinite; transform-origin: 50% -30%; }
-
 @media (prefers-reduced-motion: reduce) {
-  .halo-spin, .swing { animation: none; }
   .roll > span { transition: none; }
 }

@@ -2,6 +2,10 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
 export const EASE = [0.7, 0, 0.2, 1] as const;
+export const EASE_OUT = [0.19, 1, 0.22, 1] as const;
+export const EASE_WIPE = [0.76, 0, 0.24, 1] as const;
+// Starts from rest and settles slowly: for things arriving while something else is still moving.
+export const EASE_SOFT = [0.33, 0, 0.15, 1] as const;
 
 export function useMediaQuery(query: string): boolean {
   const [match, setMatch] = useState(() => window.matchMedia(query).matches);
@@ -14,6 +18,9 @@ export function useMediaQuery(query: string): boolean {
   }, [query]);
   return match;
 }
+
+/** Fired when a scene changes the surface behind the nav marks without the page scrolling. */
+export const NAV_TONE_EVENT = "nav-tone";
 
 /** Live time at the owner's location. */
 export function useClock(timeZone: string): string {
@@ -74,7 +81,7 @@ export function ScrollWords({ text, className = "" }: { text: string; className?
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 88%", "end 62%"] });
   const words = text.split(" ");
-  if (reduce) return <p className={className}>{text}</p>;
+  if (reduce) return <p ref={ref} className={className}>{text}</p>;
   return (
     <p ref={ref} className={className} aria-label={text}>
       <span aria-hidden="true">
