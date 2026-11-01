@@ -15,7 +15,6 @@ export default {
     extend: {
       fontFamily: {
         display: ["Melodrama", "Georgia", "serif"],
-        serif: ["Boska", "Georgia", "serif"],
         sans: ["General Sans", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
@@ -23,6 +22,7 @@ export default {
         ink: { DEFAULT: "hsl(var(--ink) / <alpha-value>)", deep: "hsl(var(--ink-deep) / <alpha-value>)" },
         honey: { DEFAULT: "hsl(var(--honey) / <alpha-value>)", deep: "hsl(var(--honey-deep) / <alpha-value>)" },
         paper: "hsl(var(--paper) / <alpha-value>)",
+        azure: "hsl(var(--azure) / <alpha-value>)",
         ember: "hsl(var(--ember) / <alpha-value>)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
