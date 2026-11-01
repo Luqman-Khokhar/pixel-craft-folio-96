@@ -14,7 +14,7 @@ export const identity = {
   github: "https://github.com/Luqman-Khokhar",
   linkedin: "https://www.linkedin.com/in/mluqmangn/",
   cv: "/CV/Muhammad_Luqman_CV_(31Oct2025).pdf.pdf",
-  portrait: "/about-removebg.png",
+  portrait: "/portrait-gold.webp",
 };
 
 export const hero = {
@@ -218,6 +218,69 @@ export const platformLabel: Record<Project["platform"], string> = {
   web: "Web",
   all: "Web + Mobile",
 };
+
+/** What a detail sheet shows: a project, or anything shaped like one. */
+export type CaseSheet = Omit<Project, "cover" | "logo" | "coverAlt"> & {
+  cover?: string;
+  coverAlt?: string;
+  techLabel?: string;
+  links?: { href: string; label: string }[];
+};
+
+export type TableCard = {
+  label: string;
+  title: string;
+  sub: string;
+  accent?: string;
+  note?: string;
+  sheet: CaseSheet;
+};
+
+const projectNamed = (title: string) => projects.find((p) => p.title === title) as Project;
+
+// The projects table holds nine cards: the seven projects, then two stats from the About content.
+export const tableCards: TableCard[] = [
+  { label: "Customer Support", title: "Chirpbyte", sub: "Mobile App", sheet: projectNamed("Chirpbyte") },
+  { label: "Social Fitness", title: "Skip2Beat", sub: "Mobile App", note: "React Native, Socket.io, Google Maps", sheet: projectNamed("Skip2Beat") },
+  { label: "Team Collaboration", title: "Kroolo", sub: "Mobile App", accent: "Live Chat", note: "React Native, Socket.io, Firebase", sheet: projectNamed("Kroolo") },
+  { label: "Health & Fitness", title: "Health In Mobile", sub: "Mobile App", sheet: projectNamed("Health In Mobile") },
+  { label: "Travel Booking", title: "AlSalaam Tourism", sub: "Web + Mobile", sheet: projectNamed("AlSalaam Tourism") },
+  { label: "Data Management", title: "Primax Portal", sub: "Web App", sheet: projectNamed("Primax Portal") },
+  { label: "Live Streaming", title: "Ace Live", sub: "Web + Mobile", sheet: projectNamed("Ace Live") },
+  {
+    label: "Projects Built",
+    title: "20+",
+    sub: "Projects",
+    sheet: {
+      title: "20+ Projects",
+      type: "Web and Mobile Applications",
+      platform: "all",
+      description: about.paragraphs[0],
+      tech: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Socket.io", "Firebase", "Supabase"],
+      links: [
+        { href: identity.github, label: "GitHub" },
+        { href: identity.linkedin, label: "LinkedIn" },
+      ],
+    },
+  },
+  {
+    label: "Experience",
+    title: "2+",
+    sub: "Years",
+    sheet: {
+      title: "2+ Years",
+      type: identity.role,
+      platform: "all",
+      description: about.paragraphs[1],
+      techLabel: "Worked at",
+      tech: experience.map((job) => `${job.company}, ${job.period}`),
+      links: [
+        { href: identity.cv, label: "Resume" },
+        { href: identity.linkedin, label: "LinkedIn" },
+      ],
+    },
+  },
+];
 
 export const contact = {
   heading: "Get In Touch",

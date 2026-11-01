@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, type MotionValue } from "framer-motion";
-import { EASE } from "./primitives";
+import { EASE_SOFT } from "./primitives";
 
 const FONT = "700 100px Melodrama";
+const LINE = 0.8;
+// Room below the line for the Q's tail, so the reveal mask doesn't clip it.
+const MASK = 1;
 
 function measure(text: string): number {
   const ctx = document.createElement("canvas").getContext("2d");
@@ -11,59 +14,64 @@ function measure(text: string): number {
   return ctx.measureText(text).width;
 }
 
-/** One line of display type sized to span its container exactly, capped by viewport height. */
-function useFitSize(text: string, maxVh: number) {
+/** Font size that spans the box exactly, and the box height the width/height ratio asks for. */
+function useFit(text: string, ratio: number) {
   const ref = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState(0);
+  const [fit, setFit] = useState({ size: 0, height: 0 });
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const fit = () => setSize(Math.min((el.clientWidth / measure(text)) * 100, (window.innerHeight * maxVh) / 0.8));
-    fit();
-    const ro = new ResizeObserver(fit);
+    const update = () => setFit({ size: (el.clientWidth / measure(text)) * 100, height: el.clientWidth / ratio });
+    update();
+    const ro = new ResizeObserver(update);
     ro.observe(el);
-    document.fonts?.ready.then(fit);
+    document.fonts?.ready.then(update);
     return () => ro.disconnect();
-  }, [text, maxVh]);
-  return { ref, size };
+  }, [text, ratio]);
+  return { ref, ...fit };
 }
 
-interface FitLineProps {
+interface EchoTitleProps {
   text: string;
   ready: boolean;
-  maxVh: number;
-  outline: MotionValue<number>;
-  fill: MotionValue<number>;
-  delay?: number;
+  /** Width over height of the title: lower stretches the letters taller. */
+  ratio: number;
+  /** One hollow copy per entry, moved by its own scroll-driven offset. */
+  echoes: { y: MotionValue<number>; opacity: MotionValue<number> }[];
 }
 
-export function FitLine({ text, ready, maxVh, outline, fill, delay = 0 }: FitLineProps) {
-  const { ref, size } = useFitSize(text, maxVh);
+/** One line of display type stretched to fill a poster-sized box, with hollow copies that fall away behind it. */
+export function EchoTitle({ text, ready, ratio, echoes }: EchoTitleProps) {
+  const { ref, size, height } = useFit(text, ratio);
   const reduce = useReducedMotion();
+  const line = {
+    fontSize: size,
+    lineHeight: LINE,
+    height: size * MASK,
+    transform: `scaleY(${size ? height / (size * LINE) : 1})`,
+    transformOrigin: "top",
+  };
   return (
-    <div ref={ref} className="relative w-full" style={{ height: size * 0.8 }}>
-      <motion.div
-        className="absolute inset-0 flex justify-center overflow-hidden whitespace-pre font-display font-bold leading-[0.8] text-paper"
-        style={{ fontSize: size, opacity: fill }}
-      >
+    <div ref={ref} className="relative w-full" style={{ height }}>
+      {!reduce && echoes.map((echo, i) => (
+        <motion.div key={i} className="absolute inset-x-0 top-0" style={{ y: echo.y, opacity: echo.opacity }}>
+          <div className="title-outline flex justify-center whitespace-pre font-display font-bold" style={line}>{text}</div>
+        </motion.div>
+      ))}
+      <div className="title-solid absolute inset-x-0 top-0 flex justify-center overflow-hidden whitespace-pre font-display font-bold" style={line}>
         {text.split("").map((ch, i) => (
           <motion.span
             key={i}
             className="inline-block"
-            initial={reduce ? false : { y: "105%" }}
-            animate={ready ? { y: 0 } : undefined}
-            transition={{ duration: 1.1, delay: delay + i * 0.035, ease: EASE }}
+            // A transform string, not y: runs on the compositor, so the rise stays smooth while the WebGL symbols start up.
+            initial={reduce ? false : { transform: "translateY(105%)", opacity: 0 }}
+            animate={ready ? { transform: "translateY(0%)", opacity: 1 } : undefined}
+            transition={{ duration: 1.5, delay: 0.25 + i * 0.025, ease: EASE_SOFT }}
           >
             {ch}
           </motion.span>
         ))}
-      </motion.div>
-      <motion.div
-        className="title-outline absolute inset-0 flex justify-center whitespace-pre font-display font-bold leading-[0.8]"
-        style={{ fontSize: size, opacity: outline }}
-      >
-        {text}
-      </motion.div>
+      </div>
     </div>
   );
 }

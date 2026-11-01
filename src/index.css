@@ -9,8 +9,6 @@ All colors MUST be HSL.
 @font-face { font-family: "Melodrama"; src: url("/fonts/melodrama-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
 @font-face { font-family: "Melodrama"; src: url("/fonts/melodrama-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "Melodrama"; src: url("/fonts/melodrama-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Boska"; src: url("/fonts/boska-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "Boska"; src: url("/fonts/boska-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "General Sans"; src: url("/fonts/general-sans-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "General Sans"; src: url("/fonts/general-sans-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "General Sans"; src: url("/fonts/general-sans-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
@@ -18,28 +16,29 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Site palette: midnight denim, honey, warm paper, one ember spark. */
-    --ink: 212 78% 15%;
-    --ink-deep: 216 62% 7%;
-    --honey: 38 92% 56%;
-    --honey-deep: 30 85% 44%;
+    /* Site palette: navy ink and paper. Honey is a small accent, never a surface. */
+    --ink: 210 84.3% 20%;
+    --ink-deep: 210 86% 12%;
+    --azure: 180 100% 100%;
+    --honey: 40 92% 59%;
+    --honey-deep: 34 70% 42%;
     --paper: 42 40% 94%;
     --ember: 9 85% 52%;
 
     --background: 42 40% 94%;
-    --foreground: 212 78% 15%;
+    --foreground: 210 84.3% 20%;
 
     --card: 42 40% 94%;
-    --card-foreground: 212 78% 15%;
+    --card-foreground: 210 84.3% 20%;
 
     --popover: 42 40% 94%;
-    --popover-foreground: 212 78% 15%;
+    --popover-foreground: 210 84.3% 20%;
 
     --primary: 38 92% 56%;
-    --primary-foreground: 212 78% 15%;
+    --primary-foreground: 210 84.3% 20%;
 
     --secondary: 42 30% 88%;
-    --secondary-foreground: 212 78% 15%;
+    --secondary-foreground: 210 84.3% 20%;
 
     --muted: 42 30% 88%;
     --muted-foreground: 212 25% 35%;
@@ -122,6 +121,11 @@ All colors MUST be HSL.
   html {
     scroll-behavior: auto;
     background: hsl(var(--ink));
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   ::selection {
@@ -176,13 +180,13 @@ All colors MUST be HSL.
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+.title-solid {
+  color: hsl(var(--azure));
+  -webkit-text-stroke: 0.02em hsl(var(--azure));
+}
 .title-outline {
   color: transparent;
-  -webkit-text-stroke: 0.09rem hsl(var(--honey));
-}
-.fade-bottom {
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 98%);
-  mask-image: linear-gradient(to bottom, black 70%, transparent 98%);
+  -webkit-text-stroke: 0.016em hsl(var(--honey));
 }
 .grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -208,15 +212,67 @@ a:focus-visible > .roll > span:first-child, button:focus-visible > .roll > span:
 a:hover > .roll > span:last-child, button:hover > .roll > span:last-child,
 a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:last-child { transform: translateY(0); }
 
-@keyframes halo-spin { to { transform: rotate(360deg); } }
-.halo-spin { animation: halo-spin 48s linear infinite; transform-origin: center; }
-@keyframes swing {
-  0%, 100% { transform: rotate(var(--swing, 6deg)); }
-  50% { transform: rotate(calc(var(--swing, 6deg) * -1)); }
+/* Project ring: the hovered card lifts, the rest step back. */
+.orbit-card { cursor: pointer; }
+.orbit-card:hover, .orbit-card:focus-visible { z-index: 25 !important; }
+.orbit-face { transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s ease; }
+.orbit-card:hover .orbit-face, .orbit-card:focus-visible .orbit-face { transform: translateY(-6%) scale(1.06); }
+[data-spotlight] .orbit-card:not([data-on]) .orbit-face { opacity: 0.4; }
+
+/* Project table: card size and position follow the table, so it holds its layout at any viewport. */
+.deck-table { container-type: size; }
+.deck-slot {
+  position: absolute;
+  left: var(--lx);
+  top: var(--ly);
+  width: calc(min(14.3cqw, 28.9cqh) * var(--k));
+  aspect-ratio: 275 / 350;
+  transform: translate(-50%, -50%);
 }
-.swing { animation: swing var(--swing-t, 5s) ease-in-out infinite; transform-origin: 50% -30%; }
+.deck-caption { max-width: max(13.5cqw, 11rem); }
+@media (max-aspect-ratio: 1/1) {
+  .deck-slot {
+    left: var(--px);
+    top: var(--py);
+    width: calc(min(40cqw, 14.5cqh) * var(--pk));
+  }
+  .deck-caption { max-width: none; }
+}
+@container (max-width: 9.5rem) {
+  .deck-note { display: none !important; }
+}
+
+/* Every section arrives as a sheet over the last one; the project detail uses the same edge. */
+.sheet-edge {
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  box-shadow: 0 -1.5rem 4rem -1.5rem hsl(var(--ink-deep) / 0.45);
+}
+@media (min-width: 768px) {
+  .sheet-edge { border-top-left-radius: 3rem; border-top-right-radius: 3rem; }
+}
+
+@keyframes cue-nudge { 50% { transform: translateY(3px); } }
+.cue-nudge { animation: cue-nudge 1.6s ease-in-out infinite; }
+
+/* Each path is normalised with pathLength="1", so the dash is one whole stroke. */
+@keyframes seal-ink { to { stroke-dashoffset: 0; } }
+.seal-stroke {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  animation: seal-ink 1.1s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+/* Holds the seal in motion once drawn: with nothing moving on screen the browser drops to about one frame a second, freezing the title's start. */
+@keyframes seal-breathe { 50% { opacity: 0.88; } }
+.seal-breathe { animation: seal-breathe 1.6s ease-in-out 2.3s infinite; }
+/* First paint is the body's ink; the entry screen deepens from it rather than jumping when React mounts. */
+@keyframes screen-deepen { from { background-color: hsl(var(--ink)); } }
+.screen-deepen { animation: screen-deepen 0.9s ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
-  .halo-spin, .swing { animation: none; }
+  .cue-nudge { animation: none; }
+  .seal-stroke { animation: none; stroke-dashoffset: 0; }
+  .seal-breathe { animation: none; }
+  .screen-deepen { animation: none; }
   .roll > span { transition: none; }
 }

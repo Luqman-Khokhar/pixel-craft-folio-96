@@ -46,11 +46,11 @@ export function ExperienceYears() {
   }, []);
 
   return (
-    <section id="experience" className="relative bg-honey text-ink">
+    <section id="experience" className="sheet-edge relative -mt-10 bg-paper text-ink md:-mt-16">
       <div className="mx-auto grid max-w-[100rem] gap-x-10 px-4 py-20 sm:px-6 md:grid-cols-12 md:py-32">
         <div className="md:col-span-6">
           <div className="md:sticky md:top-24">
-            <h2 className="eyebrow mb-4 text-ink/80 md:mb-6">Experience</h2>
+            <h2 className="eyebrow mb-4 text-ink/70 md:mb-6">Experience</h2>
             <div className="hidden md:block"><YearRoller year={experience[active].year} /></div>
           </div>
         </div>
@@ -58,17 +58,17 @@ export function ExperienceYears() {
         <ol className="md:col-span-6">
           {experience.map((job, i) => (
             <li key={job.company}>
-              <article ref={(el) => { refs.current[i] = el; }} className="border-t border-ink py-8 md:min-h-[75svh] md:py-10">
+              <article ref={(el) => { refs.current[i] = el; }} className="border-t border-ink/25 py-8 md:min-h-[75svh] md:py-10">
                 <Reveal>
                   <p className="font-display text-7xl font-bold leading-none md:hidden" aria-hidden="true">{job.year}</p>
                   <p className="eyebrow mt-3 text-ink/80 md:mt-0">{job.period}</p>
-                  <h3 className="mt-4 font-serif text-5xl font-medium leading-[0.98] tracking-tight md:text-6xl">{job.company}</h3>
+                  <h3 className="mt-4 font-display text-5xl font-medium leading-[0.98] tracking-tight md:text-6xl">{job.company}</h3>
                   <p className="mt-2 text-lg font-semibold">{job.role}</p>
                   <p className="mt-5 text-lg leading-relaxed md:text-xl">{job.summary}</p>
                   <ul className="mt-6 space-y-3">
                     {job.points.map((point) => (
                       <li key={point} className="flex gap-3 text-base leading-relaxed">
-                        <span aria-hidden="true" className="mt-1 text-xs">✦</span>
+                        <span aria-hidden="true" className="mt-[0.72em] h-px w-3 shrink-0 bg-honey-deep" />
                         <span>{point}</span>
                       </li>
                     ))}

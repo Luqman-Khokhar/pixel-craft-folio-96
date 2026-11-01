@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 import { identity, navItems } from "@/data/portfolio";
 import { scrollToHash } from "@/lib/smoothScroll";
 import { Crest } from "./Crest";
-import { EASE, Roll, useClock } from "./primitives";
+import { EASE, NAV_TONE_EVENT } from "./primitives";
 
 function useActiveSection() {
   const [active, setActive] = useState("#home");
@@ -27,10 +27,58 @@ function useActiveSection() {
   return active;
 }
 
+/** Hides on scroll down, returns on scroll up. Small moves are ignored so the marks do not flicker. */
+function useHideOnScroll() {
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y <= 8) setHidden(false);
+      else if (Math.abs(y - last) >= 4) setHidden(y > last);
+      else return;
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return hidden;
+}
+
+const isLightSurface = (el: Element) => {
+  const [r, g, b] = (getComputedStyle(el).backgroundColor.match(/[\d.]+/g) ?? ["0", "0", "0"]).map(Number);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 128;
+};
+
+/** True while a light surface sits behind the marks, where honey would wash out. */
+function useOverLight(probeY: number) {
+  const [over, setOver] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      const front = [...document.querySelectorAll<HTMLElement>("main section")].reverse().find((section) => {
+        const box = section.getBoundingClientRect();
+        return box.top <= probeY && box.bottom > probeY;
+      });
+      setOver(!!front && (front.dataset.navTone === "light" || isLightSurface(front)));
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    window.addEventListener(NAV_TONE_EVENT, check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+      window.removeEventListener(NAV_TONE_EVENT, check);
+    };
+  }, [probeY]);
+  return over;
+}
+
 export function SiteNav() {
   const active = useActiveSection();
+  const hidden = useHideOnScroll();
+  const overLight = useOverLight(48);
   const [open, setOpen] = useState(false);
-  const time = useClock(identity.timeZone);
   const { scrollYProgress } = useScroll();
   const bar = useSpring(scrollYProgress, { stiffness: 160, damping: 30 });
 
@@ -42,79 +90,58 @@ export function SiteNav() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[60]">
-      <motion.div aria-hidden="true" className="h-0.5 origin-left bg-honey" style={{ scaleX: bar }} />
-      <div className="flex items-center justify-between gap-4 px-4 pt-3 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
-        <a href="#home" onClick={(e) => go(e, "#home")} aria-label="Muhammad Luqman Khokhar, back to top" className="justify-self-start rounded-full bg-ink-deep/70 p-0.5 text-honey backdrop-blur-md">
-          <Crest className="h-10 w-10" />
+    <>
+      <motion.div aria-hidden="true" className="fixed inset-x-0 top-0 z-[61] h-0.5 origin-left bg-honey" style={{ scaleX: bar }} />
+      <div className={`pointer-events-none fixed inset-x-0 top-0 z-[60] flex items-center justify-between px-4 pt-4 transition-[transform,color] duration-500 has-[:focus-visible]:translate-y-0 motion-reduce:transition-none sm:px-6 md:px-12 md:pt-6 ${overLight ? "text-ink" : "text-honey"} ${hidden ? "-translate-y-full" : ""}`}>
+        <a href="#home" onClick={(e) => go(e, "#home")} aria-label="Muhammad Luqman Khokhar, back to top" className="pointer-events-auto rounded-full">
+          <Crest className="h-16 w-auto" />
         </a>
 
-        <nav aria-label="Main" className="hidden rounded-full border border-paper/15 bg-ink-deep/70 p-1 backdrop-blur-md md:block">
-          <ul className="flex items-center">
-            {navItems.map((item) => {
-              const isActive = active === item.href;
-              return (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => go(e, item.href)}
-                    aria-current={isActive ? "true" : undefined}
-                    className={`relative block rounded-full px-4 py-2 text-sm font-medium transition-colors ${isActive ? "text-ink" : "text-paper/80 hover:text-paper"}`}
-                  >
-                    {isActive && <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-full bg-honey" transition={{ type: "spring", stiffness: 380, damping: 34 }} />}
-                    <span className="relative"><Roll>{item.name}</Roll></span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        <div className="flex items-center gap-2 justify-self-end">
-          <p className="eyebrow hidden rounded-full border border-paper/15 bg-ink-deep/70 px-3 py-3 !text-[0.65rem] text-paper/80 backdrop-blur-md xl:block">
-            Daska <span className="text-honey">{time}</span> {identity.timeZoneLabel}
-          </p>
-          <Dialog.Root open={open} onOpenChange={setOpen}>
-            <Dialog.Trigger aria-label="Open menu" className="grid h-10 w-10 place-items-center rounded-full border border-paper/20 bg-ink-deep/70 text-paper backdrop-blur-md md:hidden">
-              <Menu className="h-5 w-5" aria-hidden="true" />
-            </Dialog.Trigger>
-            <Dialog.Portal>
-              <Dialog.Content asChild aria-describedby={undefined}>
-                <motion.div
-                  className="fixed inset-0 z-[80] flex flex-col bg-honey p-4 text-ink"
-                  initial={{ clipPath: "circle(0% at 92% 4%)" }}
-                  animate={{ clipPath: "circle(150% at 92% 4%)" }}
-                  transition={{ duration: 0.7, ease: EASE }}
-                >
-                  <Dialog.Title className="sr-only">Menu</Dialog.Title>
-                  <div className="flex items-center justify-between">
-                    <Crest className="h-11 w-11" />
-                    <Dialog.Close aria-label="Close menu" className="grid h-10 w-10 place-items-center rounded-full border border-ink/40">
-                      <X className="h-5 w-5" aria-hidden="true" />
-                    </Dialog.Close>
-                  </div>
-                  <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center">
-                    {navItems.map((item, i) => (
-                      <motion.a
-                        key={item.href}
-                        href={item.href}
-                        onClick={(e) => go(e, item.href)}
-                        className="border-b border-ink/20 py-2 font-serif text-5xl font-medium leading-none tracking-tight"
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 + i * 0.05, duration: 0.5 }}
-                      >
-                        {item.name}
-                      </motion.a>
-                    ))}
-                  </nav>
-                  <a href={identity.cv} target="_blank" rel="noopener noreferrer" className="eyebrow py-3 underline underline-offset-4">Resume</a>
-                </motion.div>
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
-        </div>
+        <Dialog.Root open={open} onOpenChange={setOpen}>
+          <Dialog.Trigger aria-label="Open menu" className="group pointer-events-auto flex h-12 w-12 items-center justify-end rounded-full">
+            {/* SVG bars antialias instead of snapping to device pixels, so browser zoom cannot leave one thinner. */}
+            <svg aria-hidden="true" viewBox="0 0 32 14" className="h-3.5 w-8 overflow-visible fill-current">
+              <rect width="32" height="2" className="transition-transform duration-300 group-hover:-translate-y-0.5" />
+              <rect y="12" width="32" height="2" className="transition-transform duration-300 group-hover:translate-y-0.5" />
+            </svg>
+          </Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus(); }}>
+              <motion.div
+                className="fixed inset-0 z-[80] flex flex-col bg-ink p-4 text-paper outline-none sm:px-6 md:px-12 md:pt-6"
+                initial={{ clipPath: "circle(0% at 96% 5%)" }}
+                animate={{ clipPath: "circle(150% at 96% 5%)" }}
+                transition={{ duration: 0.7, ease: EASE }}
+              >
+                <Dialog.Title className="sr-only">Menu</Dialog.Title>
+                <div className="flex items-center justify-between">
+                  <Crest className="h-16 w-auto text-honey" />
+                  <Dialog.Close aria-label="Close menu" className="flex h-12 w-12 items-center justify-end rounded-full text-honey">
+                    <X className="h-8 w-8" aria-hidden="true" />
+                  </Dialog.Close>
+                </div>
+                <nav aria-label="Main" className="flex flex-1 flex-col justify-center">
+                  {navItems.map((item, i) => (
+                    <motion.a
+                      key={item.href}
+                      href={item.href}
+                      onClick={(e) => go(e, item.href)}
+                      aria-current={active === item.href ? "true" : undefined}
+                      className={`border-b border-paper/20 py-2 font-display text-5xl font-medium leading-none tracking-tight transition-colors hover:text-honey md:text-6xl ${active === item.href ? "text-honey" : ""}`}
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 + i * 0.05, duration: 0.5 }}
+                    >
+                      {item.name}
+                    </motion.a>
+                  ))}
+                </nav>
+                <a href={identity.cv} target="_blank" rel="noopener noreferrer" className="eyebrow self-start py-3 underline underline-offset-4">Resume</a>
+              </motion.div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
       </div>
-    </header>
+    </>
   );
 }
