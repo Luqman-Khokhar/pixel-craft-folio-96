@@ -219,6 +219,29 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 .orbit-card:hover .orbit-face, .orbit-card:focus-visible .orbit-face { transform: translateY(-6%) scale(1.06); }
 [data-spotlight] .orbit-card:not([data-on]) .orbit-face { opacity: 0.4; }
 
+/* Project table: card size and position follow the table, so it holds its layout at any viewport. */
+.deck-table { container-type: size; }
+.deck-slot {
+  position: absolute;
+  left: var(--lx);
+  top: var(--ly);
+  width: calc(min(14.3cqw, 28.9cqh) * var(--k));
+  aspect-ratio: 275 / 350;
+  transform: translate(-50%, -50%);
+}
+.deck-caption { max-width: max(13.5cqw, 11rem); }
+@media (max-aspect-ratio: 1/1) {
+  .deck-slot {
+    left: var(--px);
+    top: var(--py);
+    width: calc(min(40cqw, 14.5cqh) * var(--pk));
+  }
+  .deck-caption { max-width: none; }
+}
+@container (max-width: 9.5rem) {
+  .deck-note { display: none !important; }
+}
+
 /* Every section arrives as a sheet over the last one; the project detail uses the same edge. */
 .sheet-edge {
   border-top-left-radius: 2rem;
