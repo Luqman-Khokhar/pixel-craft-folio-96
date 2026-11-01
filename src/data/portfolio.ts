@@ -219,6 +219,14 @@ export const platformLabel: Record<Project["platform"], string> = {
   all: "Web + Mobile",
 };
 
+/** What a detail sheet shows: a project, or anything shaped like one. */
+export type CaseSheet = Omit<Project, "cover" | "logo" | "coverAlt"> & {
+  cover?: string;
+  coverAlt?: string;
+  techLabel?: string;
+  links?: { href: string; label: string }[];
+};
+
 export const contact = {
   heading: "Get In Touch",
   intro: "Have a project in mind or want to discuss opportunities? I'd love to hear from you!",
