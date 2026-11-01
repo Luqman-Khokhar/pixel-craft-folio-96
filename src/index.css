@@ -222,6 +222,9 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
   .sheet-edge { border-top-left-radius: 3rem; border-top-right-radius: 3rem; }
 }
 
+@keyframes cue-nudge { 50% { transform: translateY(3px); } }
+.cue-nudge { animation: cue-nudge 1.6s ease-in-out infinite; }
+
 /* Each path is normalised with pathLength="1", so the dash is one whole stroke. */
 @keyframes seal-ink { to { stroke-dashoffset: 0; } }
 .seal-stroke {
@@ -237,6 +240,7 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 .screen-deepen { animation: screen-deepen 0.9s ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
+  .cue-nudge { animation: none; }
   .seal-stroke { animation: none; stroke-dashoffset: 0; }
   .seal-breathe { animation: none; }
   .screen-deepen { animation: none; }

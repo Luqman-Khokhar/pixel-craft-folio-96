@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Preloader } from "@/components/site/Preloader";
 import { HeroStage } from "@/components/site/HeroStage";
+import { PortalFrame } from "@/components/site/PortalFrame";
 import { AboutSection } from "@/components/site/AboutSection";
 import { SkillsIndex } from "@/components/site/SkillsIndex";
 import { ProjectsOrbit } from "@/components/site/ProjectsOrbit";
@@ -21,6 +22,7 @@ const Index = () => {
       <SiteNav />
       <main>
         <HeroStage ready={ready} />
+        <PortalFrame />
         <AboutSection />
         <SkillsIndex />
         <ProjectsOrbit />
