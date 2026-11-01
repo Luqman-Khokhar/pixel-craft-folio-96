@@ -212,6 +212,16 @@ a:focus-visible > .roll > span:first-child, button:focus-visible > .roll > span:
 a:hover > .roll > span:last-child, button:hover > .roll > span:last-child,
 a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:last-child { transform: translateY(0); }
 
+/* Every section arrives as a sheet over the last one; the project detail uses the same edge. */
+.sheet-edge {
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  box-shadow: 0 -1.5rem 4rem -1.5rem hsl(var(--ink-deep) / 0.45);
+}
+@media (min-width: 768px) {
+  .sheet-edge { border-top-left-radius: 3rem; border-top-right-radius: 3rem; }
+}
+
 @keyframes halo-spin { to { transform: rotate(360deg); } }
 .halo-spin { animation: halo-spin 48s linear infinite; transform-origin: center; }
 @keyframes swing {
