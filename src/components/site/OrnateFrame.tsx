@@ -9,7 +9,6 @@ export function OrnateFrame({ className = "" }: { className?: string }) {
       <path d={notched(7, 400, 500, 24)} className="fill-honey-deep" />
       <path d={notched(10, 400, 500, 23)} className="fill-honey" />
       <path d={notched(15, 400, 500, 21)} className="fill-paper" />
-      <path d={notched(24, 400, 500, 18)} fill="none" strokeWidth="0.75" className="stroke-honey-deep" />
     </svg>
   );
 }

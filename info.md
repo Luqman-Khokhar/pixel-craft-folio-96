@@ -151,6 +151,9 @@ updated: 2026-10-31
 - **Image:** `/Projects/Acelive.png`
 - **Demo:** https://acelive.cc/
 
+### Projects table
+Nine cards, in `tableCards`: the seven projects above with a short label each, plus two stats from the About section (20+ Projects, 2+ Years).
+
 ## 7. Contact section
 
 - **Email:** mluqmangn@gmail.com

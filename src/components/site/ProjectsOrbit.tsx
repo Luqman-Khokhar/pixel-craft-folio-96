@@ -1,165 +1,128 @@
-import { Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Pause, Play } from "lucide-react";
 import { platformLabel, projects } from "@/data/portfolio";
-import { scrollToY } from "@/lib/smoothScroll";
 import { ProjectCase } from "./ProjectCase";
 import { ProjectsList } from "./ProjectsList";
-import { Roll, useMediaQuery } from "./primitives";
+import { EASE_OUT, useMediaQuery } from "./primitives";
 import { ScrambleText } from "./ScrambleText";
+import { useOrbitRing } from "./useOrbitRing";
 
-const OrbitScene = lazy(() => import("./OrbitScene"));
-
-const hasWebGL = () => {
-  try {
-    return !!document.createElement("canvas").getContext("webgl2");
-  } catch {
-    return false;
-  }
-};
-
-class SceneBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    return this.state.failed ? this.props.fallback : this.props.children;
-  }
-}
-
-/** Each project holds still for part of its scroll range, so the wheel lands by itself. */
-const plateau = (raw: number) => {
-  const i = Math.floor(raw);
-  const f = raw - i;
-  const t = Math.min(Math.max((f - 0.22) / 0.56, 0), 1);
-  return i + t * t * (3 - 2 * t);
-};
+const pad = (n: number) => String(n).padStart(2, "0");
+const count = projects.length;
 
 function Orbit() {
-  const track = useRef<HTMLDivElement>(null);
-  const target = useRef(0);
-  const pointer = useRef<[number, number]>([0, 0]);
-  const [index, setIndex] = useState(0);
+  const stage = useRef<HTMLDivElement>(null);
+  const [entered, setEntered] = useState(false);
+  const [spot, setSpot] = useState<number | null>(null);
   const [open, setOpen] = useState<number | null>(null);
-  const [near, setNear] = useState(false);
-  const { scrollYProgress } = useScroll({ target: track, offset: ["start start", "end end"] });
-  const count = projects.length;
-  const project = projects[index];
+  const [paused, setPaused] = useState(false);
+  const fine = useMediaQuery("(pointer: fine)");
+  const ring = useOrbitRing(stage, () => setEntered(true));
+  const spotlit = spot === null ? null : projects[spot];
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const raw = v * (count - 1);
-    target.current = plateau(raw);
-    const next = Math.min(Math.round(raw), count - 1);
-    setIndex((prev) => (prev === next ? prev : next));
-  });
-
-  useEffect(() => {
-    const el = track.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: "60% 0px" });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  const goTo = useCallback((i: number) => {
-    const el = track.current;
-    if (!el) return;
-    const clamped = Math.min(Math.max(i, 0), count - 1);
-    const range = el.offsetHeight - window.innerHeight;
-    scrollToY(el.getBoundingClientRect().top + window.scrollY + (range * clamped) / (count - 1));
-  }, [count]);
-
-  // Click the focused cover to open it; click a neighbour to bring it into focus.
-  const indexRef = useRef(index);
-  indexRef.current = index;
-  const onSelect = useCallback((i: number) => {
-    if (i === indexRef.current) setOpen(i);
-    else goTo(i);
-  }, [goTo]);
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); goTo(index + 1); }
-    if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); goTo(index - 1); }
-  };
+  useEffect(() => ring.hold("paused", paused), [ring, paused]);
+  useEffect(() => ring.hold("open", open !== null), [ring, open]);
 
   return (
-    <div
-      ref={track}
-      style={{ height: `${count * 110}svh` }}
-      className="relative"
-      onPointerMove={(e) => { pointer.current = [e.clientX / window.innerWidth - 0.5, e.clientY / window.innerHeight - 0.5]; }}
-    >
-      <div className="sticky top-0 h-svh overflow-hidden" role="group" aria-roledescription="carousel" aria-label="Selected projects" onKeyDown={onKeyDown}>
-        <SceneBoundary fallback={<img src={project.cover} alt="" className="absolute inset-x-0 top-[12%] mx-auto w-[min(88vw,36rem)] rounded-xl" />}>
-          <Suspense fallback={null}>
-            {near && <OrbitScene target={target} pointer={pointer} onSelect={onSelect} active={near && open === null} />}
-          </Suspense>
-        </SceneBoundary>
-
-        <h2 className="eyebrow absolute left-4 top-20 z-10 text-honey sm:left-6">Selected Work</h2>
-
-        <p className="sr-only" aria-live="polite">Project {index + 1} of {count}: {project.title}</p>
-
-        <div className="pointer-events-none absolute inset-x-4 bottom-20 z-10 mx-auto flex max-w-md flex-col items-center text-center md:inset-x-0 md:bottom-auto md:top-1/2 md:-translate-y-1/2">
-          <p aria-hidden="true" className="eyebrow mb-2 text-paper/70">
-            N°<ScrambleText text={String(index + 1).padStart(2, "0")} duration={350} /> / {String(count).padStart(2, "0")}
+    <>
+      <motion.div
+        ref={stage}
+        className="relative grid h-full cursor-grab touch-pan-y select-none place-items-center rounded-t-[inherit] [overflow:clip] active:cursor-grabbing"
+        animate={{ scale: open === null ? 1 : 0.95 }}
+        transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
+      >
+        <motion.div
+          className="pointer-events-none relative z-10 mt-[calc(var(--center-y,0px)*2)] flex w-[min(34rem,72vw)] flex-col items-center text-center md:w-[min(34rem,46vw)]"
+          initial={{ opacity: 0, y: 36 }}
+          animate={entered ? { opacity: 1, y: 0 } : undefined}
+          transition={{ duration: 1.2, ease: EASE_OUT }}
+        >
+          <div aria-hidden="true" className="absolute -inset-x-10 -inset-y-12 -z-10 bg-[radial-gradient(closest-side,hsl(var(--ink)/0.92),transparent)]" />
+          <h2 className="sr-only">Selected Work</h2>
+          <p aria-hidden="true" className="eyebrow text-honey">
+            {spotlit ? `N°${pad(spot! + 1)} / ${pad(count)} · ${platformLabel[spotlit.platform]}` : `${pad(count)} Projects`}
           </p>
-          <h3 className="max-w-[24rem] font-serif text-[clamp(2.6rem,4.2vw,4.75rem)] font-medium leading-[0.98] tracking-tight">
-            <ScrambleText text={project.title} />
-          </h3>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={project.title}
-              className="flex flex-col items-center"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
+          <p aria-hidden="true" className="mt-3 grid min-h-[2em] place-items-center font-display text-[clamp(2.5rem,min(5vw,9svh),5rem)] font-bold leading-[0.98] tracking-tight">
+            <ScrambleText text={spotlit ? spotlit.title : "Selected Work"} duration={420} />
+          </p>
+          <p aria-hidden="true" className="mt-3 min-h-[3em] max-w-sm text-sm leading-relaxed text-paper/80 md:text-base">
+            {spotlit ? spotlit.type : "Web and mobile products, shipped to real users."}
+          </p>
+          <div data-orbit-ignore className="pointer-events-auto mt-2 flex items-center gap-3">
+            <p className="eyebrow whitespace-nowrap !text-[0.65rem] text-paper/70">{fine ? "Drag to spin · Click a card" : "Swipe · Tap a card"}</p>
+            <button
+              type="button"
+              onClick={() => setPaused((v) => !v)}
+              aria-label={paused ? "Resume project orbit" : "Pause project orbit"}
+              className="grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-paper/25 text-paper transition-colors hover:border-honey hover:text-honey"
             >
-              <p className="mt-3 max-w-xs text-sm text-paper/85 md:text-base">{project.type}</p>
-              <p className="eyebrow mt-3 rounded-full border border-paper/25 px-3 py-1 !text-[0.65rem] text-paper/85">{platformLabel[project.platform]}</p>
-            </motion.div>
-          </AnimatePresence>
-          <button
-            type="button"
-            onClick={() => setOpen(index)}
-            className="pointer-events-auto mt-5 rounded-full bg-honey px-5 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5 active:translate-y-0"
-          >
-            <Roll>View project</Roll>
-          </button>
-        </div>
+              {paused ? <Play className="h-3.5 w-3.5" aria-hidden="true" /> : <Pause className="h-3.5 w-3.5" aria-hidden="true" />}
+            </button>
+          </div>
+        </motion.div>
 
-        <div className="absolute inset-x-0 bottom-5 z-10 flex items-center justify-center gap-3">
-          <button type="button" aria-label="Previous project" disabled={index === 0} onClick={() => goTo(index - 1)} className="grid h-10 w-10 place-items-center rounded-full border border-paper/30 transition-colors hover:border-honey hover:text-honey disabled:opacity-30">
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          </button>
-          <ol className="flex items-center gap-1" aria-label="Choose a project">
+        <div data-orbit-track className="absolute inset-0 will-change-transform">
+          <svg aria-hidden="true" className="absolute inset-0 h-full w-full overflow-visible">
+            <ellipse data-orbit-line fill="none" className="stroke-paper/10" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+          </svg>
+          <ul aria-label="Projects" data-spotlight={spot === null ? undefined : ""}>
             {projects.map((p, i) => (
-              <li key={p.title}>
-                <button type="button" aria-label={p.title} aria-current={i === index ? "true" : undefined} onClick={() => goTo(i)} className="flex h-10 items-center px-1">
-                  <span className={`block h-0.5 rounded-full transition-all duration-300 ${i === index ? "w-8 bg-honey" : "w-3 bg-paper/40"}`} />
+              <li key={p.title} className="contents">
+                <button
+                  type="button"
+                  data-orbit-card
+                  data-cursor="View"
+                  data-on={spot === i ? "" : undefined}
+                  aria-label={`Open ${p.title}, ${p.type}`}
+                  onClick={() => setOpen(i)}
+                  onPointerEnter={(e) => {
+                    if (e.pointerType !== "mouse") return;
+                    ring.hold("hover", true);
+                    setSpot(i);
+                  }}
+                  onPointerLeave={(e) => {
+                    if (e.pointerType !== "mouse") return;
+                    ring.hold("hover", false);
+                    setSpot((cur) => (cur === i ? null : cur));
+                  }}
+                  onFocus={(e) => {
+                    if (!e.currentTarget.matches(":focus-visible")) return;
+                    ring.hold("focus", true);
+                    ring.bringToFront(i);
+                    setSpot(i);
+                  }}
+                  onBlur={() => {
+                    ring.hold("focus", false);
+                    setSpot((cur) => (cur === i ? null : cur));
+                  }}
+                  className="orbit-card absolute left-1/2 top-[calc(50%+var(--center-y,0px))] h-[var(--card-h,12rem)] w-[var(--card-w,19rem)] rounded-lg opacity-0 will-change-transform"
+                >
+                  <span className="orbit-face relative block h-full w-full overflow-hidden rounded-lg bg-ink shadow-[0_1.5rem_3.5rem_-1rem_hsl(var(--ink-deep))] ring-1 ring-paper/15">
+                    <img src={p.cover} alt="" width={1600} height={1000} loading="lazy" decoding="async" draggable={false} className="h-full w-full object-cover" />
+                    <span className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full bg-ink-deep/85 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-paper">
+                      <span className="text-honey">{pad(i + 1)}</span>
+                      {p.title}
+                    </span>
+                  </span>
                 </button>
               </li>
             ))}
-          </ol>
-          <button type="button" aria-label="Next project" disabled={index === count - 1} onClick={() => goTo(index + 1)} className="grid h-10 w-10 place-items-center rounded-full border border-paper/30 transition-colors hover:border-honey hover:text-honey disabled:opacity-30">
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </button>
+          </ul>
         </div>
-      </div>
-      <ProjectCase project={open === null ? null : projects[open]} index={open ?? 0} total={count} onClose={() => setOpen(null)} />
-    </div>
+      </motion.div>
+
+      <ProjectCase project={open === null ? null : projects[open]} index={open ?? 0} total={count} onClose={() => setOpen(null)} onNavigate={setOpen} />
+    </>
   );
 }
 
-/** Scroll-driven orbit (WebGL). Reduced motion or no WebGL gets a plain, complete list. */
+/** One screen of orbiting cards: pick one to read it, scroll on whenever. Reduced motion gets a plain list. */
 export function ProjectsOrbit() {
   const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const [webgl] = useState(hasWebGL);
   return (
-    <section id="projects" className="relative bg-ink-deep text-paper">
-      {reduce || !webgl ? <ProjectsList /> : <Orbit />}
+    <section id="projects" className={`sheet-edge relative -mt-10 bg-ink bg-[radial-gradient(ellipse_at_center,hsl(var(--honey)/0.06),transparent_62%)] text-paper md:-mt-16 ${reduce ? "pb-16" : "h-[calc(100svh+4rem)] min-h-[42rem]"}`}>
+      {reduce ? <ProjectsList /> : <Orbit />}
     </section>
   );
 }

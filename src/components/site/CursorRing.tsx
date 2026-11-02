@@ -19,8 +19,7 @@ export function CursorRing() {
       x.set(e.clientX);
       y.set(e.clientY);
       const t = e.target instanceof Element ? e.target : null;
-      // The WebGL scene names its hover through the body; only trust that while over a canvas.
-      const named = (t?.closest("canvas") && document.body.dataset.cursorLabel) || "";
+      const named = t?.closest<HTMLElement>("[data-cursor]")?.dataset.cursor ?? "";
       setLabel(named);
       setHot(!!named || !!t?.closest("a, button, input, textarea, [role='button']"));
     };

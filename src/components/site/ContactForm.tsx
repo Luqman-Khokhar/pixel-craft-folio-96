@@ -66,7 +66,7 @@ export function ContactForm() {
     return (
       <div role="status" className="flex min-h-[24rem] flex-col items-start justify-center gap-4">
         <span className="grid h-14 w-14 place-items-center rounded-full bg-honey text-ink"><Check className="h-6 w-6" aria-hidden="true" /></span>
-        <p className="font-serif text-5xl font-medium leading-none">Message sent</p>
+        <p className="font-display text-5xl font-medium leading-none">Message sent</p>
         <p className="text-paper/85">Thank you. I'll reply to the email you gave me.</p>
         <button type="button" onClick={() => setStatus("idle")} className="text-sm font-semibold underline decoration-honey underline-offset-4">Send another message</button>
       </div>

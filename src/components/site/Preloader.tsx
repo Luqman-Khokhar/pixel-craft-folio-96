@@ -1,36 +1,22 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Crest } from "./Crest";
+import { symbolsWarm } from "@/lib/symbolsWarm";
+import { LoaderSeal } from "./LoaderSeal";
 
-const SEEN_KEY = "lk-entry-seen";
-
-function alreadySeen(): boolean {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-/** Entry screen: the seal draws itself, then lifts away. Short on repeat visits in a session. */
+/** Entry screen, on every page load: the seal draws itself, then lifts away. */
 export function Preloader({ onDone }: { onDone: () => void }) {
   const reduce = useReducedMotion();
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const hold = reduce || alreadySeen() ? 150 : 1500;
+    const hold = reduce ? 800 : 2600;
     let cancelled = false;
     const fonts = document.fonts?.ready ?? Promise.resolve();
     const wait = new Promise((r) => window.setTimeout(r, hold));
     // Never let a slow font network hold the entry screen hostage.
     const cap = new Promise((r) => window.setTimeout(r, hold + 1800));
-    Promise.race([Promise.all([fonts, wait]), cap]).then(() => {
+    Promise.race([Promise.all([fonts, wait, symbolsWarm]), cap]).then(() => {
       if (cancelled) return;
-      try {
-        sessionStorage.setItem(SEEN_KEY, "1");
-      } catch {
-        /* storage unavailable: entry just plays in full next time */
-      }
       setVisible(false);
       onDone();
     });
@@ -51,7 +37,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
           aria-label="Loading portfolio"
         >
           <motion.div exit={{ scale: 0.82, opacity: 0 }} transition={{ duration: 0.4 }}>
-            <Crest draw className="h-24 w-24 sm:h-32 sm:w-32" />
+            <LoaderSeal className="seal-breathe h-56 w-auto sm:h-64" />
           </motion.div>
         </motion.div>
       )}

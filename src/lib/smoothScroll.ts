@@ -1,4 +1,4 @@
-// Small wheel smoother on top of native scroll: sticky, anchors, keyboard and touch stay native.
+// Small wheel + keyboard smoother on top of native scroll: sticky, anchors and touch stay native.
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let current = 0;
@@ -20,6 +20,12 @@ function isInsideScrollable(node: EventTarget | null): boolean {
   return false;
 }
 
+// Keys on these keep their native meaning (typing, activating, moving a slider), so they are never hijacked.
+const INTERACTIVE = "input, textarea, select, button, a, summary, [contenteditable], [role=button], [role=slider], [role=tab], [role=menuitem], [role=listbox], [role=option]";
+const isInteractive = (node: EventTarget | null) => node instanceof Element && !!node.closest(INTERACTIVE);
+// Glide rate per second: lower is silkier. ~7 matches the 0.1-per-frame lerp most smooth-scroll sites use.
+const GLIDE = 7;
+
 export function initSmoothWheel(): () => void {
   if (reducedMotion() || !window.matchMedia("(pointer: fine)").matches) return () => undefined;
   current = target = window.scrollY;
@@ -28,7 +34,7 @@ export function initSmoothWheel(): () => void {
   const tick = (now: number) => {
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
-    current += (target - current) * (1 - Math.exp(-dt * 11));
+    current += (target - current) * (1 - Math.exp(-dt * GLIDE));
     if (Math.abs(target - current) < 0.4) {
       current = target;
       wheelActive = false;
@@ -37,13 +43,11 @@ export function initSmoothWheel(): () => void {
     if (wheelActive) wheelRaf = requestAnimationFrame(tick);
   };
 
-  const onWheel = (e: WheelEvent) => {
-    if (e.ctrlKey || document.body.hasAttribute("data-scroll-locked") || isInsideScrollable(e.target)) return;
-    e.preventDefault();
+  /** Moves the glide target, starting the loop if it is idle. */
+  const glide = (to: (from: number) => number) => {
     cancelAnimationFrame(jumpRaf);
-    const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
     if (!wheelActive) current = target = window.scrollY;
-    target = clamp(target + e.deltaY * unit, 0, maxScroll());
+    target = clamp(to(target), 0, maxScroll());
     if (!wheelActive) {
       wheelActive = true;
       last = performance.now();
@@ -51,9 +55,30 @@ export function initSmoothWheel(): () => void {
     }
   };
 
+  const onWheel = (e: WheelEvent) => {
+    if (e.ctrlKey || document.body.hasAttribute("data-scroll-locked") || isInsideScrollable(e.target)) return;
+    e.preventDefault();
+    const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
+    glide((from) => from + e.deltaY * unit);
+  };
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (document.body.hasAttribute("data-scroll-locked") || isInteractive(e.target) || isInsideScrollable(e.target)) return;
+    const page = window.innerHeight * 0.85;
+    const steps: Record<string, number> = { ArrowDown: 120, ArrowUp: -120, PageDown: page, PageUp: -page, " ": e.shiftKey ? -page : page };
+    if (e.key === "Home") glide(() => 0);
+    else if (e.key === "End") glide(() => maxScroll());
+    else if (e.key in steps) glide((from) => from + steps[e.key]);
+    else return;
+    e.preventDefault();
+  };
+
   window.addEventListener("wheel", onWheel, { passive: false });
+  window.addEventListener("keydown", onKey);
   return () => {
     window.removeEventListener("wheel", onWheel);
+    window.removeEventListener("keydown", onKey);
     cancelAnimationFrame(wheelRaf);
     wheelActive = false;
   };
