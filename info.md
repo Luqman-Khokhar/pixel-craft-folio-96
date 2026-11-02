@@ -56,14 +56,16 @@ updated: 2026-10-31
 
 ## 4. Skills
 
-| Category | Skills |
-|---|---|
-| Frontend | React.js, React Native, Next.js, TypeScript, Tailwind CSS, Ant Design, Material UI, Bootstrap, Aceternity UI, Formik & Yup |
-| State Management | Context API, Redux, Redux Toolkit, Redux Thunk, Redux Saga, React Query, Zustand |
-| Real-time & APIs | Socket.io, Pusher, Firebase, Supabase, REST APIs, WebSockets, GraphQL |
-| Backend Familiarity | Node.js, KeystoneJS, Laravel, Express.js |
-| Deployment | Vercel, Netlify, GoDaddy, Hostinger, Google Play Store, Apple App Store |
-| UI / UX | Responsive Design, Animations & Transitions, Modern UI Libraries, Component Design, MVC / MVVM Structure |
+| Category | Layer | Skills |
+|---|---|---|
+| Frontend | What the screens are built with | React.js, React Native, Next.js, TypeScript, Tailwind CSS, Ant Design, Material UI, Bootstrap, Aceternity UI, Formik & Yup |
+| State Management | How the app remembers | Context API, Redux, Redux Toolkit, Redux Thunk, Redux Saga, React Query, Zustand |
+| Real-time & APIs | How it talks, live | Socket.io, Pusher, Firebase, Supabase, REST APIs, WebSockets, GraphQL |
+| Backend Familiarity | The servers my screens talk to | Node.js, KeystoneJS, Laravel, Express.js |
+| Deployment | Where it ships | Vercel, Netlify, GoDaddy, Hostinger, Google Play Store, Apple App Store |
+| UI / UX | The part people touch | Responsive Design, Animations & Transitions, Modern UI Libraries, Component Design, MVC / MVVM Structure |
+
+The skills section shows the six groups as the layers of one app, top to bottom: UI / UX, Frontend, State Management, Real-time & APIs, Backend Familiarity, Deployment.
 
 ## 5. Work experience (newest first)
 

@@ -4,6 +4,8 @@ import { motion, useInView, useReducedMotion, useScroll, useTransform, type Moti
 export const EASE = [0.7, 0, 0.2, 1] as const;
 export const EASE_OUT = [0.19, 1, 0.22, 1] as const;
 export const EASE_WIPE = [0.76, 0, 0.24, 1] as const;
+// Starts from rest and settles slowly: for things arriving while something else is still moving.
+export const EASE_SOFT = [0.33, 0, 0.15, 1] as const;
 
 export function useMediaQuery(query: string): boolean {
   const [match, setMatch] = useState(() => window.matchMedia(query).matches);

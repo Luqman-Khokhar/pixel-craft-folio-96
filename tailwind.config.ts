@@ -21,7 +21,7 @@ export default {
       colors: {
         ink: { DEFAULT: "hsl(var(--ink) / <alpha-value>)", deep: "hsl(var(--ink-deep) / <alpha-value>)" },
         honey: { DEFAULT: "hsl(var(--honey) / <alpha-value>)", deep: "hsl(var(--honey-deep) / <alpha-value>)" },
-        paper: "hsl(var(--paper) / <alpha-value>)",
+        paper: { DEFAULT: "hsl(var(--paper) / <alpha-value>)", shade: "hsl(var(--paper-shade) / <alpha-value>)" },
         azure: "hsl(var(--azure) / <alpha-value>)",
         ember: "hsl(var(--ember) / <alpha-value>)",
         border: "hsl(var(--border))",

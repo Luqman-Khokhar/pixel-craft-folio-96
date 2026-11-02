@@ -12,7 +12,7 @@ function inkBox(text: string): string | null {
 }
 
 /** Hollow display word stretched to fill its box edge to edge. The hairline stays even however far it stretches. */
-export function OutlineWord({ text, className = "" }: { text: string; className?: string }) {
+export function OutlineWord({ text, className = "", strokeClassName = "stroke-ink" }: { text: string; className?: string; strokeClassName?: string }) {
   const [box, setBox] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function OutlineWord({ text, className = "" }: { text: string; className?
   return (
     <svg aria-hidden="true" viewBox={box ?? "0 0 100 100"} preserveAspectRatio="none" className={`overflow-visible ${className}`}>
       {box && (
-        <text x="0" y="0" fontFamily="Melodrama" fontWeight="700" fontSize={SIZE} className="fill-none stroke-ink" strokeWidth="1.5" vectorEffect="non-scaling-stroke">
+        <text x="0" y="0" fontFamily="Melodrama" fontWeight="700" fontSize={SIZE} className={`fill-none ${strokeClassName}`} strokeWidth="1.5" vectorEffect="non-scaling-stroke">
           {text}
         </text>
       )}

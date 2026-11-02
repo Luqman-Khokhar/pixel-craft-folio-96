@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, type MotionValue } from "framer-motion";
-import { EASE } from "./primitives";
+import { EASE_SOFT } from "./primitives";
 
 const FONT = "700 100px Melodrama";
 const LINE = 0.8;
@@ -63,10 +63,11 @@ export function EchoTitle({ text, ready, ratio, echoes }: EchoTitleProps) {
           <motion.span
             key={i}
             className="inline-block"
-            initial={reduce ? false : { y: "105%" }}
-            animate={ready ? { y: 0 } : undefined}
-            // Rises once the portrait has faded in; the last letter lands at ~2.2s.
-            transition={{ duration: 1, delay: 0.75 + i * 0.035, ease: EASE }}
+            // A transform string, not y: runs on the compositor, so the rise stays smooth while the WebGL symbols start up.
+            initial={reduce ? false : { transform: "translateY(105%)", opacity: 0 }}
+            animate={ready ? { transform: "translateY(0%)", opacity: 1 } : undefined}
+            // Rises once the portrait has faded in; the last letter lands at ~2.3s.
+            transition={{ duration: 1.1, delay: 0.75 + i * 0.035, ease: EASE_SOFT }}
           >
             {ch}
           </motion.span>

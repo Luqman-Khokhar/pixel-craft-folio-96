@@ -44,8 +44,8 @@ const SLOTS: Slot[] = [
   { name: "Apple", Model: AppleCard, wide: { x: 0.81, y: 0.703, size: 0.145, from: [0.57, 0.406] }, phone: { x: 0.88, y: 0.76, size: 0.25, from: [0.7, 0.75], via: [0.97, 0.38] }, rotation: [0.12, -0.4, -0.2], depth: 1.05, turn: "y", turnAngle: Math.PI },
 ];
 
-// Waits for the name's last letter to land (~2.2s): symbols start hidden behind the portrait, so they surface just after.
-const ENTER_DELAY = 1.9;
+// Waits for the name's last letter to land (~2.3s): symbols start hidden behind the portrait, so they surface just after.
+const ENTER_DELAY = 2;
 const ENTER_STAGGER = 0.1;
 const ENTER_SECONDS = 1.7;
 const ENTER_SCALE = 0.6;

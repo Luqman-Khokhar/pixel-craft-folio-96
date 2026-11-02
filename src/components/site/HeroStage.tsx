@@ -3,7 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { hero, identity } from "@/data/portfolio";
 import { markSymbolsWarm } from "@/lib/symbolsWarm";
 import { EchoTitle } from "./FitTitle";
-import { EASE_OUT, useMediaQuery } from "./primitives";
+import { useMediaQuery } from "./primitives";
 
 const HeroSymbols = lazy(() => import("./HeroSymbols"));
 
@@ -94,9 +94,10 @@ export function HeroStage({ ready }: { ready: boolean }) {
             className="h-full w-auto max-w-none select-none object-contain"
             draggable={false}
             // Drifts up and settles while it fades in; the fade gets its own gentler curve so it never pops.
-            initial={reduce ? false : { opacity: 0, y: 56, scale: 0.96 }}
-            animate={ready ? { opacity: 1, y: 0, scale: 1 } : undefined}
-            transition={{ duration: 1.8, delay: 0.35, ease: [0.25, 1, 0.5, 1], opacity: { duration: 1.2, delay: 0.35, ease: "easeOut" } }}
+            // Transform strings, not y/scale: they run on the compositor while the WebGL symbols start up.
+            initial={reduce ? false : { opacity: 0, transform: "translateY(56px) scale(0.96)" }}
+            animate={ready ? { opacity: 1, transform: "translateY(0px) scale(1)" } : undefined}
+            transition={{ transform: { duration: 1.8, delay: 0.35, ease: [0.25, 1, 0.5, 1] }, opacity: { duration: 1.2, delay: 0.35, ease: "easeOut" } }}
             style={{ transformOrigin: "50% 100%" }}
           />
         </div>

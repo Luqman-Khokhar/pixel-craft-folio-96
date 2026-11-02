@@ -52,29 +52,36 @@ export const about = {
   ],
 };
 
+// `layer` names the part of an app each group builds; the skills section stacks them from UI / UX down to Deployment.
 export const skills = [
   {
     category: "Frontend",
+    layer: "What the screens are built with",
     items: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Ant Design", "Material UI", "Bootstrap", "Aceternity UI", "Formik & Yup"],
   },
   {
     category: "State Management",
+    layer: "How the app remembers",
     items: ["Context API", "Redux", "Redux Toolkit", "Redux Thunk", "Redux Saga", "React Query", "Zustand"],
   },
   {
     category: "Real-time & APIs",
+    layer: "How it talks, live",
     items: ["Socket.io", "Pusher", "Firebase", "Supabase", "REST APIs", "WebSockets", "GraphQL"],
   },
   {
     category: "Backend Familiarity",
+    layer: "The servers my screens talk to",
     items: ["Node.js", "KeystoneJS", "Laravel", "Express.js"],
   },
   {
     category: "Deployment",
+    layer: "Where it ships",
     items: ["Vercel", "Netlify", "GoDaddy", "Hostinger", "Google Play Store", "Apple App Store"],
   },
   {
     category: "UI / UX",
+    layer: "The part people touch",
     items: ["Responsive Design", "Animations & Transitions", "Modern UI Libraries", "Component Design", "MVC / MVVM Structure"],
   },
 ];
@@ -281,6 +288,18 @@ export const tableCards: TableCard[] = [
     },
   },
 ];
+
+// A store is proof when the project's demo link is its listing there.
+const STORE_HOSTS: Record<string, string> = { "Google Play Store": "play.google.com", "Apple App Store": "apps.apple.com" };
+
+/** The project cards whose tech list names this skill. Stat cards don't count: only a shipped project is proof. */
+export const cardsUsing = (skill: string): TableCard[] =>
+  tableCards.filter((card) => {
+    if (!projects.includes(card.sheet as Project)) return false;
+    const host = STORE_HOSTS[skill];
+    if (host) return (card.sheet as Project).demo?.includes(host) ?? false;
+    return card.sheet.tech.some((tech) => tech.includes(skill));
+  });
 
 export const contact = {
   heading: "Get In Touch",

@@ -4,7 +4,7 @@ import { tableCards } from "@/data/portfolio";
 import { scrollToY } from "@/lib/smoothScroll";
 import { DeckCard, type DeckSlot } from "./DeckCard";
 import { OutlineWord } from "./OutlineWord";
-import { ProjectCase } from "./ProjectCase";
+import { ProjectCloseUp } from "./ProjectCloseUp";
 import { useMediaQuery } from "./primitives";
 
 // One slot per entry of tableCards, same order. The columns are dealt right to left, the centre card last.
@@ -31,7 +31,7 @@ const CARD_SPAN = 1.2;
 const STEP = DEAL_ENDS_AT / (SLOTS.length - 1 + CARD_SPAN);
 const rangeOf = (slot: DeckSlot): [number, number] => [slot.order * STEP, (slot.order + CARD_SPAN) * STEP];
 
-/** Hollow PROJECTS on a white table, pinned while scrolling deals the cards in one by one. Scrolling back takes them out again. Cards can be picked up and moved, one is selected at a time, and a double click opens one. */
+/** Hollow PROJECTS on a night-blue table, pinned while scrolling deals the cards in face down, one by one, each turning over as it lands. Scrolling back takes them out again. Cards can be moved around the table, and a click lifts one into a close-up. */
 export function ProjectsTable() {
   const track = useRef<HTMLDivElement>(null);
   const table = useRef<HTMLDivElement>(null);
@@ -41,6 +41,7 @@ export function ProjectsTable() {
   const [stack, setStack] = useState(STACK);
   const [focused, setFocused] = useState<number | null>(CENTRE);
   const [open, setOpen] = useState<number | null>(null);
+  const cardEls = useRef<(HTMLButtonElement | null)[]>([]);
   const { scrollYProgress } = useScroll({ target: track, offset: ["start start", "end end"] });
   const progress = useSpring(scrollYProgress, { stiffness: 170, damping: 30, restDelta: 0.0005 });
 
@@ -66,8 +67,17 @@ export function ProjectsTable() {
   // Each card starts just above the screen, so a lower card covers more ground in its turn.
   const fallFrom = (slot: DeckSlot) => (portrait ? -(slot.py + 15) : -(slot.ly + 30));
 
+  // Where a card lies now, dragged and turned as it is, so the close-up lifts it from there and puts it back there.
+  const originOf = (i: number) => {
+    const el = cardEls.current[i];
+    if (!el) return null;
+    const box = el.getBoundingClientRect();
+    return { cx: box.left + box.width / 2, cy: box.top + box.height / 2, width: el.offsetWidth * (focused === i ? 1.05 : 1), rotate: SLOTS[i].rot };
+  };
+
   return (
-    <section id="projects" className="sheet-edge relative -mt-10 bg-azure text-ink [overflow:clip] md:-mt-16">
+    // With motion, the sheet slides up over the last pinned screen of Skills, which stays put beneath it.
+    <section id="projects" className="sheet-edge relative bg-ink-deep text-paper [overflow:clip] motion-safe:-mt-[100svh] motion-reduce:-mt-10 motion-reduce:md:-mt-16">
       <h2 className="sr-only">Projects</h2>
       <div ref={track} className={`relative ${animated ? "h-[560svh]" : "h-svh"}`}>
         <div
@@ -77,7 +87,7 @@ export function ProjectsTable() {
             if (!(e.target as Element).closest("button")) setFocused(null);
           }}
         >
-          <OutlineWord text="PROJECTS" className="absolute left-[5%] top-[13.7%] h-[57.9%] w-[90%]" />
+          <OutlineWord text="PROJECTS" strokeClassName="stroke-honey/30" className="absolute left-[5%] top-[13.7%] h-[57.9%] w-[90%]" />
 
           <ul aria-label="Projects">
             {tableCards.map((card, i) => (
@@ -90,9 +100,13 @@ export function ProjectsTable() {
                 fallFrom={fallFrom(SLOTS[i])}
                 animated={animated}
                 focused={focused === i}
+                held={open === i}
                 z={stack.indexOf(i) + 1}
                 fine={fine}
                 table={table}
+                buttonRef={(el) => {
+                  cardEls.current[i] = el;
+                }}
                 onPick={() => pick(i)}
                 onOpen={() => setOpen(i)}
                 onReveal={() => reveal(SLOTS[i])}
@@ -100,17 +114,17 @@ export function ProjectsTable() {
             ))}
           </ul>
 
-          <p className="deck-caption absolute inset-x-4 bottom-[1.5%] mx-auto text-center text-[0.8125rem] leading-snug text-ink/70 md:bottom-[2.5%]">
-            {fine ? "Pick up a card and move it around the table" : "Slide a card around the table"}
+          <p className="deck-caption absolute inset-x-4 bottom-[1.5%] mx-auto text-center text-[0.8125rem] leading-snug text-paper/70 md:bottom-[2.5%]">
+            {fine ? "Drag the cards around the table" : "Slide a card along the table"}
             <br />
-            {fine ? "Double-click a card to open it" : "Double-tap a card to open it"}
+            {fine ? "Click one to pick it up" : "Tap one to pick it up"}
           </p>
         </div>
       </div>
       {/* The next sheet overlaps this strip; the rest keeps its shadow off the table. */}
       <div aria-hidden="true" className="h-[6.5rem] md:h-32" />
 
-      <ProjectCase project={open === null ? null : tableCards[open].sheet} index={open ?? 0} total={tableCards.length} onClose={() => setOpen(null)} onNavigate={setOpen} />
+      <ProjectCloseUp cards={tableCards} index={open} originOf={originOf} onClose={() => setOpen(null)} onNavigate={setOpen} />
     </section>
   );
 }
