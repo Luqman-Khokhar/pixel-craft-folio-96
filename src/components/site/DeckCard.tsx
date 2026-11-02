@@ -48,6 +48,31 @@ interface DeckCardProps {
   onReveal: () => void;
 }
 
+/** The printed face of a card. Fills its parent, which sets the size and the ink colour. */
+export function CardFace({ card, focused = false }: { card: TableCard; focused?: boolean }) {
+  return (
+    <>
+      <svg aria-hidden="true" viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible">
+        <path d={OUTER} vectorEffect="non-scaling-stroke" strokeWidth="2.25" className={`fill-azure transition-[stroke] duration-300 ${focused ? "stroke-honey" : "stroke-ink"}`} />
+        <path d={INNER} vectorEffect="non-scaling-stroke" strokeWidth="1.25" className={`fill-none transition-[stroke] duration-300 ${focused ? "stroke-honey/70" : "stroke-ink/55"}`} />
+      </svg>
+
+      <span className="relative flex h-full w-full flex-col items-center justify-center px-[9%] pb-[8%] text-center [container-type:inline-size]">
+        <span className="block text-[max(0.6875rem,4.5cqw)] font-medium leading-tight">{card.label}</span>
+        <span aria-hidden="true" className="my-[6cqw] flex w-[45cqw] items-center gap-[3cqw]">
+          <span className="h-px flex-1 bg-honey" />
+          <span className="h-[2cqw] min-h-1 w-[2cqw] min-w-1 rotate-45 bg-honey" />
+          <span className="h-px flex-1 bg-honey" />
+        </span>
+        <span className="block font-display text-[16cqw] font-bold leading-[1.02] tracking-tight [text-wrap:balance]">{card.title}</span>
+        <span className="mt-[4.5cqw] block font-display text-[max(0.75rem,7.2cqw)] font-bold leading-tight">{card.sub}</span>
+        {card.accent && <span className="deck-note mt-[3.5cqw] block font-display text-[max(0.75rem,6.4cqw)] font-bold leading-tight text-honey-deep">{card.accent}</span>}
+        {card.note && <span className="deck-note mt-[3.5cqw] block text-[max(0.625rem,3.7cqw)] leading-snug text-ink/70">{card.note}</span>}
+      </span>
+    </>
+  );
+}
+
 /** One card on the table: scrolling deals it in from above and takes it back out, it lifts when picked up, drags anywhere, opens on a double click or Enter. */
 export function DeckCard({ card, slot, progress, range, fallFrom, animated, focused, z, fine, table, onPick, onOpen, onReveal }: DeckCardProps) {
   const [landed, setLanded] = useState(() => !animated || progress.get() >= range[1]);
@@ -114,23 +139,7 @@ export function DeckCard({ card, slot, progress, range, fallFrom, animated, focu
             lastClick.current = e.timeStamp;
           }}
         >
-          <svg aria-hidden="true" viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible">
-            <path d={OUTER} vectorEffect="non-scaling-stroke" strokeWidth="2.25" className={`fill-azure transition-[stroke] duration-300 ${focused ? "stroke-honey" : "stroke-ink"}`} />
-            <path d={INNER} vectorEffect="non-scaling-stroke" strokeWidth="1.25" className={`fill-none transition-[stroke] duration-300 ${focused ? "stroke-honey/70" : "stroke-ink/55"}`} />
-          </svg>
-
-          <span className="relative flex h-full w-full flex-col items-center justify-center px-[9%] pb-[8%] text-center [container-type:inline-size]">
-            <span className="block text-[max(0.6875rem,4.5cqw)] font-medium leading-tight">{card.label}</span>
-            <span aria-hidden="true" className="my-[6cqw] flex w-[45cqw] items-center gap-[3cqw]">
-              <span className="h-px flex-1 bg-honey" />
-              <span className="h-[2cqw] min-h-1 w-[2cqw] min-w-1 rotate-45 bg-honey" />
-              <span className="h-px flex-1 bg-honey" />
-            </span>
-            <span className="block font-display text-[16cqw] font-bold leading-[1.02] tracking-tight [text-wrap:balance]">{card.title}</span>
-            <span className="mt-[4.5cqw] block font-display text-[max(0.75rem,7.2cqw)] font-bold leading-tight">{card.sub}</span>
-            {card.accent && <span className="deck-note mt-[3.5cqw] block font-display text-[max(0.75rem,6.4cqw)] font-bold leading-tight text-honey-deep">{card.accent}</span>}
-            {card.note && <span className="deck-note mt-[3.5cqw] block text-[max(0.625rem,3.7cqw)] leading-snug text-ink/70">{card.note}</span>}
-          </span>
+          <CardFace card={card} focused={focused} />
         </motion.button>
       </motion.div>
     </li>

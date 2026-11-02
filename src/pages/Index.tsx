@@ -4,7 +4,7 @@ import { Preloader } from "@/components/site/Preloader";
 import { HeroStage } from "@/components/site/HeroStage";
 import { PortalFrame } from "@/components/site/PortalFrame";
 import { AboutSection } from "@/components/site/AboutSection";
-import { SkillsIndex } from "@/components/site/SkillsIndex";
+import { SkillsStack } from "@/components/site/SkillsStack";
 import { ProjectsTable } from "@/components/site/ProjectsTable";
 import { ExperienceYears } from "@/components/site/ExperienceYears";
 import { ContactFinale } from "@/components/site/ContactFinale";
@@ -24,7 +24,7 @@ const Index = () => {
         <HeroStage ready={ready} />
         <PortalFrame />
         <AboutSection />
-        <SkillsIndex />
+        <SkillsStack />
         <ProjectsTable />
         <ExperienceYears />
         <ContactFinale />

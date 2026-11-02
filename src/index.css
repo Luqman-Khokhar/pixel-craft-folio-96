@@ -23,6 +23,8 @@ All colors MUST be HSL.
     --honey: 40 92% 59%;
     --honey-deep: 34 70% 42%;
     --paper: 42 40% 94%;
+    /* The side of a paper slab: the same stock, turned away from the light. */
+    --paper-shade: 38 24% 72%;
     --ember: 9 85% 52%;
 
     --background: 42 40% 94%;
@@ -241,6 +243,9 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 @container (max-width: 9.5rem) {
   .deck-note { display: none !important; }
 }
+
+/* Skills stack: a slab changes stock when it is the layer in hand. */
+.stack-slab path { transition: fill 0.24s ease; }
 
 /* Every section arrives as a sheet over the last one; the project detail uses the same edge. */
 .sheet-edge {
