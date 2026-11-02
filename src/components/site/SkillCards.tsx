@@ -173,7 +173,7 @@ export function SkillCards({ open, left, top, cardWidth }: SkillCardsProps) {
           return (
             <motion.div
               key={card.title}
-              className="absolute left-0 top-0"
+              className="deck-card absolute left-0 top-0"
               style={{ width: cardWidth, height: cardWidth * CARD_RATIO, zIndex: i }}
               initial={reduce ? false : { x: i * spread, y: -36, rotate: rotate * 0.3, opacity: 0 }}
               animate={{ x: i * spread, y: Math.abs(i - middle) * 6, rotate, opacity: 1 }}
