@@ -25,6 +25,8 @@ All colors MUST be HSL.
     --paper: 42 40% 94%;
     /* The side of a paper slab: the same stock, turned away from the light. */
     --paper-shade: 38 24% 72%;
+    /* What a card on the dark table casts: darker than the table itself. */
+    --night: 214 70% 4%;
     --ember: 9 85% 52%;
 
     --background: 42 40% 94%;
@@ -244,6 +246,31 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
   .deck-note { display: none !important; }
 }
 
+/* A card rests on the table with a tight contact shadow; picked up, the shadow spreads and drops. */
+.deck-card::before,
+.deck-card::after {
+  content: "";
+  position: absolute;
+  inset: 1.5% 2%;
+  border-radius: 4% / 3%;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.24s ease;
+}
+.deck-card::before { box-shadow: 0 1px 2px hsl(var(--night) / 0.55), 0 10px 20px -8px hsl(var(--night) / 0.7); }
+.deck-card::after { box-shadow: 0 30px 50px -14px hsl(var(--night) / 0.85), 0 12px 20px -8px hsl(var(--night) / 0.5); opacity: 0; }
+.deck-card[data-lifted]::after { opacity: 1; }
+/* Still falling: no shadow until it touches the table, so it settles onto it. */
+.deck-card[data-airborne]::before,
+.deck-card[data-airborne]::after { opacity: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .deck-card:hover::after { opacity: 0.75; }
+}
+/* The cover window repeats the card's cut corners. */
+.card-window {
+  overflow: hidden;
+  clip-path: polygon(3cqw 0, calc(100% - 3cqw) 0, 100% 3cqw, 100% calc(100% - 3cqw), calc(100% - 3cqw) 100%, 3cqw 100%, 0 calc(100% - 3cqw), 0 3cqw);
+}
 /* Skills stack: a slab changes stock when it is the layer in hand. */
 .stack-slab path { transition: fill 0.24s ease; }
 

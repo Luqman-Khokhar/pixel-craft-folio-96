@@ -145,6 +145,12 @@ export function SkillsStack() {
   const opening = useTransform(smooth, [0, OPEN_END], [0, 1], { clamp: true });
   const fullyOpen = useMotionValue(1);
 
+  // The last screen is held under the projects sheet: the stage stays pinned and sinks back as the sheet slides over it.
+  const cover = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: covered } = useScroll({ target: cover, offset: ["start end", "start start"] });
+  const sink = useTransform(covered, [0, 1], [1, 0.94]);
+  const shade = useTransform(covered, [0, 1], [0, 0.6]);
+
   const choose = (next: number) => {
     if (next === activeRef.current) return;
     setDir(next > activeRef.current ? 1 : -1);
@@ -175,9 +181,15 @@ export function SkillsStack() {
     <section id="skills" className="sheet-edge relative -mt-10 bg-ink text-paper md:-mt-16">
       {/* A phone needs the whole pinned screen for the stack, so the heading scrolls past first. */}
       {!wide && <StackHeading className="mx-auto max-w-[100rem] px-4 pt-20 sm:px-6" />}
-      <div ref={track} className={pinned ? "relative h-[460svh]" : "relative"}>
-        <div
-          className={`${pinned ? "sticky top-0 h-svh pb-6 md:pb-12" : "min-h-svh pb-20 md:pb-28"} mx-auto flex max-w-[100rem] flex-col px-4 pt-16 sm:px-6 md:grid md:grid-cols-12 md:grid-rows-[auto_minmax(0,1fr)] md:gap-x-10 md:pt-28`}
+      {/* Pinned: 460svh of layers, then one more screen that the projects sheet covers (it overlaps by exactly that much). */}
+      <div className={pinned ? "relative h-[560svh]" : "relative"}>
+        <div ref={track} aria-hidden="true" className={`pointer-events-none absolute inset-x-0 top-0 ${pinned ? "h-[460svh]" : "h-full"}`} />
+        <div ref={cover} aria-hidden="true" className={`pointer-events-none absolute inset-x-0 bottom-0 ${pinned ? "h-svh" : "h-0"}`} />
+        {/* The frame stays full size so the whole screen dims evenly; only what is on it sinks back. */}
+        <div className={pinned ? "sticky top-0 h-svh" : ""}>
+        <motion.div
+          style={pinned ? { scale: sink } : undefined}
+          className={`${pinned ? "h-full origin-[50%_35%] pb-6 md:pb-12" : "min-h-svh pb-20 md:pb-28"} mx-auto flex max-w-[100rem] flex-col px-4 pt-16 sm:px-6 md:grid md:grid-cols-12 md:grid-rows-[auto_minmax(0,1fr)] md:gap-x-10 md:pt-28`}
         >
           {wide && <StackHeading className="md:col-span-5 md:row-start-1" />}
 
@@ -225,6 +237,8 @@ export function SkillsStack() {
               </ol>
             </nav>
           </div>
+        </motion.div>
+        {pinned && <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-ink-deep" style={{ opacity: shade }} />}
         </div>
       </div>
 
