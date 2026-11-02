@@ -66,7 +66,8 @@ export function EchoTitle({ text, ready, ratio, echoes }: EchoTitleProps) {
             // A transform string, not y: runs on the compositor, so the rise stays smooth while the WebGL symbols start up.
             initial={reduce ? false : { transform: "translateY(105%)", opacity: 0 }}
             animate={ready ? { transform: "translateY(0%)", opacity: 1 } : undefined}
-            transition={{ duration: 1.5, delay: 0.25 + i * 0.025, ease: EASE_SOFT }}
+            // Rises once the portrait has faded in; the last letter lands at ~2.3s.
+            transition={{ duration: 1.1, delay: 0.75 + i * 0.035, ease: EASE_SOFT }}
           >
             {ch}
           </motion.span>

@@ -3,7 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { hero, identity } from "@/data/portfolio";
 import { markSymbolsWarm } from "@/lib/symbolsWarm";
 import { EchoTitle } from "./FitTitle";
-import { EASE_SOFT, useMediaQuery } from "./primitives";
+import { useMediaQuery } from "./primitives";
 
 const HeroSymbols = lazy(() => import("./HeroSymbols"));
 
@@ -57,23 +57,24 @@ export function HeroStage({ ready }: { ready: boolean }) {
   }, [webgl, reduce]);
 
   const echoOpacity = useTransform(p, [0, 0.02], [0, 1]);
+  const roleOpacity = useTransform(p, [0, 0.03], [0, 1]);
+  const roleY = useTransform(p, [0, 0.03], [24, 0]);
   const echoNear = useTransform(p, (v) => v * ECHO_DROP[0] * (stage.current?.clientHeight ?? 0));
   const echoFar = useTransform(p, (v) => v * ECHO_DROP[1] * (stage.current?.clientHeight ?? 0));
 
   return (
     <section id="home" className="relative isolate bg-ink">
       <h1 className="sr-only">{hero.heading}</h1>
-      <div ref={stage} className="relative h-[max(100svh,46rem)] px-[clamp(1.25rem,2.78vw,4rem)] [overflow:clip] md:aspect-[1440/1360] md:h-auto md:min-h-svh">
+      <div ref={stage} className="relative h-[max(100svh,46rem)] px-[clamp(1.25rem,2.78vw,4rem)] [overflow:clip] md:aspect-[1440/1282] md:h-auto md:min-h-svh">
         <motion.p
-          className="absolute inset-x-[clamp(1.25rem,2.78vw,4rem)] top-[4.75rem] text-balance text-center text-[clamp(0.75rem,1.25vw,1.75rem)] uppercase leading-tight tracking-[0.14em] text-honey md:top-[10.37%]"
-          initial={reduce ? false : { opacity: 0, transform: "translateY(24px)" }}
-          animate={ready ? { opacity: 1, transform: "translateY(0px)" } : undefined}
-          transition={{ duration: 1.4, delay: 0.35, ease: EASE_SOFT }}
+          className="absolute inset-x-[clamp(1.25rem,2.78vw,4rem)] top-[4.75rem] text-balance text-center text-[clamp(0.75rem,1.25vw,1.75rem)] uppercase leading-tight tracking-[0.14em] text-honey md:top-[4.92%]"
+          // Kept out of the entrance: it only shows once the visitor starts scrolling.
+          style={reduce ? undefined : { opacity: roleOpacity, y: roleY }}
         >
           {identity.role}
         </motion.p>
 
-        <div aria-hidden="true" className="absolute inset-x-[clamp(1.25rem,2.78vw,4rem)] top-[7.5rem] z-10 md:top-[12.28%]">
+        <div aria-hidden="true" className="absolute inset-x-[clamp(1.25rem,2.78vw,4rem)] top-[7.5rem] z-10 md:top-[6.94%]">
           <EchoTitle
             text={identity.displayLines.join(" ")}
             ready={ready}
@@ -82,7 +83,7 @@ export function HeroStage({ ready }: { ready: boolean }) {
           />
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 z-20 flex h-[68%] justify-center md:h-[74%]">
+        <div className="absolute inset-x-0 bottom-0 z-20 flex h-[68%] justify-center md:h-[78.5%]">
           <motion.img
             ref={portrait}
             src={identity.portrait}
@@ -92,9 +93,12 @@ export function HeroStage({ ready }: { ready: boolean }) {
             {...{ fetchpriority: "high" }}
             className="h-full w-auto max-w-none select-none object-contain"
             draggable={false}
-            initial={reduce ? false : { opacity: 0 }}
-            animate={ready ? { opacity: 1 } : undefined}
-            transition={{ duration: 1.6, delay: 0.1, ease: EASE_SOFT }}
+            // Drifts up and settles while it fades in; the fade gets its own gentler curve so it never pops.
+            // Transform strings, not y/scale: they run on the compositor while the WebGL symbols start up.
+            initial={reduce ? false : { opacity: 0, transform: "translateY(56px) scale(0.96)" }}
+            animate={ready ? { opacity: 1, transform: "translateY(0px) scale(1)" } : undefined}
+            transition={{ transform: { duration: 1.8, delay: 0.35, ease: [0.25, 1, 0.5, 1] }, opacity: { duration: 1.2, delay: 0.35, ease: "easeOut" } }}
+            style={{ transformOrigin: "50% 100%" }}
           />
         </div>
 
