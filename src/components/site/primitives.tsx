@@ -75,18 +75,20 @@ const Word = ({ word, progress, start, end }: { word: string; progress: MotionVa
   return <motion.span style={{ opacity }} className="inline-block whitespace-pre">{word} </motion.span>;
 };
 
-/** Paragraph whose words ink in as it is scrolled through. */
-export function ScrollWords({ text, className = "" }: { text: string; className?: string }) {
+/** Paragraph whose words ink in as it is scrolled through. Pass `progress` + `range` to drive it from a pinned scene instead. */
+export function ScrollWords({ text, className = "", progress, range = [0, 1] }: { text: string; className?: string; progress?: MotionValue<number>; range?: [number, number] }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 88%", "end 62%"] });
   const words = text.split(" ");
   if (reduce) return <p ref={ref} className={className}>{text}</p>;
+  const [from, to] = range;
+  const at = (share: number) => (progress ? from + (to - from) * Math.min(share, 1) : share);
   return (
     <p ref={ref} className={className} aria-label={text}>
       <span aria-hidden="true">
         {words.map((w, i) => (
-          <Word key={i} word={w} progress={scrollYProgress} start={i / words.length} end={(i + 1.6) / words.length} />
+          <Word key={i} word={w} progress={progress ?? scrollYProgress} start={at(i / words.length)} end={at((i + 1.6) / words.length)} />
         ))}
       </span>
     </p>
