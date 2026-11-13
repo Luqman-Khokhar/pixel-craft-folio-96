@@ -276,8 +276,6 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
   overflow: hidden;
   clip-path: polygon(3cqw 0, calc(100% - 3cqw) 0, 100% 3cqw, 100% calc(100% - 3cqw), calc(100% - 3cqw) 100%, 3cqw 100%, 0 calc(100% - 3cqw), 0 3cqw);
 }
-/* Skills stack: a slab changes stock when it is the layer in hand. */
-.stack-slab path { transition: fill 0.24s ease; }
 
 /* Every section arrives as a sheet over the last one; the project detail uses the same edge. */
 .sheet-edge {
