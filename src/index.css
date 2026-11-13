@@ -28,6 +28,11 @@ All colors MUST be HSL.
     /* What a card on the dark table casts: darker than the table itself. */
     --night: 214 70% 4%;
     --ember: 9 85% 52%;
+    /* Skills keyboard: a graphite board with bone keycaps; honey is the backlight. */
+    --graphite: 220 9% 12%;
+    --graphite-deep: 222 12% 7%;
+    --bone: 40 24% 90%;
+    --bone-shade: 36 12% 60%;
 
     --background: 42 40% 94%;
     --foreground: 210 84.3% 20%;
@@ -282,6 +287,61 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 }
 @media (min-width: 768px) {
   .sheet-edge { border-top-left-radius: 3rem; border-top-right-radius: 3rem; }
+}
+
+/* Skills keyboard. A key's side is a solid shadow; pressing sinks the cap into it. */
+.kb-case {
+  background: linear-gradient(180deg, hsl(var(--graphite-deep)) 0%, hsl(var(--graphite-deep) / 0.92) 100%);
+  box-shadow: inset 0 1px 0 hsl(var(--bone) / 0.08), inset 0 -2px 0 hsl(0 0% 0% / 0.4), 0 2.5rem 4rem -2rem hsl(0 0% 0% / 0.7);
+}
+.keycap {
+  background: linear-gradient(180deg, hsl(var(--bone)) 0%, hsl(var(--bone) / 0.93) 100%);
+  color: hsl(var(--graphite));
+  box-shadow: 0 5px 0 hsl(var(--bone-shade)), 0 10px 14px -6px hsl(0 0% 0% / 0.7), inset 0 1px 0 hsl(0 0% 100% / 0.7);
+  transform: translateY(0);
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms cubic-bezier(0.34, 1.56, 0.64, 1), background-color 150ms ease-out, opacity 200ms ease-out;
+}
+.keycap[data-dim] { opacity: 0.55; }
+.keycap[aria-pressed="true"] {
+  background: hsl(var(--honey));
+  color: hsl(var(--graphite-deep));
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 hsl(var(--honey-deep)), 0 0 28px -4px hsl(var(--honey) / 0.6), inset 0 1px 0 hsl(0 0% 100% / 0.5);
+}
+.keycap:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 hsl(var(--bone-shade)), 0 2px 6px -2px hsl(0 0% 0% / 0.7), inset 0 1px 0 hsl(0 0% 100% / 0.5);
+  transition-duration: 60ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .keycap:hover:not([aria-pressed="true"]) { box-shadow: 0 5px 0 hsl(var(--bone-shade)), 0 0 0 1.5px hsl(var(--honey) / 0.8), 0 0 22px -4px hsl(var(--honey) / 0.55); }
+}
+.keycap-mod {
+  background: hsl(var(--graphite));
+  color: hsl(var(--bone) / 0.7);
+  box-shadow: 0 5px 0 hsl(0 0% 0% / 0.55), inset 0 1px 0 hsl(var(--bone) / 0.1);
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease-out, color 150ms ease-out;
+}
+/* The function row on a phone: the latched key is the row on show. */
+.keycap-mod[aria-pressed="true"] {
+  color: hsl(var(--honey));
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 hsl(0 0% 0% / 0.55), inset 0 0 0 1px hsl(var(--honey) / 0.6), 0 0 18px -6px hsl(var(--honey) / 0.6);
+}
+@keyframes key-ripple { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+.key-ripple {
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 0 1.5px hsl(var(--honey) / 0.75), 0 0 22px -2px hsl(var(--honey) / 0.5);
+  animation: key-ripple 520ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .keycap, .keycap:active, .keycap-mod { transition: background-color 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out; transform: none; }
+  .keycap[aria-pressed="true"], .keycap-mod[aria-pressed="true"] { transform: none; }
+  .key-ripple { display: none; }
 }
 
 @keyframes cue-nudge { 50% { transform: translateY(3px); } }

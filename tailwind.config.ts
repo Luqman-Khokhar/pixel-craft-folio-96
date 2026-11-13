@@ -24,6 +24,8 @@ export default {
         paper: { DEFAULT: "hsl(var(--paper) / <alpha-value>)", shade: "hsl(var(--paper-shade) / <alpha-value>)" },
         azure: "hsl(var(--azure) / <alpha-value>)",
         ember: "hsl(var(--ember) / <alpha-value>)",
+        graphite: { DEFAULT: "hsl(var(--graphite) / <alpha-value>)", deep: "hsl(var(--graphite-deep) / <alpha-value>)" },
+        bone: { DEFAULT: "hsl(var(--bone) / <alpha-value>)", shade: "hsl(var(--bone-shade) / <alpha-value>)" },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
