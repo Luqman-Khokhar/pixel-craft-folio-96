@@ -79,10 +79,12 @@ export function ProjectDetails({ project, variant }: { project: Project; variant
         {project.description}
       </p>
 
-      <div className="detail-rise mt-4 max-w-[44rem]" style={step(4)}>
-        <h5 className="text-xs font-semibold uppercase tracking-[0.12em] text-ink/70">My role</h5>
-        <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-ink/90">{project.contribution}</p>
-      </div>
+      {project.contribution && (
+        <div className="detail-rise mt-4 max-w-[44rem]" style={step(4)}>
+          <h5 className="text-xs font-semibold uppercase tracking-[0.12em] text-ink/70">My role</h5>
+          <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-ink/90">{project.contribution}</p>
+        </div>
+      )}
 
       <div className="detail-rise mt-4 max-w-[44rem]" style={step(5)}>
         <h5 className="text-xs font-semibold uppercase tracking-[0.12em] text-ink/70">Key features</h5>

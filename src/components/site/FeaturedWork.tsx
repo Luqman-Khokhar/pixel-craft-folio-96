@@ -65,10 +65,12 @@ export function CaseStudy({ project, index, flip, eager }: { project: Project; i
             <dt className={label}>Solution</dt>
             <dd className="mt-1.5">{f.solution}</dd>
           </div>
-          <div>
-            <dt className={label}>My role</dt>
-            <dd className="mt-1.5">{project.contribution}</dd>
-          </div>
+          {project.contribution && (
+            <div>
+              <dt className={label}>My role</dt>
+              <dd className="mt-1.5">{project.contribution}</dd>
+            </div>
+          )}
           <div>
             <dt className={label}>Key features</dt>
             <dd className="mt-1.5">

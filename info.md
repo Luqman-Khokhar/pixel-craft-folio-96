@@ -54,7 +54,7 @@ updated: 2026-11-14
 | Value | Label |
 |---|---|
 | 2023 | Shipping since |
-| 8 | Products in this portfolio |
+| 10 | Products in this portfolio |
 | iOS · Android · Web | Platforms shipped |
 
 ## 3b. Services
@@ -160,7 +160,36 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Solution:** A location-first app: find nearby mosques and prayer areas, suggest missing ones, and gather a congregation for the next prayer.
 - **Outcome:** Live on Google Play and the App Store.
 
-### 2. Chirpbyte
+### 2. NexGen Tracker
+- **Type:** Vehicle Tracking Company Website
+- **Platform:** web
+- **Status:** live
+- **Context:** Web project
+- **Description:** The website for NexGen Tracker, a GPS vehicle-tracking company in Pakistan: what the service is, its features, how it works and how to get in touch, with a sign-in to the separate web app where customers track their vehicles.
+- **My role:** (not stated; omitted, not shown on the site)
+- **Key features:** Service information: live location, zone alerts, route replay and over-speed alerts; How-it-works walkthrough and FAQ; Sign-in link to the separate tracking web app; Contact form, phone and WhatsApp
+- **Tech:** Astro.js, Three.js, Tailwind CSS
+- **Image:** `/Projects/covers/nexgen.webp` (screenshot of the live site)
+- **Live site:** https://nexgentracker.com/
+- **Tracking portal:** https://app.nexgentracker.com/
+- **Problem:** Car and bike owners want to know where their vehicle is, and to be alerted when it leaves a zone or crosses a speed limit.
+- **Solution:** A company website that explains the tracking service and how it is fitted, with a sign-in to the separate web app where customers track their vehicles.
+- **Outcome:** Live at nexgentracker.com.
+
+### 3. TFC Academy
+- **Type:** Academy Website & Certificate Platform
+- **Platform:** web
+- **Status:** live
+- **Context:** Web project
+- **Description:** A website and certificate platform for Two Fast Computer College in Daska: a course catalogue, student certificates they can look up by ID, teacher bulk certificate management from Excel and PDF files, and admin course management.
+- **My role:** (not stated; omitted)
+- **Key features:** Course catalogue with duration and fee for each course; Students look up their certificate by ID to print or download it, with QR verification; Teachers manage certificates in bulk from Excel and PDF files; Admins manage courses
+- **Tech:** Next.js, Tailwind CSS
+- **Image:** `/Projects/covers/tfc.webp` (screenshot of the live site)
+- **Live site:** https://tfcacademy.vercel.app/
+- **Note:** Teacher and admin tools are behind a staff login.
+
+### 4. Chirpbyte
 - **Type:** Customer Support & Engagement App
 - **Platform:** mobile
 - **Status:** live
@@ -172,11 +201,8 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Image:** `/Projects/covers/chirpbyte.webp (App Store screenshots)`
 - **Company site:** https://chirpbyte.com/
 - **App Store:** https://apps.apple.com/us/app/chirpbyte/id6670273736
-- **Problem:** Businesses chatting with visitors across their website and social channels need to answer from anywhere, not just from a desk.
-- **Solution:** A mobile inbox for live visitor conversations, issue handling and meeting scheduling.
-- **Outcome:** Live on the App Store.
 
-### 3. Skip2Beat
+### 5. Skip2Beat
 - **Type:** Social Fitness & Workout Tracking App
 - **Platform:** mobile
 - **Status:** live
@@ -187,11 +213,8 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Tech:** React Native, Socket.io, Google Maps
 - **Image:** `/Projects/covers/skip2beat.webp`
 - **Google Play:** https://play.google.com/store/apps/details?id=com.skip2beat.app&hl=en
-- **Problem:** Workouts are easier to stick to with friends, but most fitness apps are solitary.
-- **Solution:** Short guided workouts with music, plus chat and location so members can find, challenge and motivate each other.
-- **Outcome:** Live on Google Play.
 
-### 4. Kroolo
+### 6. Kroolo
 - **Type:** Management & Team Collaboration App
 - **Platform:** mobile
 - **Status:** live
@@ -204,7 +227,7 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Company site:** https://kroolo.com/
 - **Google Play:** https://play.google.com/store/apps/details?id=com.kroolo.app&hl=en (verified 2026-11-14)
 
-### 5. Health In Mobile
+### 7. Health In Mobile
 - **Type:** Health & Fitness Motivation App
 - **Platform:** mobile
 - **Status:** live
@@ -216,7 +239,7 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Image:** `/Projects/covers/health.webp`
 - **Google Play:** https://play.google.com/store/apps/details?id=org.hksr.healthinmobile&hl=en
 
-### 6. AlSalaam Tourism
+### 8. AlSalaam Tourism
 - **Type:** Tour & Event Booking Web Application
 - **Platform:** all
 - **Status:** live
@@ -228,7 +251,7 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Image:** `/Projects/covers/alsalaam.webp`
 - **Live site:** https://alsalaamtourism.com/
 
-### 7. Primax Portal
+### 9. Primax Portal
 - **Type:** Role-Based Data Management Web Application
 - **Platform:** web
 - **Status:** live
@@ -241,7 +264,7 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Login page:** https://primaxportal.com/login
 - **Note:** Login-gated client system; screens available on request.
 
-### 8. Ace Live
+### 10. Ace Live
 - **Type:** Live Streaming & Interactive Chat Web Application
 - **Platform:** all
 - **Status:** private
@@ -254,10 +277,10 @@ Intro: Four teams since 2023, from agency client work to owning a product.
 - **Note:** Private build, not publicly launched.
 
 ### Projects section copy
-Title: Selected work. Sub: Eight products. Seven are live on the App Store, Google Play or the web.
+Title: Selected work. Sub: Ten products. Nine are live on the App Store, Google Play or the web.
 
 ### Projects table
-Eight cards, in `tableCards`: the eight projects above with a short label each.
+Ten cards, in `tableCards`: the ten projects above with a short label each.
 
 ## 7. Contact section
 
@@ -288,7 +311,7 @@ Eight cards, in `tableCards`: the eight projects above with a short label each.
   },
   "primaryStack": ["React.js", "React Native", "Node.js", "Express.js", "MongoDB", "Next.js", "TypeScript", "Redux Toolkit", "Socket.io", "Firebase"],
   "employers": ["Contrive Solutions (2026-present)", "Adroid IT Solutions (2025-2026)", "AppCrates (2024-2025)", "Al-Salam Tech House (2023-2024)"],
-  "projects": ["Saleem Mosque Finder", "Chirpbyte", "Skip2Beat", "Kroolo", "Health In Mobile", "AlSalaam Tourism", "Primax Portal", "Ace Live"]
+  "projects": ["Saleem Mosque Finder", "NexGen Tracker", "TFC Academy", "Chirpbyte", "Skip2Beat", "Kroolo", "Health In Mobile", "AlSalaam Tourism", "Primax Portal", "Ace Live"]
 }
 ```
 
