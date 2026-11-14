@@ -2,7 +2,7 @@
 doc: portfolio-content-source
 owner: Muhammad Luqman Khokhar
 purpose: Single source of truth for all portfolio content. Use it to build or restyle the site in any theme, and for AI models to read about the owner and projects.
-updated: 2026-10-31
+updated: 2026-11-14
 ---
 
 # Muhammad Luqman Khokhar — Portfolio Content
@@ -15,8 +15,8 @@ updated: 2026-10-31
 |---|---|
 | Full name | Muhammad Luqman Khokhar |
 | Short name | Luqman |
-| Role | Frontend Developer (React.js, React Native) |
-| Experience | 2+ years |
+| Role | Full Stack Software Engineer |
+| Experience | 4+ years |
 | Location | Daska City, Pakistan |
 | Email | mluqmangn@gmail.com |
 | Phone | +92 3147551262 |
@@ -29,11 +29,11 @@ updated: 2026-10-31
 ## 2. Site copy
 
 - **Page title:** Muhammad Luqman Khokhar
-- **Meta description:** Portfolio of a professional React.js and React Native developer specializing in modern web and mobile applications.
-- **OG title:** Professional React Developer | Portfolio
+- **Meta description:** Portfolio of a Full Stack Software Engineer building web and mobile applications with the MERN stack and React Native.
+- **OG title:** Full Stack Software Engineer | Portfolio
 - **Hero heading:** Hi, I'm Muhammad Luqman Khokhar
-- **Hero rotating roles (typing animation):** React.js Developer, React Native Developer, Web Developer, Mobile App Developer, Full Stack Developer
-- **Hero tagline:** Crafting beautiful, performant, and user-friendly applications with modern technologies. Specialized in React ecosystem and mobile development.
+- **Hero rotating roles (typing animation):** Software Engineer, Full Stack Developer, MERN Stack Developer, React Native Developer, Mobile App Developer
+- **Hero tagline:** Building complete web and mobile products end to end, from database and API to the screens people use. Specialized in the MERN stack and React Native.
 - **Hero CTAs:** Get In Touch (→ `#contact`), View My Work (→ `#projects`), Resume (→ CV file)
 - **Footer:** © {year} Muhammad Luqman Khokhar. All rights reserved.
 - **Nav items:** Home `#home`, About `#about`, Skills `#skills`, Projects `#projects`, Experience `#experience`, Contact `#contact`
@@ -42,17 +42,17 @@ updated: 2026-10-31
 
 **Headline:** Turning ideas into digital reality
 
-**Paragraph 1:** I'm a Frontend Developer with 2+ years of experience building intuitive, high-performance web and mobile applications using React.js and React Native.
+**Paragraph 1:** I'm a Full Stack Software Engineer with 4+ years of experience building and shipping complete web and mobile products with the MERN stack and React Native.
 
-**Paragraph 2:** I focus on detail-oriented interfaces, real-time features, and efficient architectures that scale gracefully. My passion lies in blending creativity and logic to deliver smooth, visually stunning user experiences.
+**Paragraph 2:** I own projects end to end, from database design and APIs to polished interfaces and App Store and Play Store releases. I care about real-time features, clean architecture that scales, and smooth experiences people enjoy using.
 
 **Stat cards:**
 
 | Value | Label |
 |---|---|
-| 2+ | Years |
+| 4+ | Years |
 | 20+ | Projects |
-| React / RN | Tech Focus |
+| MERN | Full Stack |
 
 ## 4. Skills
 
@@ -61,16 +61,23 @@ updated: 2026-10-31
 | Frontend | What the screens are built with | React.js, React Native, Next.js, TypeScript, Tailwind CSS, Ant Design, Material UI, Bootstrap, Aceternity UI, Formik & Yup |
 | State Management | How the app remembers | Context API, Redux, Redux Toolkit, Redux Thunk, Redux Saga, React Query, Zustand |
 | Real-time & APIs | How it talks, live | Socket.io, Pusher, Firebase, Supabase, REST APIs, WebSockets, GraphQL |
-| Backend Familiarity | The servers my screens talk to | Node.js, KeystoneJS, Laravel, Express.js |
+| Backend | The servers and data behind the screens | Node.js, Express.js, MongoDB, Ruby on Rails, KeystoneJS, Laravel |
 | Deployment | Where it ships | Vercel, Netlify, GoDaddy, Hostinger, Google Play Store, Apple App Store |
 | UI / UX | The part people touch | Responsive Design, Animations & Transitions, Modern UI Libraries, Component Design, MVC / MVVM Structure |
 
-The skills section shows the six groups as the layers of one app, top to bottom: UI / UX, Frontend, State Management, Real-time & APIs, Backend Familiarity, Deployment.
+The skills section shows the six groups as the layers of one app, top to bottom: UI / UX, Frontend, State Management, Real-time & APIs, Backend, Deployment.
 
 ## 5. Work experience (newest first)
 
+### MERN Stack & React Native Developer — Contrive Solutions
+- **Period:** 2026 – Present (current)
+- **Summary:** Joined as a React.js Developer, now working across the full MERN stack and leading the company's React Native mobile app.
+- Build and maintain full stack web features with MongoDB, Express.js, React.js and Node.js.
+- Own the Saleem Mosque Finder mobile app solo, a React Native Expo project shipped to Android and iOS.
+- Handle the mobile release cycle end to end, from feature planning and API integration to Google Play and App Store submissions.
+
 ### Frontend Developer — Adroid IT Solutions
-- **Period:** 2025 – Present (current)
+- **Period:** 2025 – 2026
 - **Summary:** Leading the development of web and mobile interfaces with React.js and React Native.
 - Spearheaded frontend development of multiple mobile and web products, achieving improved responsiveness and user retention.
 - Integrated AI chatbot & real-time notification systems, boosting user engagement and reducing manual support.
@@ -99,9 +106,9 @@ The skills section shows the six groups as the layers of one app, top to bottom:
 - **Platform:** mobile
 - **Description:** A mobile app for chatting with website/social visitors, handling their issues, and scheduling meetings.
 - **Tech:** React Native, Notifee, Socket.io, Pusher
-- **Image:** `/Projects/Chirpbyte.png`
+- **Image:** `/Projects/covers/chirpbyte.webp` (App Store screenshots)
 - **Company site:** https://chirpbyte.com/
-- **Demo:** https://play.google.com/store/apps/details?id=com.chirpbyte&hl=en
+- **App Store:** https://apps.apple.com/us/app/chirpbyte/id6670273736
 
 ### 2. Skip2Beat
 - **Type:** Social Fitness & Workout Tracking App
@@ -153,8 +160,17 @@ The skills section shows the six groups as the layers of one app, top to bottom:
 - **Image:** `/Projects/Acelive.png`
 - **Demo:** https://acelive.cc/
 
+### 8. Saleem Mosque Finder
+- **Type:** Mosque & Prayer Location Finder App
+- **Platform:** mobile
+- **Description:** A prayer location finder for Muslims: find nearby mosques and prayer areas, request new locations or edits, and join or start congregations for the next prayer.
+- **Tech:** Expo React Native, Ruby on Rails, Redux, Firebase, TypeScript
+- **Image:** `/Projects/covers/saleem.webp` (App Store screenshots)
+- **Google Play:** https://play.google.com/store/apps/details?id=com.akhie.saleem&hl=en
+- **App Store:** https://apps.apple.com/us/app/saleem-mosque-finder/id6760958351
+
 ### Projects table
-Nine cards, in `tableCards`: the seven projects above with a short label each, plus two stats from the About section (20+ Projects, 2+ Years).
+Ten cards, in `tableCards`: the eight projects above with a short label each, plus two stats from the About section (20+ Projects, 4+ Years).
 
 ## 7. Contact section
 
@@ -169,8 +185,8 @@ Nine cards, in `tableCards`: the seven projects above with a short label each, p
 ```json
 {
   "name": "Muhammad Luqman Khokhar",
-  "title": "Frontend Developer",
-  "yearsExperience": 2,
+  "title": "Full Stack Software Engineer",
+  "yearsExperience": 4,
   "location": "Daska City, Pakistan",
   "email": "mluqmangn@gmail.com",
   "phone": "+923147551262",
@@ -179,9 +195,9 @@ Nine cards, in `tableCards`: the seven projects above with a short label each, p
     "linkedin": "https://www.linkedin.com/in/mluqmangn/",
     "site": "https://portfolio-xi-ochre-76.vercel.app/"
   },
-  "primaryStack": ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Socket.io", "Firebase", "Supabase"],
-  "employers": ["Adroid IT Solutions (2025-present)", "AppCrates (2024-2025)", "Al-Salam Tech House (2023-2024)"],
-  "projects": ["Chirpbyte", "Skip2Beat", "Kroolo", "Health In Mobile", "AlSalaam Tourism", "Primax Portal", "Ace Live"]
+  "primaryStack": ["React.js", "React Native", "Node.js", "Express.js", "MongoDB", "Next.js", "TypeScript", "Redux Toolkit", "Socket.io", "Firebase"],
+  "employers": ["Contrive Solutions (2026-present)", "Adroid IT Solutions (2025-2026)", "AppCrates (2024-2025)", "Al-Salam Tech House (2023-2024)"],
+  "projects": ["Chirpbyte", "Skip2Beat", "Kroolo", "Health In Mobile", "AlSalaam Tourism", "Primax Portal", "Ace Live", "Saleem Mosque Finder"]
 }
 ```
 
