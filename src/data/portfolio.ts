@@ -54,7 +54,7 @@ export const about = {
   ],
   facts: [
     { value: "2023", label: "Shipping since" },
-    { value: "8", label: "Products in this portfolio" },
+    { value: "10", label: "Products in this portfolio" },
     { value: "iOS · Android · Web", label: "Platforms shipped" },
   ],
 };
@@ -215,8 +215,9 @@ export type Project = {
   company?: string;
   demo?: string;
   appStore?: string;
+  portal?: string;
   context: string;
-  contribution: string;
+  contribution?: string;
   features: string[];
   featured?: { problem: string; solution: string; outcome: string };
   status: "live" | "private";
@@ -228,7 +229,7 @@ export type Project = {
 // Chirpbyte now links its App Store listing instead. Kroolo Play Store listing verified 2026-11-14.
 export const projectsIntro = {
   title: "Selected work",
-  sub: "Eight products. Seven are live on the App Store, Google Play or the web.",
+  sub: "Ten products. Nine are live on the App Store, Google Play or the web.",
 };
 
 export const projects: Project[] = [
@@ -254,6 +255,41 @@ export const projects: Project[] = [
     status: "live",
   },
   {
+    title: "NexGen Tracker",
+    type: "Vehicle Tracking Company Website",
+    platform: "web",
+    description: "The website for NexGen Tracker, a GPS vehicle-tracking company in Pakistan: what the service is, its features, how it works and how to get in touch, with a sign-in to the separate web app where customers track their vehicles.",
+    tech: ["Astro.js", "Three.js", "Tailwind CSS"],
+    cover: "/Projects/covers/nexgen.webp",
+    logo: "/Projects/icons/nexgen.webp",
+    coverAlt: "NexGen Tracker homepage: a headline about a GPS tracker for your car or bike, with a tracking web app and phone app preview",
+    demo: "https://nexgentracker.com/",
+    portal: "https://app.nexgentracker.com/",
+    context: "Web project",
+    features: ["Service information: live location, zone alerts, route replay and over-speed alerts", "How-it-works walkthrough and FAQ", "Sign-in link to the separate tracking web app", "Contact form, phone and WhatsApp"],
+    featured: {
+      problem: "Car and bike owners want to know where their vehicle is, and to be alerted when it leaves a zone or crosses a speed limit.",
+      solution: "A company website that explains the tracking service and how it is fitted, with a sign-in to the separate web app where customers track their vehicles.",
+      outcome: "Live at nexgentracker.com.",
+    },
+    status: "live",
+  },
+  {
+    title: "TFC Academy",
+    type: "Academy Website & Certificate Platform",
+    platform: "web",
+    description: "A website and certificate platform for Two Fast Computer College in Daska: a course catalogue, student certificates they can look up by ID, teacher bulk certificate management from Excel and PDF files, and admin course management.",
+    tech: ["Next.js", "Tailwind CSS"],
+    cover: "/Projects/covers/tfc.webp",
+    logo: "/Projects/icons/tfc.webp",
+    coverAlt: "Two Fast Computer College homepage: a headline about learning computer skills, over a photo of a classroom lab, with course and student counts",
+    demo: "https://tfcacademy.vercel.app/",
+    context: "Web project",
+    features: ["Course catalogue with duration and fee for each course", "Students look up their certificate by ID to print or download it, with QR verification", "Teachers manage certificates in bulk from Excel and PDF files", "Admins manage courses"],
+    status: "live",
+    note: "Teacher and admin tools are behind a staff login.",
+  },
+  {
     title: "Chirpbyte",
     type: "Customer Support & Engagement App",
     platform: "mobile",
@@ -267,11 +303,6 @@ export const projects: Project[] = [
     context: "Team project",
     contribution: "React Native development of the mobile app: live conversations, real-time updates with Socket.io and Pusher, and push notifications with Notifee.",
     features: ["Live chat with website and social-media visitors", "Real-time conversation updates and push notifications", "Visitor dashboard and meeting scheduling"],
-    featured: {
-      problem: "Businesses chatting with visitors across their website and social channels need to answer from anywhere, not just from a desk.",
-      solution: "A mobile inbox for live visitor conversations, issue handling and meeting scheduling.",
-      outcome: "Live on the App Store.",
-    },
     status: "live",
   },
   {
@@ -287,11 +318,6 @@ export const projects: Project[] = [
     context: "Team project",
     contribution: "React Native development: guided workout flows, real-time chat with Socket.io, and location features with Google Maps.",
     features: ["Guided 7-minute workouts set to music", "Real-time chat between members", "Nearby members on a map, to connect and compete"],
-    featured: {
-      problem: "Workouts are easier to stick to with friends, but most fitness apps are solitary.",
-      solution: "Short guided workouts with music, plus chat and location so members can find, challenge and motivate each other.",
-      outcome: "Live on Google Play.",
-    },
     status: "live",
   },
   {
@@ -374,9 +400,10 @@ export const projects: Project[] = [
 ];
 
 /** A project's public links, the store or live site first. */
-export const projectLinks = (project: Pick<Project, "demo" | "company" | "appStore">) => [
+export const projectLinks = (project: Pick<Project, "demo" | "company" | "appStore" | "portal">) => [
   ...(project.demo ? [{ href: project.demo, label: project.demo.includes("play.google.com") ? "Open on Google Play" : "Visit live site" }] : []),
   ...(project.appStore ? [{ href: project.appStore, label: "Open on App Store" }] : []),
+  ...(project.portal ? [{ href: project.portal, label: "Tracking portal" }] : []),
   ...(project.company ? [{ href: project.company, label: "Company site" }] : []),
 ];
 
@@ -406,9 +433,11 @@ export type TableCard = {
 
 const projectNamed = (title: string) => projects.find((p) => p.title === title) as Project;
 
-// The projects table holds the eight projects.
+// The projects table holds the ten projects.
 export const tableCards: TableCard[] = [
   { label: "Prayer Finder", title: "Saleem", sub: "Mobile App", sheet: projectNamed("Saleem Mosque Finder") },
+  { label: "Vehicle Tracking", title: "NexGen Tracker", sub: "Web App", sheet: projectNamed("NexGen Tracker") },
+  { label: "Academy Platform", title: "TFC Academy", sub: "Web App", sheet: projectNamed("TFC Academy") },
   { label: "Customer Support", title: "Chirpbyte", sub: "Mobile App", sheet: projectNamed("Chirpbyte") },
   { label: "Social Fitness", title: "Skip2Beat", sub: "Mobile App", note: "React Native, Socket.io, Google Maps", sheet: projectNamed("Skip2Beat") },
   { label: "Team Collaboration", title: "Kroolo", sub: "Mobile App", accent: "Live Chat", note: "React Native, Socket.io, Firebase", sheet: projectNamed("Kroolo") },
