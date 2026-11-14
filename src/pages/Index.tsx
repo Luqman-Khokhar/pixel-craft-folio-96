@@ -5,14 +5,23 @@ import { HeroStage } from "@/components/site/HeroStage";
 import { PortalFrame } from "@/components/site/PortalFrame";
 import { AboutSection } from "@/components/site/AboutSection";
 import { SkillsKeyboard } from "@/components/site/SkillsKeyboard";
+import { ServicesSection } from "@/components/site/ServicesSection";
+import { ProcessSection } from "@/components/site/ProcessSection";
 import { ProjectsIndex } from "@/components/site/ProjectsIndex";
 import { ExperienceYears } from "@/components/site/ExperienceYears";
 import { ContactFinale } from "@/components/site/ContactFinale";
 import { CursorRing } from "@/components/site/CursorRing";
-import { initSmoothWheel } from "@/lib/smoothScroll";
+import { scrollToHash } from "@/lib/smoothScroll";
 const Index = () => {
   const [ready, setReady] = useState(false);
-  useEffect(() => initSmoothWheel(), []);
+  // Deep links (/#projects) land on their section once the page is ready; sections above can still be settling, so it re-checks briefly.
+  useEffect(() => {
+    if (!ready || !window.location.hash) return;
+    const hash = window.location.hash;
+    scrollToHash(hash, true);
+    const timers = [150, 600].map((ms) => window.setTimeout(() => scrollToHash(hash, true), ms));
+    return () => timers.forEach(window.clearTimeout);
+  }, [ready]);
   return (
 
     <div className="min-h-screen relative [overflow-x:clip]">
@@ -24,9 +33,11 @@ const Index = () => {
         <HeroStage ready={ready} />
         <PortalFrame />
         <AboutSection />
-        <SkillsKeyboard />
+        <ServicesSection />
         <ProjectsIndex />
+        <ProcessSection />
         <ExperienceYears />
+        <SkillsKeyboard />
         <ContactFinale />
       </main>
 

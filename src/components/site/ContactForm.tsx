@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 import { contact, identity } from "@/data/portfolio";
 import { Roll } from "./primitives";
@@ -6,7 +6,7 @@ import { Roll } from "./primitives";
 type Status = "idle" | "sending" | "sent" | "failed";
 type Errors = Partial<Record<"name" | "email" | "message", string>>;
 
-const FIELD = "field-line block w-full py-3 text-lg text-paper placeholder:text-paper/60";
+const FIELD = "field-line block w-full py-3 text-lg text-paper placeholder:text-paper/70";
 
 function validate(name: string, email: string, message: string): Errors {
   const errors: Errors = {};
@@ -29,6 +29,7 @@ function Field({ id, label, error, children }: { id: string; label: string; erro
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
+  const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +40,11 @@ export function ContactForm() {
     const message = String(data.get("message") ?? "").trim();
     const found = validate(name, email, message);
     setErrors(found);
-    if (Object.keys(found).length) return;
+    if (Object.keys(found).length) {
+      const first = (["name", "email", "message"] as const).find((k) => found[k]);
+      if (first) form.querySelector<HTMLElement>(`#${first}`)?.focus();
+      return;
+    }
 
     const key = import.meta.env.VITE_WEB3FORMS_KEY;
     if (!key) {
@@ -51,6 +56,7 @@ export function ContactForm() {
       data.set("name", name);
       data.set("email", email);
       data.set("message", message);
+      data.set("project_type", String(data.get("project_type") ?? "") || "Not specified");
       data.append("access_key", key);
       const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: data });
       const json = await res.json().catch(() => ({ success: false }));
@@ -74,7 +80,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-8">
+    <form ref={formRef} onSubmit={onSubmit} noValidate aria-busy={status === "sending"} className="space-y-8">
       <input type="hidden" name="subject" value={contact.subject} />
       <input type="checkbox" name="botcheck" tabIndex={-1} aria-hidden="true" className="hidden" />
       <Field id="name" label="Name" error={errors.name}>
@@ -83,23 +89,36 @@ export function ContactForm() {
       <Field id="email" label="Email" error={errors.email}>
         <input id="email" name="email" type="email" autoComplete="email" placeholder="your.email@example.com" aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} className={FIELD} />
       </Field>
+      <fieldset>
+        <legend className="eyebrow block text-paper/75">What do you need? <span className="normal-case tracking-normal text-paper/70">(optional)</span></legend>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {contact.projectTypes.map((type) => (
+            <label key={type} className="relative cursor-pointer">
+              <input type="radio" name="project_type" value={type} className="peer sr-only" />
+              <span className="flex min-h-11 items-center rounded-full border border-paper/40 px-4 text-sm font-medium text-paper transition-colors hover:border-paper peer-checked:border-honey peer-checked:bg-honey peer-checked:text-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-honey">
+                {type}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <Field id="message" label="Message" error={errors.message}>
-        <textarea id="message" name="message" rows={4} placeholder="Write your message here" aria-invalid={!!errors.message} aria-describedby={errors.message ? "message-error" : undefined} className={`${FIELD} resize-y`} />
+        <textarea id="message" name="message" rows={4} placeholder="What are you building, who is it for, and when would you like to launch?" aria-invalid={!!errors.message} aria-describedby={errors.message ? "message-error" : undefined} className={`${FIELD} resize-y`} />
       </Field>
 
       {status === "failed" && (
         <p role="alert" className="rounded-lg border border-honey/60 p-4 text-sm leading-relaxed">
           Your message couldn't be sent, and nothing you typed was lost. Please try again, or email{" "}
-          <a href={`mailto:${identity.email}`} className="font-semibold underline underline-offset-2">{identity.email}</a>.
+          <a href={`mailto:${identity.email}?subject=${encodeURIComponent(contact.subject)}`} className="font-semibold underline underline-offset-2">{identity.email}</a>.
         </p>
       )}
 
       <button
         type="submit"
         disabled={status === "sending"}
-        className="inline-flex w-full items-center justify-between rounded-full bg-honey px-6 py-4 font-semibold text-ink transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-wait disabled:opacity-70 sm:w-auto sm:gap-10"
+        className="inline-flex min-h-12 w-full items-center justify-between rounded-full bg-honey px-6 py-4 font-semibold text-ink transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper active:translate-y-0 disabled:cursor-wait disabled:opacity-70 sm:w-auto sm:gap-10"
       >
-        {status === "sending" ? <span>Sending...</span> : <Roll>Send Message</Roll>}
+        {status === "sending" ? <span>Sending…</span> : <Roll>{contact.submit}</Roll>}
         <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
       </button>
     </form>

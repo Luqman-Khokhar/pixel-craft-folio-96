@@ -22,6 +22,8 @@ All colors MUST be HSL.
     --azure: 180 100% 100%;
     --honey: 40 92% 59%;
     --honey-deep: 34 70% 42%;
+    /* Accent text on light surfaces: honey is too pale there. */
+    --honey-ink: 33 77% 34%;
     --paper: 42 40% 94%;
     /* The side of a paper slab: the same stock, turned away from the light. */
     --paper-shade: 38 24% 72%;
@@ -129,6 +131,7 @@ All colors MUST be HSL.
 
   html {
     scroll-behavior: auto;
+    position: relative; /* framer-motion useScroll wants a non-static scroll container */
     background: hsl(var(--ink));
     scrollbar-width: none;
   }
@@ -347,11 +350,11 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 .seal-stroke {
   stroke-dasharray: 1 1;
   stroke-dashoffset: 1;
-  animation: seal-ink 1.1s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+  animation: seal-ink 0.4s cubic-bezier(0.6, 0, 0.2, 1) forwards;
 }
 /* Holds the seal in motion once drawn: with nothing moving on screen the browser drops to about one frame a second, freezing the title's start. */
 @keyframes seal-breathe { 50% { opacity: 0.88; } }
-.seal-breathe { animation: seal-breathe 1.6s ease-in-out 2.3s infinite; }
+.seal-breathe { animation: seal-breathe 1.6s ease-in-out 0.8s infinite; }
 /* First paint is the body's ink; the entry screen deepens from it rather than jumping when React mounts. */
 @keyframes screen-deepen { from { background-color: hsl(var(--ink)); } }
 .screen-deepen { animation: screen-deepen 0.9s ease-out; }

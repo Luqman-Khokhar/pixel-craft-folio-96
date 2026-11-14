@@ -2,7 +2,7 @@
 
 Personal portfolio of Muhammad Luqman Khokhar, a frontend developer.
 
-Live: https://portfolio-xi-ochre-76.vercel.app/
+Live: https://muhammadluqmankhokhar.vercel.app/
 
 ## Stack
 

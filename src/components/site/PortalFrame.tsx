@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
-import { about } from "@/data/portfolio";
+import { portal } from "@/data/portfolio";
 import { createTornPaint } from "@/lib/tornPaint";
 import { OrnateFrame } from "./OrnateFrame";
 import { NAV_TONE_EVENT } from "./primitives";
@@ -57,7 +57,7 @@ function ScrollPortal() {
   const track = useTransform(p, [0, CUE_TRACK_END], [0, 1]);
   const cueOpacity = useTransform(p, CUE_FADE, [1, 0]);
   const cueY = useTransform(p, CUE_FADE, [0, 12]);
-  const words = about.headline.split(" ");
+  const words = portal.headline.split(" ");
 
   useEffect(() => {
     const stageEl = stage.current;
@@ -128,7 +128,7 @@ function ScrollPortal() {
   }, [p]);
 
   return (
-    <section ref={section} aria-label={about.headline} className="relative h-[260svh] bg-ink">
+    <section ref={section} aria-label={portal.headline} className="relative h-[260svh] bg-ink">
       <div ref={stage} data-tone="dark" className="group sticky top-0 grid h-svh place-items-center [overflow:clip]">
         <canvas ref={canvas} aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full" />
         <motion.div ref={frame} className={`${FRAME_SIZE} z-[1]`} style={{ scale }}>
@@ -166,7 +166,7 @@ export function PortalFrame() {
     <section className="grid place-items-center bg-ink px-5 py-24">
       <div className={FRAME_SIZE}>
         <OrnateFrame className="absolute inset-0 h-full w-full" />
-        <p className={FRAME_TEXT}>{about.headline}</p>
+        <p className={FRAME_TEXT}>{portal.headline}</p>
       </div>
     </section>
   );

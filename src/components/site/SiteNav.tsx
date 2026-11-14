@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, type Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { identity, navItems } from "@/data/portfolio";
-import { scrollToHash } from "@/lib/smoothScroll";
+import { identity, navCta, navItems } from "@/data/portfolio";
+import { goToAnchor } from "@/lib/smoothScroll";
 import { Crest } from "./Crest";
 import { EASE_OUT, NAV_TONE_EVENT } from "./primitives";
 
@@ -32,39 +32,30 @@ function useActiveSection() {
   return active;
 }
 
-/** Hides on scroll down, returns on scroll up. Small moves are ignored so the marks do not flicker. */
-function useHideOnScroll() {
-  const [hidden, setHidden] = useState(false);
-  useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (y <= 8) setHidden(false);
-      else if (Math.abs(y - last) >= 4) setHidden(y > last);
-      else return;
-      last = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return hidden;
-}
+const luminance = (r: number, g: number, b: number) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-const isLightSurface = (el: Element) => {
-  const [r, g, b] = (getComputedStyle(el).backgroundColor.match(/[\d.]+/g) ?? ["0", "0", "0"]).map(Number);
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 128;
+/** Tone of whatever is actually painted under a point: the first element up the stack with a data-nav-tone or a near-opaque background. */
+const toneAt = (x: number, y: number, skip: Element | null): boolean => {
+  for (const el of document.elementsFromPoint(x, y)) {
+    if (skip && skip.contains(el)) continue;
+    const tone = (el.closest("[data-nav-tone]") as HTMLElement | null)?.dataset.navTone;
+    if (tone) return tone === "light";
+    const nums = (getComputedStyle(el).backgroundColor.match(/[\d.]+/g) ?? []).map(Number);
+    if (nums.length >= 3 && (nums.length < 4 || nums[3] >= 0.9)) return luminance(nums[0], nums[1], nums[2]) > 128;
+  }
+  return false;
 };
 
-/** True while a light surface sits behind the marks, where honey would wash out. */
-function useOverLight(probeY: number) {
-  const [over, setOver] = useState(false);
+/** Tone behind the bar (honey would wash out on light) and whether the page has scrolled off the top. */
+function useNavBacking(bar: React.RefObject<HTMLElement>) {
+  const [state, setState] = useState({ over: false, scrolled: false });
   useEffect(() => {
     const check = () => {
-      const front = [...document.querySelectorAll<HTMLElement>("main section")].reverse().find((section) => {
-        const box = section.getBoundingClientRect();
-        return box.top <= probeY && box.bottom > probeY;
-      });
-      setOver(!!front && (front.dataset.navTone === "light" || isLightSurface(front)));
+      const box = bar.current?.getBoundingClientRect();
+      const y = box ? box.top + box.height / 2 : 48;
+      const over = toneAt(window.innerWidth / 2, y, bar.current);
+      const scrolled = window.scrollY > 40;
+      setState((prev) => (prev.over === over && prev.scrolled === scrolled ? prev : { over, scrolled }));
     };
     check();
     window.addEventListener("scroll", check, { passive: true });
@@ -75,14 +66,14 @@ function useOverLight(probeY: number) {
       window.removeEventListener("resize", check);
       window.removeEventListener(NAV_TONE_EVENT, check);
     };
-  }, [probeY]);
-  return over;
+  }, [bar]);
+  return state;
 }
 
 export function SiteNav() {
   const active = useActiveSection();
-  const hidden = useHideOnScroll();
-  const overLight = useOverLight(48);
+  const barRef = useRef<HTMLDivElement>(null);
+  const { over: overLight, scrolled } = useNavBacking(barRef);
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
   const reduce = useReducedMotion();
@@ -90,10 +81,12 @@ export function SiteNav() {
   const bar = useSpring(scrollYProgress, { stiffness: 160, damping: 30 });
 
   const go = (e: React.MouseEvent, href: string) => {
-    e.preventDefault();
-    setOpen(false);
     // Wait for the menu's scroll lock to release before moving the page.
-    window.setTimeout(() => scrollToHash(href), open ? 340 : 0);
+    if (open) {
+      e.preventDefault();
+      setOpen(false);
+      window.setTimeout(() => goToAnchor({ preventDefault: () => undefined }, href), 340);
+    } else goToAnchor(e, href);
   };
 
   const panelV: Variants = reduce
@@ -114,13 +107,37 @@ export function SiteNav() {
   return (
     <>
       <motion.div aria-hidden="true" className="fixed inset-x-0 top-0 z-[61] h-0.5 origin-left bg-honey" style={{ scaleX: bar }} />
-      <div className={`pointer-events-none fixed inset-x-0 top-0 ${open ? "z-[90]" : "z-[60]"} flex items-center justify-between px-4 pt-4 transition-[transform,color] duration-500 has-[:focus-visible]:translate-y-0 motion-reduce:transition-none sm:px-6 md:px-12 md:pt-6 ${overLight && !open ? "text-ink" : "text-honey"} ${hidden && !open ? "-translate-y-full" : ""}`}>
+      <div ref={barRef} className={`pointer-events-none fixed inset-x-0 top-0 ${open ? "z-[90]" : "z-[60]"} flex items-center justify-between px-4 pb-2 pt-4 transition-colors duration-500 motion-reduce:transition-none sm:px-6 md:px-12 md:pt-6 ${overLight && !open ? "text-ink" : "text-honey"}`}>
+        <span aria-hidden="true" className={`pointer-events-none absolute inset-0 -z-10 border-b backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none ${scrolled && !open ? "opacity-100" : "opacity-0"} ${overLight ? "border-ink/15 bg-paper/90" : "border-paper/10 bg-ink/90"}`} />
         <a href="#home" onClick={(e) => go(e, "#home")} aria-label="Muhammad Luqman Khokhar, back to top" aria-hidden={open || undefined} tabIndex={open ? -1 : undefined} className={`rounded-full transition-opacity duration-300 ${open ? "pointer-events-none opacity-0" : "pointer-events-auto"}`}>
           <Crest className="h-16 w-auto" />
         </a>
 
+        <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+          <nav aria-label="Primary" className={`hidden items-center gap-5 lg:flex ${open ? "pointer-events-none opacity-0" : ""}`}>
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={(e) => go(e, item.href)}
+                aria-current={active === item.href ? "true" : undefined}
+                className={`pointer-events-auto rounded-sm py-2 text-sm font-semibold underline-offset-[6px] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${active === item.href ? "underline decoration-2" : `opacity-90 ${HOVER_FINE}:hover:underline`}`}
+              >
+                {item.name}
+              </a>
+            ))}
+          </nav>
+          <a
+            href={navCta.href}
+            onClick={(e) => go(e, navCta.href)}
+            aria-hidden={open || undefined}
+            tabIndex={open ? -1 : undefined}
+            className={`inline-flex min-h-11 items-center rounded-full bg-honey px-4 text-sm font-semibold text-ink transition-[background-color,opacity] duration-300 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper focus-visible:ring-offset-2 focus-visible:ring-offset-ink ${open ? "pointer-events-none opacity-0" : "pointer-events-auto"}`}
+          >
+            {navCta.label}
+          </a>
         <Dialog.Root open={open} onOpenChange={setOpen}>
-          <Dialog.Trigger data-nav-toggle aria-label={open ? "Close menu" : "Open menu"} className="group pointer-events-auto flex h-12 w-12 items-center justify-end rounded-full">
+          <Dialog.Trigger data-nav-toggle aria-label={open ? "Close menu" : "Open menu"} className="group pointer-events-auto flex h-12 w-12 items-center justify-end rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current lg:hidden">
             {/* SVG bars antialias instead of snapping to device pixels, so browser zoom cannot leave one thinner. */}
             <svg aria-hidden="true" viewBox="0 0 32 14" className="h-3.5 w-8 overflow-visible fill-current">
               <rect width="32" height="2" className={`origin-center [transform-box:fill-box] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] ${open ? "translate-y-[6px] rotate-45" : "group-hover:-translate-y-0.5"}`} />
@@ -160,7 +177,6 @@ export function SiteNav() {
                     onDragEnd={(_, info) => { if (info.offset.x + project(info.velocity.x) > 140) setOpen(false); }}
                   >
                     <Dialog.Title className="sr-only">Menu</Dialog.Title>
-                    <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-honey/15 blur-3xl" />
                     <div className="relative flex h-12 items-center">
                       <span className="eyebrow text-paper/50">Menu</span>
                     </div>
@@ -178,7 +194,7 @@ export function SiteNav() {
                               onFocus={() => setHovered(i)}
                               onBlur={() => setHovered(null)}
                               aria-current={isActive ? "true" : undefined}
-                              className={`group flex items-center gap-4 py-3 font-display text-5xl font-medium leading-[1.1] tracking-tight outline-none transition-opacity duration-300 focus-visible:ring-2 focus-visible:ring-honey sm:text-6xl ${hovered !== null && hovered !== i ? "opacity-40" : ""}`}
+                              className={`group flex items-center gap-4 py-2 font-display text-4xl font-medium leading-[1.1] tracking-tight outline-none transition-opacity duration-300 focus-visible:ring-2 focus-visible:ring-honey sm:py-3 sm:text-5xl ${hovered !== null && hovered !== i ? "opacity-40" : ""}`}
                             >
                               <span className={`eyebrow w-8 shrink-0 transition-colors duration-300 ${isActive ? "text-honey" : "text-paper/40"}`}>{String(i + 1).padStart(2, "0")}</span>
                               <span className="block overflow-hidden pb-[0.1em]">
@@ -221,6 +237,7 @@ export function SiteNav() {
             )}
           </AnimatePresence>
         </Dialog.Root>
+        </div>
       </div>
     </>
   );
