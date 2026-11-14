@@ -2,14 +2,14 @@ import { cardsUsing, skills } from "@/data/portfolio";
 import type { SkillProof } from "./SkillCards";
 
 // Top row to bottom row: what people touch, down to where it ships.
-const ORDER = ["UI / UX", "Frontend", "State Management", "Real-time & APIs", "Backend Familiarity", "Deployment"];
+const ORDER = ["UI / UX", "Frontend", "State Management", "Real-time & APIs", "Backend", "Deployment"];
 // Legends for the function row a phone gets in place of the full board.
 const SHORT: Record<string, string> = {
   "UI / UX": "UI",
   Frontend: "Front",
   "State Management": "State",
   "Real-time & APIs": "Live",
-  "Backend Familiarity": "Back",
+  Backend: "Back",
   Deployment: "Ship",
 };
 const rank = (category: string) => {

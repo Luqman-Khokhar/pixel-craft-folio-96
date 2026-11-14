@@ -4,7 +4,7 @@ export const identity = {
   fullName: "Muhammad Luqman Khokhar",
   firstName: "Muhammad",
   displayLines: ["LUQMAN", "KHOKHAR"],
-  role: "Frontend Developer (React.js, React Native)",
+  role: "Full Stack Software Engineer",
   location: "Daska City, Pakistan",
   timeZone: "Asia/Karachi",
   timeZoneLabel: "PKT",
@@ -20,14 +20,14 @@ export const identity = {
 export const hero = {
   heading: "Hi, I'm Muhammad Luqman Khokhar",
   roles: [
-    "React.js Developer",
-    "React Native Developer",
-    "Web Developer",
-    "Mobile App Developer",
+    "Software Engineer",
     "Full Stack Developer",
+    "MERN Stack Developer",
+    "React Native Developer",
+    "Mobile App Developer",
   ],
   tagline:
-    "Crafting beautiful, performant, and user-friendly applications with modern technologies. Specialized in React ecosystem and mobile development.",
+    "Building complete web and mobile products end to end, from database and API to the screens people use. Specialized in the MERN stack and React Native.",
 };
 
 export const navItems = [
@@ -42,13 +42,13 @@ export const navItems = [
 export const about = {
   headline: "Turning ideas into digital reality",
   paragraphs: [
-    "I'm a Frontend Developer with 2+ years of experience building intuitive, high-performance web and mobile applications using React.js and React Native.",
-    "I focus on detail-oriented interfaces, real-time features, and efficient architectures that scale gracefully. My passion lies in blending creativity and logic to deliver smooth, visually stunning user experiences.",
+    "I'm a Full Stack Software Engineer with 4+ years of experience building and shipping complete web and mobile products with the MERN stack and React Native.",
+    "I own projects end to end, from database design and APIs to polished interfaces and App Store and Play Store releases. I care about real-time features, clean architecture that scales, and smooth experiences people enjoy using.",
   ],
   stats: [
-    { value: "2+", label: "Years" },
+    { value: "4+", label: "Years" },
     { value: "20+", label: "Projects" },
-    { value: "React / RN", label: "Tech Focus" },
+    { value: "MERN", label: "Full Stack" },
   ],
 };
 
@@ -70,9 +70,9 @@ export const skills = [
     items: ["Socket.io", "Pusher", "Firebase", "Supabase", "REST APIs", "WebSockets", "GraphQL"],
   },
   {
-    category: "Backend Familiarity",
-    layer: "The servers my screens talk to",
-    items: ["Node.js", "KeystoneJS", "Laravel", "Express.js"],
+    category: "Backend",
+    layer: "The servers and data behind the screens",
+    items: ["Node.js", "Express.js", "MongoDB", "Ruby on Rails", "KeystoneJS", "Laravel"],
   },
   {
     category: "Deployment",
@@ -88,8 +88,20 @@ export const skills = [
 
 export const experience = [
   {
+    year: "2026",
+    period: "2026 – Present",
+    role: "MERN Stack & React Native Developer",
+    company: "Contrive Solutions",
+    summary: "Joined as a React.js Developer, now working across the full MERN stack and leading the company's React Native mobile app.",
+    points: [
+      "Build and maintain full stack web features with MongoDB, Express.js, React.js and Node.js.",
+      "Own the Saleem Mosque Finder mobile app solo, a React Native Expo project shipped to Android and iOS.",
+      "Handle the mobile release cycle end to end, from feature planning and API integration to Google Play and App Store submissions.",
+    ],
+  },
+  {
     year: "2025",
-    period: "2025 – Present",
+    period: "2025 – 2026",
     role: "Frontend Developer",
     company: "Adroid IT Solutions",
     summary: "Leading the development of web and mobile interfaces with React.js and React Native.",
@@ -136,10 +148,12 @@ export type Project = {
   coverAlt: string;
   company?: string;
   demo?: string;
+  appStore?: string;
 };
 
 // Links that failed a live check on 2026-10-31 are left out so a client never hits a dead page:
 // Chirpbyte demo (Play Store 404), Skip2Beat company site and Ace Live demo (domain does not resolve).
+// Chirpbyte now links its App Store listing instead.
 export const projects: Project[] = [
   {
     title: "Chirpbyte",
@@ -149,8 +163,9 @@ export const projects: Project[] = [
     tech: ["React Native", "Notifee", "Socket.io", "Pusher"],
     cover: "/Projects/covers/chirpbyte.webp",
     logo: "/Projects/icons/chirpbyte.webp",
-    coverAlt: "Chirpbyte website showing its live chat product",
+    coverAlt: "Three Chirpbyte app screens: a visitor dashboard, live conversations and a customer chat",
     company: "https://chirpbyte.com/",
+    appStore: "https://apps.apple.com/us/app/chirpbyte/id6670273736",
   },
   {
     title: "Skip2Beat",
@@ -218,11 +233,24 @@ export const projects: Project[] = [
     logo: "/Projects/icons/acelive.webp",
     coverAlt: "Ace Live title artwork with a live badge and audio bars",
   },
+  {
+    title: "Saleem Mosque Finder",
+    type: "Mosque & Prayer Location Finder App",
+    platform: "mobile",
+    description: "A prayer location finder for Muslims: find nearby mosques and prayer areas, request new locations or edits, and join or start congregations for the next prayer.",
+    tech: ["Expo React Native", "Ruby on Rails", "Redux", "Firebase", "TypeScript"],
+    cover: "/Projects/covers/saleem.webp",
+    logo: "/Projects/icons/saleem.webp",
+    coverAlt: "Three Saleem app screens: a mosque map, active congregation prayers and a form to propose a prayer location",
+    demo: "https://play.google.com/store/apps/details?id=com.akhie.saleem&hl=en",
+    appStore: "https://apps.apple.com/us/app/saleem-mosque-finder/id6760958351",
+  },
 ];
 
 /** A project's public links, the store or live site first. */
-export const projectLinks = (project: Pick<Project, "demo" | "company">) => [
+export const projectLinks = (project: Pick<Project, "demo" | "company" | "appStore">) => [
   ...(project.demo ? [{ href: project.demo, label: project.demo.includes("play.google.com") ? "Open on Google Play" : "Visit live site" }] : []),
+  ...(project.appStore ? [{ href: project.appStore, label: "Open on App Store" }] : []),
   ...(project.company ? [{ href: project.company, label: "Company site" }] : []),
 ];
 
@@ -251,7 +279,7 @@ export type TableCard = {
 
 const projectNamed = (title: string) => projects.find((p) => p.title === title) as Project;
 
-// The projects table holds nine cards: the seven projects, then two stats from the About content.
+// The projects table holds ten cards: the eight projects, then two stats from the About content.
 export const tableCards: TableCard[] = [
   { label: "Customer Support", title: "Chirpbyte", sub: "Mobile App", sheet: projectNamed("Chirpbyte") },
   { label: "Social Fitness", title: "Skip2Beat", sub: "Mobile App", note: "React Native, Socket.io, Google Maps", sheet: projectNamed("Skip2Beat") },
@@ -260,6 +288,7 @@ export const tableCards: TableCard[] = [
   { label: "Travel Booking", title: "AlSalaam Tourism", sub: "Web + Mobile", sheet: projectNamed("AlSalaam Tourism") },
   { label: "Data Management", title: "Primax Portal", sub: "Web App", sheet: projectNamed("Primax Portal") },
   { label: "Live Streaming", title: "Ace Live", sub: "Web + Mobile", sheet: projectNamed("Ace Live") },
+  { label: "Prayer Finder", title: "Saleem", sub: "Mobile App", sheet: projectNamed("Saleem Mosque Finder") },
   {
     label: "Projects Built",
     title: "20+",
@@ -269,7 +298,7 @@ export const tableCards: TableCard[] = [
       type: "Web and Mobile Applications",
       platform: "all",
       description: about.paragraphs[0],
-      tech: ["React.js", "React Native", "Next.js", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Socket.io", "Firebase", "Supabase"],
+      tech: ["React.js", "React Native", "Node.js", "Express.js", "MongoDB", "Next.js", "TypeScript", "Redux Toolkit", "Socket.io", "Firebase"],
       links: [
         { href: identity.github, label: "GitHub" },
         { href: identity.linkedin, label: "LinkedIn" },
@@ -278,10 +307,10 @@ export const tableCards: TableCard[] = [
   },
   {
     label: "Experience",
-    title: "2+",
+    title: "4+",
     sub: "Years",
     sheet: {
-      title: "2+ Years",
+      title: "4+ Years",
       type: identity.role,
       platform: "all",
       description: about.paragraphs[1],
@@ -303,7 +332,7 @@ export const cardsUsing = (skill: string): TableCard[] =>
   tableCards.filter((card) => {
     if (!projects.includes(card.sheet as Project)) return false;
     const host = STORE_HOSTS[skill];
-    if (host) return (card.sheet as Project).demo?.includes(host) ?? false;
+    if (host) return [(card.sheet as Project).demo, (card.sheet as Project).appStore].some((link) => link?.includes(host));
     return card.sheet.tech.some((tech) => tech.includes(skill));
   });
 

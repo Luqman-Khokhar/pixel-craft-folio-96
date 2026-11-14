@@ -35,7 +35,7 @@ export function ProjectStage({ active, dir, warm, onStep }: ProjectStageProps) {
   const seq = useRef(0);
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const shown = layers[layers.length - 1].index;
-  const hasLinks = Boolean(projects[active].demo || projects[active].company);
+  const hasLinks = Boolean(projects[active].demo || projects[active].appStore || projects[active].company);
 
   // A new cover is decoded off-screen first, so the wipe never uncovers a blank. Only the latest pick lands.
   useEffect(() => {
