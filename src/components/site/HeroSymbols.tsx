@@ -35,17 +35,17 @@ type Slot = {
 };
 
 const SLOTS: Slot[] = [
-  { name: "React", Model: ReactAtom, wide: { x: 0.13, y: 0.49, size: 0.2, from: [0.54, 0.385] }, phone: { x: 0.16, y: 0.54, size: 0.36, from: [0.35, 0.72] }, rotation: [0.35, 0.45, -0.25], depth: 1.25, turn: "x" },
-  { name: "Firebase", Model: FirebaseFlame, wide: { x: 0.3, y: 0.448, size: 0.1, from: [0.54, 0.364] }, rotation: [0.08, 0.22, -0.1], depth: 0.8, turn: "y" },
+  { name: "React", Model: ReactAtom, wide: { x: 0.075, y: 0.265, size: 0.12, from: [0.54, 0.385] }, phone: { x: 0.15, y: 0.4, size: 0.28, from: [0.35, 0.72] }, rotation: [0.35, 0.45, -0.25], depth: 1.25, turn: "x" },
+  { name: "Firebase", Model: FirebaseFlame, wide: { x: 0.93, y: 0.29, size: 0.075, from: [0.54, 0.364] }, rotation: [0.08, 0.22, -0.1], depth: 0.8, turn: "y" },
   // { name: "TypeScript", Model: TypeScriptTile, wide: { x: 0.5, y: 0.215, size: 0.08, from: [0.55, 0.38] }, phone: { x: 0.85, y: 0.36, size: 0.2, from: [0.7, 0.42], via: [0.95, 0.24] }, rotation: [0.15, -0.3, -0.2], depth: 0.7, turn: "y", turnAngle: Math.PI },
-  { name: "Next.js", Model: NextCoin, wide: { x: 0.215, y: 0.703, size: 0.075, from: [0.53, 0.427] }, rotation: [0.25, 0.5, 0.1], depth: 0.9, turn: "y", turnAngle: Math.PI },
-  { name: "Android", Model: AndroidRobot, wide: { x: 0.7, y: 0.47, size: 0.1, from: [0.58, 0.385] }, phone: { x: 0.11, y: 0.8, size: 0.24, from: [0.3, 0.75], via: [0.14, 0.36] }, rotation: [0.1, -0.45, 0.12], depth: 0.85, turn: "z" },
+  { name: "Next.js", Model: NextCoin, wide: { x: 0.17, y: 0.265, size: 0.06, from: [0.53, 0.427] }, rotation: [0.25, 0.5, 0.1], depth: 0.9, turn: "y", turnAngle: Math.PI },
+  { name: "Android", Model: AndroidRobot, wide: { x: 0.7, y: 0.47, size: 0.1, from: [0.58, 0.385] }, rotation: [0.1, -0.45, 0.12], depth: 0.85, turn: "z" },
   { name: "Node.js", Model: NodeBlock, wide: { x: 0.875, y: 0.459, size: 0.14, from: [0.58, 0.385] }, rotation: [0.3, -0.55, 0.12], depth: 1.15, turn: "y", turnAngle: Math.PI },
-  { name: "Apple", Model: AppleCard, wide: { x: 0.81, y: 0.703, size: 0.145, from: [0.57, 0.406] }, phone: { x: 0.88, y: 0.76, size: 0.25, from: [0.7, 0.75], via: [0.97, 0.38] }, rotation: [0.12, -0.4, -0.2], depth: 1.05, turn: "y", turnAngle: Math.PI },
+  { name: "Apple", Model: AppleCard, wide: { x: 0.81, y: 0.703, size: 0.145, from: [0.57, 0.406] }, phone: { x: 0.87, y: 0.41, size: 0.2, from: [0.7, 0.75], via: [0.97, 0.38] }, rotation: [0.12, -0.4, -0.2], depth: 1.05, turn: "y", turnAngle: Math.PI },
 ];
 
-// Waits for the name's last letter to land (~2.3s): symbols start hidden behind the portrait, so they surface just after.
-const ENTER_DELAY = 2;
+// Symbols start hidden behind the portrait and surface once the name has begun to land.
+const ENTER_DELAY = 1;
 const ENTER_STAGGER = 0.1;
 const ENTER_SECONDS = 1.7;
 const ENTER_SCALE = 0.6;

@@ -1,112 +1,31 @@
-// Small wheel + keyboard smoother on top of native scroll: sticky, anchors and touch stay native.
+// Native smooth scrolling only: wheel, keys, touch and anchors all stay with the browser.
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-let current = 0;
-let target = 0;
-let wheelRaf = 0;
-let wheelActive = false;
-let jumpRaf = 0;
+export function scrollToY(y: number, instant = false) {
+  window.scrollTo({ top: Math.max(0, y), behavior: instant || reducedMotion() ? "auto" : "smooth" });
+}
 
-const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
-const clamp = (v: number, a: number, b: number) => Math.min(Math.max(v, a), b);
-
-function isInsideScrollable(node: EventTarget | null): boolean {
-  let el = node instanceof Element ? node : null;
-  while (el && el !== document.body) {
-    const { overflowY } = getComputedStyle(el);
-    if ((overflowY === "auto" || overflowY === "scroll") && el.scrollHeight > el.clientHeight) return true;
-    el = el.parentElement;
+export function scrollToHash(hash: string, instant = false) {
+  if (!hash || hash === "#") return false;
+  let el: Element | null = null;
+  try {
+    el = document.querySelector(hash);
+  } catch {
+    return false;
   }
-  return false;
+  if (!el) return false;
+  scrollToY(el.getBoundingClientRect().top + window.scrollY, instant);
+  return true;
 }
 
-// Keys on these keep their native meaning (typing, activating, moving a slider), so they are never hijacked.
-const INTERACTIVE = "input, textarea, select, button, a, summary, [contenteditable], [role=button], [role=slider], [role=tab], [role=menuitem], [role=listbox], [role=option]";
-const isInteractive = (node: EventTarget | null) => node instanceof Element && !!node.closest(INTERACTIVE);
-// Glide rate per second: lower is silkier. ~7 matches the 0.1-per-frame lerp most smooth-scroll sites use.
-const GLIDE = 7;
-
-export function initSmoothWheel(): () => void {
-  if (reducedMotion() || !window.matchMedia("(pointer: fine)").matches) return () => undefined;
-  current = target = window.scrollY;
-  let last = performance.now();
-
-  const tick = (now: number) => {
-    const dt = Math.min((now - last) / 1000, 0.05);
-    last = now;
-    current += (target - current) * (1 - Math.exp(-dt * GLIDE));
-    if (Math.abs(target - current) < 0.4) {
-      current = target;
-      wheelActive = false;
+/** Click handler for in-page anchors: smooth scroll, and the hash follows without a jump or a history entry. */
+export function goToAnchor(e: { preventDefault: () => void }, href: string) {
+  e.preventDefault();
+  if (scrollToHash(href)) {
+    try {
+      window.history.replaceState(null, "", href);
+    } catch {
+      /* some sandboxes block history updates; the scroll already happened */
     }
-    window.scrollTo(0, current);
-    if (wheelActive) wheelRaf = requestAnimationFrame(tick);
-  };
-
-  /** Moves the glide target, starting the loop if it is idle. */
-  const glide = (to: (from: number) => number) => {
-    cancelAnimationFrame(jumpRaf);
-    if (!wheelActive) current = target = window.scrollY;
-    target = clamp(to(target), 0, maxScroll());
-    if (!wheelActive) {
-      wheelActive = true;
-      last = performance.now();
-      wheelRaf = requestAnimationFrame(tick);
-    }
-  };
-
-  const onWheel = (e: WheelEvent) => {
-    if (e.ctrlKey || document.body.hasAttribute("data-scroll-locked") || isInsideScrollable(e.target)) return;
-    e.preventDefault();
-    const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
-    glide((from) => from + e.deltaY * unit);
-  };
-
-  const onKey = (e: KeyboardEvent) => {
-    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
-    if (document.body.hasAttribute("data-scroll-locked") || isInteractive(e.target) || isInsideScrollable(e.target)) return;
-    const page = window.innerHeight * 0.85;
-    const steps: Record<string, number> = { ArrowDown: 120, ArrowUp: -120, PageDown: page, PageUp: -page, " ": e.shiftKey ? -page : page };
-    if (e.key === "Home") glide(() => 0);
-    else if (e.key === "End") glide(() => maxScroll());
-    else if (e.key in steps) glide((from) => from + steps[e.key]);
-    else return;
-    e.preventDefault();
-  };
-
-  window.addEventListener("wheel", onWheel, { passive: false });
-  window.addEventListener("keydown", onKey);
-  return () => {
-    window.removeEventListener("wheel", onWheel);
-    window.removeEventListener("keydown", onKey);
-    cancelAnimationFrame(wheelRaf);
-    wheelActive = false;
-  };
-}
-
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
-export function scrollToY(y: number) {
-  cancelAnimationFrame(wheelRaf);
-  cancelAnimationFrame(jumpRaf);
-  wheelActive = false;
-  const to = clamp(y, 0, maxScroll());
-  if (reducedMotion()) {
-    window.scrollTo(0, to);
-    return;
   }
-  const from = window.scrollY;
-  const duration = clamp(600 + Math.abs(to - from) * 0.12, 700, 1900);
-  const start = performance.now();
-  const step = (now: number) => {
-    const k = Math.min((now - start) / duration, 1);
-    window.scrollTo(0, from + (to - from) * easeInOut(k));
-    if (k < 1) jumpRaf = requestAnimationFrame(step);
-  };
-  jumpRaf = requestAnimationFrame(step);
-}
-
-export function scrollToHash(hash: string) {
-  const el = document.querySelector(hash);
-  if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY);
 }

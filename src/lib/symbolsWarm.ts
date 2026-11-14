@@ -6,3 +6,14 @@ export const symbolsWarm = new Promise<void>((resolve) => {
 });
 
 export const markSymbolsWarm = () => settle();
+
+export const SEEN_KEY = "lk-intro-seen";
+
+/** True when the entry screen already played this session (false too when storage is unavailable). */
+export const introSeen = () => {
+  try {
+    return window.sessionStorage.getItem(SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+};

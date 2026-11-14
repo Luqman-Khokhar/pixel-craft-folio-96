@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { Plus } from "lucide-react";
-import { projects } from "@/data/portfolio";
+import type { Project } from "@/data/portfolio";
 import { scrollToY } from "@/lib/smoothScroll";
 import { FoilPlate } from "./foil";
 import { ProjectDetails } from "./ProjectDetails";
@@ -14,7 +14,7 @@ const NAV_CLEARANCE = 88;
 const OPEN_MS = 340;
 
 /** Phones: every project name stays in view, and the open one unfolds into its plate right under its row. */
-export function ProjectAccordion({ rise }: { rise: Variants }) {
+export function ProjectAccordion({ items, rise }: { items: Project[]; rise: Variants }) {
   const reduce = useReducedMotion();
   const [open, setOpen] = useState<number | null>(0);
   const rows = useRef<(HTMLButtonElement | null)[]>([]);
@@ -33,13 +33,13 @@ export function ProjectAccordion({ rise }: { rise: Variants }) {
   };
 
   return (
-    <ul className="mt-6 border-t border-paper/15">
-      {projects.map((p, i) => {
+    <ul className="mt-2 border-t border-paper/15">
+      {items.map((p, i) => {
         const on = open === i;
         const icons = PLATFORM_ICONS[p.platform];
         return (
           <motion.li key={p.title} variants={rise} className="border-b border-paper/15">
-            <h3>
+            <h4>
               <button
                 ref={(el) => {
                   rows.current[i] = el;
@@ -60,7 +60,7 @@ export function ProjectAccordion({ rise }: { rise: Variants }) {
                 </span>
                 <Plus aria-hidden="true" strokeWidth={1.75} className={`h-5 w-5 transition-transform duration-300 ease-out ${on ? "rotate-45 text-honey" : "text-paper/60"}`} />
               </button>
-            </h3>
+            </h4>
 
             <AnimatePresence initial={false}>
               {on && (

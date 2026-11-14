@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { projects } from "@/data/portfolio";
+import type { Project } from "@/data/portfolio";
 import { FoilPlate } from "./foil";
 import { ProjectDetails } from "./ProjectDetails";
 import { STAGE_ID, coverSources, tabId } from "./projectMedia";
@@ -20,6 +20,8 @@ interface Layer {
 }
 
 interface ProjectStageProps {
+  /** The projects this stage browses. */
+  items: Project[];
   active: number;
   dir: number;
   /** Fetch the other covers in the background once the first is in. */
@@ -28,14 +30,14 @@ interface ProjectStageProps {
 }
 
 /** The selected project on a foil plate: its cover wipes in over the last one, its sheet rises in beneath. */
-export function ProjectStage({ active, dir, warm, onStep }: ProjectStageProps) {
+export function ProjectStage({ items, active, dir, warm, onStep }: ProjectStageProps) {
   const reduce = useReducedMotion();
   const [layers, setLayers] = useState<Layer[]>([{ key: 0, index: active, dir: 0 }]);
   const [firstIn, setFirstIn] = useState(false);
   const seq = useRef(0);
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const shown = layers[layers.length - 1].index;
-  const hasLinks = Boolean(projects[active].demo || projects[active].appStore || projects[active].company);
+  const hasLinks = Boolean(items[active].demo || items[active].appStore || items[active].company);
 
   // A new cover is decoded off-screen first, so the wipe never uncovers a blank. Only the latest pick lands.
   useEffect(() => {
@@ -43,7 +45,7 @@ export function ProjectStage({ active, dir, warm, onStep }: ProjectStageProps) {
     let live = true;
     const img = new Image();
     img.sizes = SIZES;
-    const { src, srcSet } = coverSources(projects[active].cover);
+    const { src, srcSet } = coverSources(items[active].cover);
     img.srcset = srcSet;
     img.src = src;
     img
@@ -55,13 +57,13 @@ export function ProjectStage({ active, dir, warm, onStep }: ProjectStageProps) {
     return () => {
       live = false;
     };
-  }, [active, dir, shown]);
+  }, [active, dir, shown, items]);
 
   // Browsing should never wait on the network: once the first cover is in, the rest are fetched quietly. Not decoded until picked.
   useEffect(() => {
     if (!warm || !firstIn) return;
     const id = window.setTimeout(() => {
-      projects.forEach((p, i) => {
+      items.forEach((p, i) => {
         if (i === active) return;
         const img = new Image();
         img.fetchPriority = "low";
@@ -100,7 +102,7 @@ export function ProjectStage({ active, dir, warm, onStep }: ProjectStageProps) {
         >
           {layers.map((layer, n) => {
             const top = n === layers.length - 1;
-            const p = projects[layer.index];
+            const p = items[layer.index];
             const wipeFrom = layer.dir > 0 ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)";
             return (
               <motion.img
@@ -131,7 +133,7 @@ export function ProjectStage({ active, dir, warm, onStep }: ProjectStageProps) {
 
         {/* Every sheet sits in the same cell, so the plate is always as tall as the longest one and never jumps. */}
         <div className="mt-[calc(var(--u)*1.1rem)] grid">
-          {projects.map((p, i) => (
+          {items.map((p, i) => (
             <div key={p.title} data-on={i === active} className="detail-sheet [grid-area:1/1]">
               <ProjectDetails project={p} variant="stage" />
             </div>

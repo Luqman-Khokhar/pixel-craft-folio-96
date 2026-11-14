@@ -63,7 +63,7 @@ export function Keycap({ proof, label, delay, compact, shown, pressed, dimmed, f
         aria-label={label}
         data-dim={dimmed ? true : undefined}
         className={`keycap relative flex w-full items-center justify-center rounded-xl px-3 py-1.5 text-center font-medium leading-tight [text-wrap:balance] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-honey ${
-          compact ? "min-h-[clamp(2.75rem,7.5svh,4.25rem)] text-[0.875rem] [@media(max-height:480px)]:min-h-9" : "min-h-[2.25rem] text-[clamp(0.8125rem,1.45svh,1.125rem)]"
+          compact ? "min-h-[clamp(2.75rem,7.5svh,4.25rem)] text-[0.875rem] [@media(max-height:480px)]:min-h-9" : "min-h-[3.25rem] text-[clamp(0.8125rem,1.15vw,1.0625rem)]"
         }`}
         {...proofProps}
         onPointerEnter={both((e: ReactPointerEvent<HTMLButtonElement>) => e.pointerType === "mouse" && onHover(true), proofProps?.onPointerEnter)}
@@ -74,7 +74,7 @@ export function Keycap({ proof, label, delay, compact, shown, pressed, dimmed, f
         {ripple && !reduce && <span key={ripple.id} aria-hidden="true" className="key-ripple" style={{ animationDelay: `${ripple.delay}ms` }} />}
         {proof.name}
         {count > 0 && (
-          <span aria-hidden="true" className="absolute right-1.5 top-1 font-mono text-[0.625rem] leading-none opacity-60">
+          <span aria-hidden="true" className="absolute right-1.5 top-1 font-mono text-[0.75rem] leading-none opacity-70">
             {count}
           </span>
         )}

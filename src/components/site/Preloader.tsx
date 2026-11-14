@@ -1,24 +1,19 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, type TargetAndTransition } from "framer-motion";
-import { symbolsWarm } from "@/lib/symbolsWarm";
+import { SEEN_KEY, introSeen, symbolsWarm } from "@/lib/symbolsWarm";
 import { LoaderSeal } from "./LoaderSeal";
 
-// The seal finishes inking at about 2330ms; the rest of the hold lets the finished mark register.
-const HOLD_MS = 2800;
-const LIFT_SECONDS = 2;
-// Eases in briefly: a long slow start would spend the fully visible part of the lift barely moving.
+// The seal finishes inking at about 750ms; first visit reaches a visible hero by ~1.1s and is clear by ~1.4s.
+const HOLD_MS = 800;
+const LIFT_SECONDS = 0.6;
 const LIFT_EASE = [0.45, 0, 0.25, 1] as const;
-// Rise first, fade second: the screen only starts to fade once the rise has clearly read.
-const FADE_DELAY = 0.7;
-// The seal clears sooner than the screen, so it never ghosts over the hero's text arriving beneath it.
-const SEAL_FADE_DELAY = 0.8;
-const SEAL_FADE_SECONDS = 0.8;
-// The hero starts as the fade does, so the two overlap and read as a single move.
-const HERO_CUE_MS = 700;
-// How far the screen rises: enough to read as a lift, while keeping the seal on screen so its fade is seen.
-const RISE_PERCENT = 32;
-// Soft trailing edge below the screen, seen as its lower edge rises over the hero.
-const FEATHER_VH = 30;
+const FADE_DELAY = 0.15;
+const SEAL_FADE_DELAY = 0.05;
+const SEAL_FADE_SECONDS = 0.3;
+// The hero starts as the screen begins to lift, so the two overlap and read as a single move.
+const HERO_CUE_MS = 250;
+const RISE_PERCENT = 20;
+const FEATHER_VH = 20;
 
 // Animated as transform strings, not x/y: those run on the compositor, so the lift stays smooth while the hero's WebGL scene starts up on the main thread.
 const SCREEN_EXIT: TargetAndTransition = {
@@ -35,19 +30,29 @@ const SEAL_EXIT: TargetAndTransition = {
 };
 const FADE_EXIT = { opacity: 0, transition: { duration: 0.3 } };
 
-/** Entry screen, on every page load: the seal inks itself in, then the whole screen rises and fades off the hero. */
+/** Entry screen, first visit per session only: the seal inks itself in, then the screen lifts off the hero. */
 export function Preloader({ onDone }: { onDone: () => void }) {
   const reduce = useReducedMotion();
-  const [visible, setVisible] = useState(true);
+  const [skip] = useState(introSeen);
+  const [visible, setVisible] = useState(!skip);
 
   useEffect(() => {
-    const hold = reduce ? 800 : HOLD_MS;
+    if (skip) {
+      onDone();
+      return;
+    }
+    try {
+      window.sessionStorage.setItem(SEEN_KEY, "1");
+    } catch {
+      /* private mode: the intro just plays again next load */
+    }
+    const hold = reduce ? 300 : HOLD_MS;
     let cancelled = false;
     let cue = 0;
     const fonts = document.fonts?.ready ?? Promise.resolve();
     const wait = new Promise((r) => window.setTimeout(r, hold));
-    // Never let a slow font network hold the entry screen hostage.
-    const cap = new Promise((r) => window.setTimeout(r, hold + 1800));
+    // Never let a slow font network or the WebGL warm-up hold the entry screen hostage.
+    const cap = new Promise((r) => window.setTimeout(r, hold + 150));
     Promise.race([Promise.all([fonts, wait, symbolsWarm]), cap]).then(() => {
       if (cancelled) return;
       setVisible(false);

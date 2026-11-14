@@ -38,12 +38,15 @@ const WREATH_COPIES = eightfold((turn) => `rotate(${turn})`);
 // North and south fleurs sit further out, which gives the seal its upright oval.
 const FLEUR_COPIES = eightfold((turn) => `rotate(${turn}) translate(0 ${turn % 180 ? -6 : -12})`);
 
+// The inking is compressed to ~0.75s so the whole entry stays under the first-visit budget.
+const DELAY_SCALE = 0.3;
+
 const Stroke = ({ d, delay, width = 1.5, still = false }: { d: string; delay: number; width?: number; still?: boolean }) =>
   still ? (
     // At logo size the artwork scales far below a pixel, so line weight is fixed in screen pixels instead.
     <path d={d} strokeWidth={width / 2} vectorEffect="non-scaling-stroke" />
   ) : (
-    <path d={d} pathLength={1} strokeWidth={width} className="seal-stroke" style={{ animationDelay: `${delay}ms` }} />
+    <path d={d} pathLength={1} strokeWidth={width} className="seal-stroke" style={{ animationDelay: `${Math.round(delay * DELAY_SCALE)}ms` }} />
   );
 
 /** Ornate "LK" monogram that inks itself in: wreath first, then the card suits and the letters. `still` skips the inking. */
