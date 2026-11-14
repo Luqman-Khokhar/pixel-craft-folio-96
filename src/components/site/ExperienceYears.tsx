@@ -46,7 +46,7 @@ export function ExperienceYears() {
   }, []);
 
   return (
-    <section id="experience" className="sheet-edge relative -mt-10 bg-paper text-ink md:-mt-16">
+    <section id="experience" className="sheet-edge relative bg-paper text-ink motion-safe:-mt-[100svh] motion-reduce:-mt-10 motion-reduce:md:-mt-16">
       <div className="mx-auto grid max-w-[100rem] gap-x-10 px-4 py-20 sm:px-6 md:grid-cols-12 md:py-32">
         <div className="md:col-span-6">
           <div className="md:sticky md:top-24">

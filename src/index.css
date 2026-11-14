@@ -221,32 +221,7 @@ a:focus-visible > .roll > span:first-child, button:focus-visible > .roll > span:
 a:hover > .roll > span:last-child, button:hover > .roll > span:last-child,
 a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:last-child { transform: translateY(0); }
 
-/* Project ring: the hovered card lifts, the rest step back. */
-.orbit-card { cursor: pointer; }
-.orbit-card:hover, .orbit-card:focus-visible { z-index: 25 !important; }
-.orbit-face { transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s ease; }
-.orbit-card:hover .orbit-face, .orbit-card:focus-visible .orbit-face { transform: translateY(-6%) scale(1.06); }
-[data-spotlight] .orbit-card:not([data-on]) .orbit-face { opacity: 0.4; }
-
-/* Project table: card size and position follow the table, so it holds its layout at any viewport. */
-.deck-table { container-type: size; }
-.deck-slot {
-  position: absolute;
-  left: var(--lx);
-  top: var(--ly);
-  width: calc(min(14.3cqw, 28.9cqh) * var(--k));
-  aspect-ratio: 275 / 350;
-  transform: translate(-50%, -50%);
-}
-.deck-caption { max-width: max(13.5cqw, 11rem); }
-@media (max-aspect-ratio: 1/1) {
-  .deck-slot {
-    left: var(--px);
-    top: var(--py);
-    width: calc(min(40cqw, 14.5cqh) * var(--pk));
-  }
-  .deck-caption { max-width: none; }
-}
+/* A card too narrow for its note drops it. */
 @container (max-width: 9.5rem) {
   .deck-note { display: none !important; }
 }
@@ -264,10 +239,6 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 }
 .deck-card::before { box-shadow: 0 1px 2px hsl(var(--night) / 0.55), 0 10px 20px -8px hsl(var(--night) / 0.7); }
 .deck-card::after { box-shadow: 0 30px 50px -14px hsl(var(--night) / 0.85), 0 12px 20px -8px hsl(var(--night) / 0.5); opacity: 0; }
-.deck-card[data-lifted]::after { opacity: 1; }
-/* Still falling: no shadow until it touches the table, so it settles onto it. */
-.deck-card[data-airborne]::before,
-.deck-card[data-airborne]::after { opacity: 0; }
 @media (hover: hover) and (pointer: fine) {
   .deck-card:hover::after { opacity: 0.75; }
 }
@@ -275,6 +246,32 @@ a:focus-visible > .roll > span:last-child, button:focus-visible > .roll > span:l
 .card-window {
   overflow: hidden;
   clip-path: polygon(3cqw 0, calc(100% - 3cqw) 0, 100% 3cqw, 100% calc(100% - 3cqw), calc(100% - 3cqw) 100%, 3cqw 100%, 0 calc(100% - 3cqw), 0 3cqw);
+}
+
+/* Project plate: the cover window repeats the plate's cut corners, scaled with it. */
+.plate-window {
+  --cut: calc(var(--u, 1) * 8px);
+  clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 var(--cut));
+}
+.foil-shadow > svg { filter: drop-shadow(0 28px 36px hsl(var(--night) / 0.55)) drop-shadow(0 4px 8px hsl(var(--night) / 0.35)); }
+
+/* A project's sheet: the outgoing one fades at once, the incoming one rises in line by line just after. */
+.detail-sheet { visibility: hidden; transition: visibility 0s linear 140ms; }
+.detail-sheet[data-on="true"] { visibility: visible; transition: none; }
+.detail-rise {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 120ms ease-out, transform 0s linear 140ms;
+}
+[data-on="true"] .detail-rise {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 280ms cubic-bezier(0.19, 1, 0.22, 1) calc(90ms + var(--i, 0) * 35ms),
+    transform 480ms cubic-bezier(0.19, 1, 0.22, 1) calc(90ms + var(--i, 0) * 35ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .detail-rise, [data-on="true"] .detail-rise { transform: none; transition: opacity 150ms ease-out; }
 }
 
 /* Every section arrives as a sheet over the last one; the project detail uses the same edge. */

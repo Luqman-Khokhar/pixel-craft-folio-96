@@ -215,9 +215,15 @@ export const projects: Project[] = [
     description: "A platform where users can watch live streams, chat in real time, and interact with streamers who can manage or promote participants.",
     tech: ["React.js", "KeystoneJS", "TypeScript", "OBS", "Supabase", "GraphQL", "Prisma", "MySQL"],
     cover: "/Projects/covers/acelive.webp",
-    logo: "/Projects/icons/health.webp",
+    logo: "/Projects/icons/acelive.webp",
     coverAlt: "Ace Live title artwork with a live badge and audio bars",
   },
+];
+
+/** A project's public links, the store or live site first. */
+export const projectLinks = (project: Pick<Project, "demo" | "company">) => [
+  ...(project.demo ? [{ href: project.demo, label: project.demo.includes("play.google.com") ? "Open on Google Play" : "Visit live site" }] : []),
+  ...(project.company ? [{ href: project.company, label: "Company site" }] : []),
 ];
 
 export const platformLabel: Record<Project["platform"], string> = {

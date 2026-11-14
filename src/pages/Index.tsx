@@ -5,7 +5,7 @@ import { HeroStage } from "@/components/site/HeroStage";
 import { PortalFrame } from "@/components/site/PortalFrame";
 import { AboutSection } from "@/components/site/AboutSection";
 import { SkillsKeyboard } from "@/components/site/SkillsKeyboard";
-import { ProjectsTable } from "@/components/site/ProjectsTable";
+import { ProjectsIndex } from "@/components/site/ProjectsIndex";
 import { ExperienceYears } from "@/components/site/ExperienceYears";
 import { ContactFinale } from "@/components/site/ContactFinale";
 import { CursorRing } from "@/components/site/CursorRing";
@@ -25,7 +25,7 @@ const Index = () => {
         <PortalFrame />
         <AboutSection />
         <SkillsKeyboard />
-        <ProjectsTable />
+        <ProjectsIndex />
         <ExperienceYears />
         <ContactFinale />
       </main>
